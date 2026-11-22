@@ -22,6 +22,7 @@ import {
   Organization,
 } from '../core/groups';
 import { FREE_GROUP_MEMBER_LIMIT } from '../core/plans';
+import { ParishTierId, tierById } from '../core/pricing';
 import { PrayerTime } from '../core/schedule';
 import { getJSON, setJSON } from '../storage/kv';
 import { getState, removePrayerTime, setGroups, upsertGroupPrayerTime } from '../state/store';
@@ -38,7 +39,9 @@ function myName(): string {
 
 function friendly(message: string): string {
   if (/no group has that code/i.test(message)) return 'No group has that code. Check it with the person who invited you.';
-  if (/group is full/i.test(message)) return `This group is full (${FREE_GROUP_MEMBER_LIMIT} members). Its leader can add a parish plan for more.`;
+  if (/group is full/i.test(message)) return `This group is full (${FREE_GROUP_MEMBER_LIMIT} members). Its leader can add a plan for more.`;
+  if (/plan is full/i.test(message)) return 'This parish plan has reached its member limit. Its leader can move to a bigger plan.';
+  if (/group limit/i.test(message)) return 'Your plan has reached its number of groups. Move to a bigger plan to add more.';
   if (/sign in/i.test(message)) return 'Sign in to use prayer groups.';
   if (/network|fetch/i.test(message)) return 'No connection. Check your internet and try again.';
   return message;
@@ -192,6 +195,9 @@ export async function createGroup(input: NewGroup): Promise<Result<GroupSummary>
   if (name.length < 2) return { ok: false, error: 'Give the group a name of at least 2 letters.' };
   const timezone = localTimeZone();
   if (!accountsConfigured) {
+    if (input.orgId && !demoOrgHasRoom(input.orgId, { groups: 1 })) {
+      return { ok: false, error: friendly('group limit') };
+    }
     const g: DemoGroup = {
       id: `demo-${Date.now()}`,
       name,
@@ -364,6 +370,17 @@ export async function recordGroupPrayer(): Promise<void> {
 
 // ------------------------------------------------------------------ parish plans
 
+/** Preview stand-in for the server's tier limits (0005_plan_tiers.sql). */
+function demoOrgHasRoom(orgId: string, add: { groups?: number; members?: number }): boolean {
+  const tier = tierById(demo.orgs().find((o) => o.id === orgId)?.tier);
+  if (!tier) return false;
+  const groups = demo.load().filter((g) => g.orgId === orgId);
+  const members = groups.reduce((n, g) => n + g.members.length, 0);
+  if (tier.maxGroups !== null && groups.length + (add.groups ?? 0) > tier.maxGroups) return false;
+  if (tier.maxMembers !== null && members + (add.members ?? 0) > tier.maxMembers) return false;
+  return true;
+}
+
 export async function postAnnouncement(groupId: string, body: string): Promise<Result<null>> {
   const text = body.trim();
   if (!text) return { ok: false, error: 'Write the announcement first.' };
@@ -389,6 +406,7 @@ export async function deleteAnnouncement(groupId: string, id: string): Promise<R
 }
 
 export interface PlanRequest {
+  tier: ParishTierId;
   orgName: string;
   orgKind: Organization['kind'];
   contactName: string;
@@ -412,6 +430,7 @@ export async function requestParishPlan(r: PlanRequest): Promise<Result<{ activa
       id: `demo-org-${Date.now()}`,
       name: r.orgName.trim(),
       kind: r.orgKind,
+      tier: r.tier,
       activeUntil: Date.now() + 30 * 86_400_000,
       groupIds: [],
     };
@@ -419,6 +438,7 @@ export async function requestParishPlan(r: PlanRequest): Promise<Result<{ activa
     return { ok: true, value: { activatedNow: true } };
   }
   const { error } = await supabase().from('plan_requests').insert({
+    tier: r.tier,
     org_name: r.orgName.trim(),
     org_kind: r.orgKind,
     contact_name: r.contactName.trim(),
@@ -434,7 +454,7 @@ export async function requestParishPlan(r: PlanRequest): Promise<Result<{ activa
 export async function myOrganizations(): Promise<Result<Organization[]>> {
   if (!getState().account) return { ok: true, value: [] };
   if (!accountsConfigured) return { ok: true, value: demo.orgs().map(({ groupIds: _g, ...o }) => o) };
-  const { data, error } = await supabase().from('organization_admins').select('organizations (id, name, kind, plan_active_until)');
+  const { data, error } = await supabase().from('organization_admins').select('organizations (id, name, kind, tier, plan_active_until)');
   if (error) return { ok: false, error: friendly(error.message) };
   return {
     ok: true,
@@ -444,6 +464,7 @@ export async function myOrganizations(): Promise<Result<Organization[]>> {
             id: row.organizations.id,
             name: row.organizations.name,
             kind: row.organizations.kind,
+            tier: row.organizations.tier,
             activeUntil: row.organizations.plan_active_until ? Date.parse(row.organizations.plan_active_until) : undefined,
           }]
         : [],
@@ -454,6 +475,8 @@ export async function myOrganizations(): Promise<Result<Organization[]>> {
 /** Moves a group the user leads into their organisation (parish plan). */
 export async function attachGroupToOrg(groupId: string, orgId: string): Promise<Result<null>> {
   if (!accountsConfigured) {
+    const members = demo.load().find((g) => g.id === groupId)?.members.length ?? 0;
+    if (!demoOrgHasRoom(orgId, { groups: 1, members })) return { ok: false, error: friendly('plan is full') };
     demo.save(demo.load().map((g) => (g.id === groupId ? { ...g, orgId } : g)));
   } else {
     const { error } = await supabase().rpc('attach_group_to_org', { p_group: groupId, p_org: orgId });

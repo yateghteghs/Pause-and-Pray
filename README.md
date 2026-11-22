@@ -11,7 +11,7 @@ This repository holds the MVP (version 1.0) codebase: one Expo (React Native, Ty
 | Area | State |
 |---|---|
 | Shared app: screens, content, calendar, stats | Written, typechecked, and the Android JS bundle builds |
-| Core logic: calendar, readings, Rosary, prayer times, gate rules, groups, guided prayers, campaigns, stats | 89 unit tests passing |
+| Core logic: calendar, readings, Rosary, prayer times, gate rules, groups, guided prayers, campaigns, pricing, stats | 105 unit tests passing |
 | Android gate (Kotlin AccessibilityService) | Written; **not yet compiled or run on a device** |
 | iOS gate (Swift: FamilyControls, ManagedSettings, 3 extensions) | Written; **not yet compiled**, and it needs Apple's Family Controls entitlement |
 | Prayer and calendar text | Every entry is `reviewStatus: pending` until the theological adviser signs it off |
@@ -64,6 +64,22 @@ Members of a parish, youth group, school or family pray together: create a group
 
 What is free and what is paid is defined in one place: `src/core/plans.ts`. The prayer gate, intentions, readings, saint of the day and groups of up to 15 stay free.
 
+### Prices
+
+One price list, `src/core/pricing.ts`, drives the paywall, the parish plan page and the server limits. Tests make sure no paid option costs less than ₦400 and no plan more than ₦10,000 a year.
+
+| Plan | Price | Includes |
+|---|---|---|
+| Free | ₦0 | Prayer times, intentions, readings, saint, groups up to 15 |
+| Plus monthly | ₦400 / month | Guided Rosary, Divine Mercy Chaplet, novenas |
+| Plus yearly | ₦3,500 / year (saves 27%) | The same |
+| Group plan | ₦4,000 / year | 1 group, up to 50 members |
+| Parish plan | ₦7,500 / year | Up to 10 groups, 300 members in total |
+| Community plan | ₦10,000 / year | Unlimited groups and members |
+
+- **Plus:** create the products `plus-monthly` (₦400) and `plus-yearly` (₦3,500) in Google Play Console and App Store Connect with these naira prices. For other countries, let the stores suggest local prices from the naira price. The app shows the store's own price once a store is connected, so keep the two in step. The stores keep a share of each sale (currently 15% for small developers).
+- **Group, parish and community plans:** invoice the price for the chosen tier. Limits are enforced by `supabase/migrations/0005_plan_tiers.sql`, and a test checks they match `pricing.ts`. To change a price or limit, edit `pricing.ts`, update the numbers in a new migration, and run the tests.
+
 ### Pause & Pray Plus (individuals)
 
 Guided Rosary with a bead counter (`src/app/rosary.tsx`), the Divine Mercy Chaplet (`src/app/chaplet.tsx`) and a nine-day novena for the user's intentions (`src/app/novena.tsx`, content in `src/content/novenas.json`). Paywall: `src/app/plus.tsx`. Billing: `src/features/billing.ts`, via [RevenueCat](https://www.revenuecat.com) (`react-native-purchases`), which handles Google Play and App Store subscriptions and receipts.
@@ -82,7 +98,7 @@ Groups of any size, a leader dashboard (`src/app/dashboard.tsx`: totals per grou
 Selling is by invoice, so app-store fees do not apply to it:
 1. A leader sends a request in the app (Me → For parishes and schools). It lands in the `plan_requests` table.
 2. You invoice them (for example through Paystack or Flutterwave).
-3. Once paid, run `select public.activate_parish_plan('<request id>', '2027-12-31');` in the Supabase SQL editor. This creates the organisation, makes the requester its leader and sets the paid-until date. To renew, update `organizations.plan_active_until`.
+3. Once paid, run `select public.activate_parish_plan('<request id>', '2027-12-31');` in the Supabase SQL editor. This creates the organisation on the tier they requested, makes the requester its leader and sets the paid-until date. To renew, update `organizations.plan_active_until`; to change tier, update `organizations.tier`.
 
 Before relying on this, confirm with both stores' current rules that selling a group service to organisations outside in-app billing is acceptable for your setup.
 

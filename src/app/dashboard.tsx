@@ -6,6 +6,7 @@ import { ErrorText } from '../components/form';
 import { colors, space } from '../components/theme';
 import { OrgDashboardRow, Organization } from '../core/groups';
 import { parishActive } from '../core/plans';
+import { formatNaira, tierById } from '../core/pricing';
 import { attachGroupToOrg, myOrganizations, orgDashboard } from '../features/groups';
 import { useAppState } from '../state/store';
 
@@ -27,6 +28,7 @@ export default function Dashboard() {
   if (!org) return <Screen>{error ? <ErrorText>{error}</ErrorText> : <Body muted>Loading…</Body>}</Screen>;
 
   const active = parishActive(org);
+  const tier = tierById(org.tier);
   const movable = groups.filter((g) => g.role === 'admin' && g.orgId !== org.id);
   const totals = (rows ?? []).reduce(
     (t, r) => ({ members: t.members + r.members, today: t.today + r.prayedToday, w7: t.w7 + r.rate7d * r.members, w30: t.w30 + r.rate30d * r.members }),
@@ -38,7 +40,18 @@ export default function Dashboard() {
       <Stack.Screen options={{ title: org.name }} />
       <Label>Leader dashboard</Label>
       <H1>{org.name}</H1>
-      <Body muted>{active ? `Parish plan active until ${new Date(org.activeUntil!).toLocaleDateString()}` : 'Parish plan not active'}</Body>
+      <Body muted>
+        {active
+          ? `${tier?.name ?? 'Plan'} (${tier ? formatNaira(tier.naira) : ''} / year) · active until ${new Date(org.activeUntil!).toLocaleDateString()}`
+          : 'Plan not active'}
+      </Body>
+      {tier && rows ? (
+        <Body muted>
+          {tier.maxGroups === null
+            ? `${rows.length} ${rows.length === 1 ? 'group' : 'groups'} · ${totals.members} ${totals.members === 1 ? 'member' : 'members'} · no limits`
+            : `Groups: ${rows.length} of ${tier.maxGroups} · Members: ${totals.members} of ${tier.maxMembers}`}
+        </Body>
+      ) : null}
 
       <Card>
         <View style={d.kpis}>
@@ -63,7 +76,7 @@ export default function Dashboard() {
       ))}
       {rows && !rows.length ? <Body>No groups in {org.name} yet.</Body> : null}
 
-      {active ? <Button title={`Start a group in ${org.name}`} onPress={() => router.push({ pathname: '/group/new', params: { org: org.id } })} /> : null}
+      {active && (tier?.maxGroups === null || (rows?.length ?? 0) < (tier?.maxGroups ?? 0)) ? <Button title={`Start a group in ${org.name}`} onPress={() => router.push({ pathname: '/group/new', params: { org: org.id } })} /> : null}
       {active && movable.length ? (
         <Card style={{ paddingVertical: space.sm }}>
           <Label>Move a group you lead into {org.name}</Label>

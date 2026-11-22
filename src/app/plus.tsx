@@ -40,7 +40,7 @@ export default function Plus() {
     <Screen>
       <Label>Pause & Pray Plus</Label>
       <H1>{active ? 'You have Plus. Thank you.' : 'Pray more deeply'}</H1>
-      {billingPreview ? <Notice>Preview: no store is connected, so nothing is charged.</Notice> : null}
+      {billingPreview ? <Notice>Preview: these are the planned prices, but no store is connected, so nothing is charged.</Notice> : null}
 
       <Card>
         {PLUS_FEATURES.map((f) => (

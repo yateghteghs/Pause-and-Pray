@@ -12,6 +12,7 @@
 import { Platform } from 'react-native';
 import Purchases, { CustomerInfo, PurchasesPackage } from 'react-native-purchases';
 import { PlusStatus } from '../core/plans';
+import { PLUS_PRICES, priceLabel, yearlySaving } from '../core/pricing';
 import { setPlus } from '../state/store';
 
 export const ENTITLEMENT = 'plus';
@@ -57,15 +58,7 @@ export async function initBilling(): Promise<void> {
 }
 
 export async function getPlusOffers(): Promise<{ ok: true; offers: PlusOffer[] } | { ok: false; error: string }> {
-  if (billingPreview) {
-    return {
-      ok: true,
-      offers: [
-        { id: 'preview-annual', title: 'Yearly', price: 'Preview: no charge', note: 'Your store price appears here' },
-        { id: 'preview-monthly', title: 'Monthly', price: 'Preview: no charge', note: 'Your store price appears here' },
-      ],
-    };
-  }
+  if (billingPreview) return { ok: true, offers: listPriceOffers() };
   if (!billingConfigured) return { ok: false, error: 'Plus is not available in this version yet.' };
   try {
     await initBilling();
@@ -78,12 +71,22 @@ export async function getPlusOffers(): Promise<{ ok: true; offers: PlusOffer[] }
         id: p.identifier,
         title: p.packageType === 'ANNUAL' ? 'Yearly' : p.packageType === 'MONTHLY' ? 'Monthly' : p.product.title,
         price: p.product.priceString,
-        note: p.product.introPrice ? `Starts with ${p.product.introPrice.priceString}` : undefined,
+        note: p.packageType === 'ANNUAL' ? `Save ${yearlySaving()}% on paying monthly` : undefined,
       })),
     };
   } catch {
     return { ok: false, error: 'Could not reach the store. Check your connection and try again.' };
   }
+}
+
+/** Our list prices (core/pricing.ts), shown where no store price is available. */
+export function listPriceOffers(): PlusOffer[] {
+  return PLUS_PRICES.map((p) => ({
+    id: p.id,
+    title: p.title,
+    price: priceLabel(p),
+    note: p.period === 'year' ? `Save ${yearlySaving()}% on paying monthly` : undefined,
+  }));
 }
 
 export async function buyPlus(offerId: string): Promise<{ ok: true } | { ok: false; cancelled?: boolean; error?: string }> {

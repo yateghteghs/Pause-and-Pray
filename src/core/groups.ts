@@ -33,6 +33,8 @@ export interface Organization {
   name: string;
   kind: 'parish' | 'school' | 'chaplaincy' | 'association' | 'other';
   activeUntil?: number;
+  /** Which paid tier (see core/pricing.ts). */
+  tier: 'group' | 'parish' | 'community';
 }
 
 export interface GroupSummary {

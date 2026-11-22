@@ -24,7 +24,7 @@ export const FREE_FOREVER = [
 export const FREE_GROUP_MEMBER_LIMIT = 15;
 
 export const PARISH_FEATURES = [
-  'Groups of any size, and as many groups as you need',
+  'Bigger groups: from 50 members up to no limit, depending on the plan',
   'A leader dashboard: who is praying, by group, over 7 and 30 days',
   'Announcements to each group',
   'Choose the group devotion: intentions, Angelus, Divine Mercy or a Rosary decade',
@@ -47,6 +47,7 @@ export function hasPlus(status: PlusStatus | undefined, nowMs = Date.now()): boo
 export interface ParishPlan {
   /** Epoch ms until which the organisation's plan is paid. */
   activeUntil?: number;
+  tier?: string;
 }
 
 export function parishActive(plan: ParishPlan | undefined, nowMs = Date.now()): boolean {

@@ -3,6 +3,7 @@
  * RevenueCat SDK out of the web bundle.
  */
 import { setPlus } from '../state/store';
+import { PLUS_PRICES, priceLabel, yearlySaving } from '../core/pricing';
 
 export const ENTITLEMENT = 'plus';
 export const billingConfigured = false;
@@ -22,10 +23,12 @@ export async function initBilling(): Promise<void> {}
 export async function getPlusOffers(): Promise<{ ok: true; offers: PlusOffer[] } | { ok: false; error: string }> {
   return {
     ok: true,
-    offers: [
-      { id: 'preview-annual', title: 'Yearly', price: 'Preview: no charge', note: 'Your store price appears here' },
-      { id: 'preview-monthly', title: 'Monthly', price: 'Preview: no charge', note: 'Your store price appears here' },
-    ],
+    offers: PLUS_PRICES.map((p) => ({
+      id: p.id,
+      title: p.title,
+      price: priceLabel(p),
+      note: p.period === 'year' ? `Save ${yearlySaving()}% on paying monthly` : undefined,
+    })),
   };
 }
 
