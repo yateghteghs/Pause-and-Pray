@@ -1,6 +1,8 @@
 import content from '../content/prayers.json';
 import intentionsContent from '../content/intentions.json';
 import { PrayerTime, resolvePrayerId } from './schedule';
+import { isEasterTime as isEasterTimeLocal } from './liturgical';
+import { mysteryOfTheDay } from './rosary';
 import { civilDate, diffDays, utcDate } from './dates';
 
 export interface Prayer {
@@ -115,7 +117,7 @@ export function prayerTimePlan(
   local: Date,
   intentions: string[],
   counter: number,
-  group?: { name: string; intention?: string },
+  group?: { name: string; intention?: string; devotion?: string },
 ): PausePlan {
   const own = pausePlan(intentions, counter, 'pray-now');
   if (time.kind === 'devotion') {
@@ -127,10 +129,37 @@ export function prayerTimePlan(
   }
   if (time.kind === 'group' && group) {
     const intention = group.intention?.trim() || `The members of ${group.name}`;
+    const together: PauseSection = { heading: `Praying with ${group.name}`, intention, title: intention, text: intentionPrayer(intention, counter) };
     return {
-      sections: [{ heading: `Praying with ${group.name}`, intention, title: intention, text: intentionPrayer(intention, counter) }, ...own.sections],
+      sections: [...groupDevotion(group.devotion, local), together, ...own.sections.filter((x) => x.intention || !group.devotion || group.devotion === 'intentions')],
       prayerId: `group:${time.groupId ?? time.id}`,
     };
   }
   return { ...own, prayerId: `time:${time.id}` };
+}
+
+/** The prayer a parish-plan group says together at its prayer time. */
+function groupDevotion(devotion: string | undefined, local: Date): PauseSection[] {
+  const p = (id: string, title?: string): PauseSection => {
+    const found = prayerById(id)!;
+    return { title: title ?? found.title, text: found.text };
+  };
+  switch (devotion) {
+    case 'angelus':
+      return [p(isEasterTimeLocal(local) ? 'regina-caeli' : 'angelus')];
+    case 'divine-mercy':
+      return [p('divine-mercy-hour')];
+    case 'rosary-decade': {
+      const m = mysteryOfTheDay(local);
+      return [
+        { title: `${m.title}: ${m.items[0]}`, text: 'Picture this mystery as you pray one decade together.' },
+        p('our-father'),
+        p('hail-mary', 'Hail Mary (ten times)'),
+        p('glory-be'),
+        p('fatima-prayer'),
+      ];
+    }
+    default:
+      return [];
+  }
 }

@@ -7,6 +7,7 @@ import { PauseEvent } from '../core/stats';
 import { getJSON, setJSON, remove } from '../storage/kv';
 import type { Account } from '../features/auth';
 import type { GroupSummary } from '../core/groups';
+import type { PlusStatus } from '../core/plans';
 
 export interface AppState {
   onboarded: boolean;
@@ -17,6 +18,10 @@ export interface AppState {
   intentions: string[];
   /** Prayer groups the user belongs to (needs an account). */
   groups: GroupSummary[];
+  /** Pause & Pray Plus subscription, as last reported by the store. */
+  plus: PlusStatus;
+  /** Novena in progress: which one, when it started, and the calendar days (YYYY-MM-DD) it was prayed. */
+  novena?: { id: string; startedOn: string; daysDone: string[] };
   /** National calendar layered on the General Roman Calendar ('universal' for none). */
   country: CountryCode;
   remindersEnabled: boolean;
@@ -36,6 +41,7 @@ function defaultState(): AppState {
     account: null,
     intentions: [],
     groups: [],
+    plus: { active: false },
     country: defaultCountry(),
     remindersEnabled: true,
     gate: { gatedApps: [], mode: 'prayer-times', unlockMinutes: 15, schedule: defaultSchedule(Date.now()), lastPrayedAt: 0 },
@@ -142,6 +148,14 @@ export function upsertGroupPrayerTime(time: PrayerTime) {
 export function markPrayed(nowMs = Date.now()) {
   AppGate.markPrayed(nowMs);
   commit({ ...state, gate: { ...state.gate, lastPrayedAt: nowMs } }, true);
+}
+
+export function setPlus(plus: PlusStatus) {
+  commit({ ...state, plus });
+}
+
+export function setNovena(novena: AppState['novena']) {
+  commit({ ...state, novena });
 }
 
 export function setGroups(groups: GroupSummary[]) {

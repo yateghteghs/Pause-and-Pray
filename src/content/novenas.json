@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "reviewStatus": "pending",
+  "reviewNote": "Day reflections are written for Pause & Pray. Scripture is adapted from the World English Bible (public domain), resolved by scripts/build-readings.mjs.",
+  "novenas": [
+    {
+      "id": "my-intentions",
+      "title": "Novena for my intentions",
+      "about": "Nine days of trusting prayer for the things on your heart, as the apostles prayed with Mary for nine days before Pentecost.",
+      "days": [
+        {
+          "ref": "Matthew 7:7-8",
+          "reflection": "Jesus invites us to ask. Bring your intentions to him today without fear."
+        },
+        {
+          "ref": "Luke 1:38",
+          "reflection": "Mary said yes to God's plan. Ask for the grace to trust his answer, whatever it is."
+        },
+        {
+          "ref": "Philippians 4:6-7",
+          "reflection": "Hand your worries over to God, and let his peace guard your heart."
+        },
+        {
+          "ref": "Mark 11:24",
+          "reflection": "Pray with faith. God hears every word."
+        },
+        {
+          "ref": "John 14:13-14",
+          "reflection": "Ask in the name of Jesus, united with his own prayer to the Father."
+        },
+        {
+          "ref": "Psalm 46:11",
+          "reflection": "Be still. Let a minute of silence be part of your prayer today."
+        },
+        {
+          "ref": "Romans 8:28",
+          "reflection": "God can bring good out of every situation you are praying about."
+        },
+        {
+          "ref": "Luke 18:1",
+          "reflection": "Keep praying, and do not lose heart."
+        },
+        {
+          "ref": "1 John 5:14-15",
+          "reflection": "Thank God for hearing you, and leave your intentions in his hands."
+        }
+      ]
+    }
+  ]
+}

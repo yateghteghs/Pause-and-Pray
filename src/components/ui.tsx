@@ -111,7 +111,7 @@ export const styles = StyleSheet.create({
   small: { fontSize: 13, lineHeight: 18 },
   label: { fontSize: 12, fontWeight: '700', letterSpacing: 0.8, textTransform: 'uppercase', color: colors.muted },
   button: { borderRadius: radius, paddingVertical: 14, paddingHorizontal: space.md, alignItems: 'center' },
-  buttonText: { fontSize: 16, fontWeight: '700', color: colors.primaryInk },
+  buttonText: { fontSize: 16, fontWeight: '700', color: colors.primaryInk, textAlign: 'center' },
   row: { flexDirection: 'row', alignItems: 'center', paddingVertical: space.sm, minHeight: 48 },
   segmented: { flexDirection: 'row', backgroundColor: colors.bg, borderRadius: radius, padding: 3, borderWidth: 1, borderColor: colors.line },
   segment: { flex: 1, alignItems: 'center', paddingVertical: 9, borderRadius: radius - 3 },

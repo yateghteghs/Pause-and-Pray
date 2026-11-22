@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react';
 import { Share, StyleSheet, Text, View } from 'react-native';
 import { router, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { Body, Button, Card, H1, Label, Screen, SwitchRow } from '../../components/ui';
+import { Body, Button, Card, H1, Label, Screen, Segmented, SwitchRow } from '../../components/ui';
 import { ErrorText, Field } from '../../components/form';
 import { TimeField } from '../../components/TimeField';
 import { colors, space } from '../../components/theme';
-import { GroupDetail } from '../../core/groups';
+import { DEVOTION_LABELS, GroupDetail, GroupDevotion } from '../../core/groups';
 import { formatTime } from '../../core/schedule';
-import { getGroup, leaveGroup, updateGroup } from '../../features/groups';
+import { deleteAnnouncement, getGroup, leaveGroup, postAnnouncement, updateGroup } from '../../features/groups';
 import { useAppState } from '../../state/store';
 
 export default function Group() {
@@ -38,6 +38,10 @@ export default function Group() {
     <Screen>
       <Stack.Screen options={{ title: group.name }} />
       <H1>{group.name}</H1>
+      {group.orgName ? <Text style={s.org}>{group.orgName}</Text> : null}
+      {group.announcements.length || (group.role === 'admin' && group.orgActive) ? (
+        <Announcements group={group} onChange={load} />
+      ) : null}
       {group.intention ? (
         <Card>
           <Label>We are praying for</Label>
@@ -50,6 +54,11 @@ export default function Group() {
         <Text style={s.big}>
           {prayed} of {group.members.length} prayed
         </Text>
+        <Body muted>
+          {group.memberLimit
+            ? `${group.members.length} of ${group.memberLimit} members (free group)`
+            : `${group.members.length} ${group.members.length === 1 ? 'member' : 'members'} · parish plan`}
+        </Body>
         <Body muted>
           Group streak: {group.streak} {group.streak === 1 ? 'day' : 'days'} with someone praying
         </Body>
@@ -71,6 +80,7 @@ export default function Group() {
       <Card>
         <Label>Prayer time</Label>
         <Body>{local ? `Together at ${formatTime(local)} your time` : 'No shared prayer time yet.'}</Body>
+        {group.devotion && group.devotion !== 'intentions' ? <Body>We pray: {DEVOTION_LABELS[group.devotion]}</Body> : null}
         {local ? <Body muted>At this time your chosen apps pause until you pray. You can turn this off in Me, then Settings.</Body> : null}
       </Card>
 
@@ -123,17 +133,36 @@ function EditGroup({ group, onDone }: { group: GroupDetail; onDone: () => void }
   const [intention, setIntention] = useState(group.intention ?? '');
   const [withTime, setWithTime] = useState(Boolean(local));
   const [time, setTime] = useState({ hour: local?.hour ?? 20, minute: local?.minute ?? 0 });
+  const [devotion, setDevotion] = useState<GroupDevotion>(group.devotion ?? 'intentions');
   const [error, setError] = useState<string | null>(null);
   return (
     <Card>
       <Field id="edit-intention" label="Group intention" value={intention} onChangeText={setIntention} maxLength={140} />
       <SwitchRow label="Pray together at a set time" value={withTime} onChange={setWithTime} />
       {withTime ? <TimeField label="Group prayer time" hour={time.hour} minute={time.minute} onChange={(hour, minute) => setTime({ hour, minute })} /> : null}
+      {group.orgActive ? (
+        <>
+          <Label>What the group prays together</Label>
+          <Segmented
+            options={(Object.keys(DEVOTION_LABELS) as GroupDevotion[]).map((value) => ({
+              value,
+              label: { intentions: 'Intentions', angelus: 'Angelus', 'divine-mercy': 'Mercy', 'rosary-decade': 'Rosary' }[value],
+            }))}
+            value={devotion}
+            onChange={setDevotion}
+          />
+        </>
+      ) : null}
       <ErrorText>{error}</ErrorText>
       <Button
         title="Save"
         onPress={async () => {
-          const r = await updateGroup(group.id, { intention, hour: withTime ? time.hour : null, minute: withTime ? time.minute : null });
+          const r = await updateGroup(group.id, {
+            intention,
+            hour: withTime ? time.hour : null,
+            minute: withTime ? time.minute : null,
+            ...(group.orgActive ? { devotion } : {}),
+          });
           if (!r.ok) return setError(r.error);
           onDone();
         }}
@@ -143,7 +172,54 @@ function EditGroup({ group, onDone }: { group: GroupDetail; onDone: () => void }
   );
 }
 
+function Announcements({ group, onChange }: { group: GroupDetail; onChange: () => void }) {
+  const [text, setText] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const canPost = group.role === 'admin' && group.orgActive;
+  return (
+    <Card>
+      <Label>Announcements</Label>
+      {group.announcements.map((a) => (
+        <View key={a.id} style={s.note}>
+          <Body>{a.body}</Body>
+          <Text style={s.noteMeta}>
+            {new Date(a.at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+            {canPost ? '  ·  ' : ''}
+            {canPost ? (
+              <Text style={s.delete} onPress={() => deleteAnnouncement(group.id, a.id).then(onChange)}>
+                Delete
+              </Text>
+            ) : null}
+          </Text>
+        </View>
+      ))}
+      {!group.announcements.length ? <Body muted>No announcements yet.</Body> : null}
+      {canPost ? (
+        <>
+          <Field id="announcement" label="New announcement" value={text} onChangeText={setText} multiline maxLength={500} placeholder="Rosary at the grotto on Saturday at 5pm" />
+          <ErrorText>{error}</ErrorText>
+          <Button
+            kind="secondary"
+            title="Post to the group"
+            disabled={!text.trim()}
+            onPress={async () => {
+              const r = await postAnnouncement(group.id, text);
+              if (!r.ok) return setError(r.error);
+              setText('');
+              onChange();
+            }}
+          />
+        </>
+      ) : null}
+    </Card>
+  );
+}
+
 const s = StyleSheet.create({
+  org: { fontSize: 14, fontWeight: '700', color: colors.gold, marginTop: -space.sm },
+  note: { gap: 2, paddingVertical: space.xs, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
+  noteMeta: { fontSize: 12, color: colors.muted },
+  delete: { color: colors.danger, fontWeight: '600' },
   big: { fontSize: 28, fontWeight: '700', color: colors.primary },
   member: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: 4 },
   tick: { width: 20, fontSize: 16, fontWeight: '800', color: colors.primary, textAlign: 'center' },

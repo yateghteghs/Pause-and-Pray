@@ -22,7 +22,7 @@ const BOOK_NAMES = { Psalm: 'Psalms', 'Song of Songs': 'Song of Solomon', Wisdom
  */
 const PSALM_OFFSET = {
   1: 0, 2: 0, 19: 1, 22: 1, 23: 0, 24: 0, 25: 0, 27: 0, 29: 0, 30: 1, 31: 1, 33: 0, 34: 1, 40: 1, 45: 1,
-  47: 1, 51: 2, 67: 1, 71: 0, 72: 0, 78: 0, 80: 1, 84: 1, 85: 1, 89: 1, 93: 0, 95: 0, 96: 0, 97: 0,
+  46: 1, 47: 1, 51: 2, 67: 1, 71: 0, 72: 0, 78: 0, 80: 1, 84: 1, 85: 1, 89: 1, 93: 0, 95: 0, 96: 0, 97: 0,
   98: 0, 100: 0, 103: 0, 104: 0, 105: 0, 116: 0, 118: 0, 122: 0, 124: 0, 128: 0, 137: 0, 139: 0,
   145: 0, 147: 0,
 };
@@ -73,6 +73,14 @@ function versesOf(book, spans, offset = 0) {
   }
   if (!out.length) throw new Error(`No verses found for ${book} ${JSON.stringify(spans)}`);
   return out;
+}
+
+const novenas = JSON.parse(readFileSync(new URL('src/content/novenas.json', root), 'utf8'));
+// Novena days use the same resolver; they appear as entries with a single "reading".
+for (const n of novenas.novenas) {
+  n.days.forEach((d, i) => {
+    lectionary.entries[`novena:${n.id}:${i + 1}`] = { readings: [{ kind: 'first', ref: d.ref }] };
+  });
 }
 
 const texts = {};

@@ -1,0 +1,128 @@
+import { useCallback, useState } from 'react';
+import { router, useFocusEffect } from 'expo-router';
+import { Body, Button, Card, H1, H2, Label, NavRow, Screen, Segmented } from '../components/ui';
+import { ErrorText, Field, Notice } from '../components/form';
+import { space } from '../components/theme';
+import { Organization } from '../core/groups';
+import { PARISH_FEATURES, parishActive } from '../core/plans';
+import { accountsConfigured } from '../features/auth';
+import { myOrganizations, requestParishPlan } from '../features/groups';
+import { useAppState } from '../state/store';
+
+const KINDS: { value: Organization['kind']; label: string }[] = [
+  { value: 'parish', label: 'Parish' },
+  { value: 'school', label: 'School' },
+  { value: 'chaplaincy', label: 'Chaplaincy' },
+  { value: 'association', label: 'Group' },
+];
+
+export default function Parish() {
+  const { account } = useAppState();
+  const [orgs, setOrgs] = useState<Organization[]>([]);
+  const [sent, setSent] = useState<string | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      myOrganizations().then((r) => r.ok && setOrgs(r.value));
+    }, []),
+  );
+
+  return (
+    <Screen>
+      <H1>For parishes and schools</H1>
+      <Body>Bring your parish, school, chaplaincy or association to prayer together.</Body>
+      <Card>
+        <Label>Parish plan</Label>
+        {PARISH_FEATURES.map((f) => (
+          <Body key={f}>• {f}</Body>
+        ))}
+        <Body muted>Billed yearly by invoice. Groups of up to 15 members stay free.</Body>
+      </Card>
+
+      {orgs.length ? (
+        <Card style={{ paddingVertical: space.sm }}>
+          <Label>Your organisations</Label>
+          {orgs.map((o) => (
+            <NavRow
+              key={o.id}
+              label={o.name}
+              detail={parishActive(o) ? `Active until ${new Date(o.activeUntil!).toLocaleDateString()} · Open the leader dashboard` : 'Plan not active'}
+              onPress={() => router.push({ pathname: '/dashboard', params: { org: o.id } })}
+            />
+          ))}
+        </Card>
+      ) : null}
+
+      {!account ? (
+        <>
+          <Body muted>Sign in to request a parish plan.</Body>
+          <Button title="Sign in" onPress={() => router.push('/sign-in')} />
+        </>
+      ) : sent ? (
+        <Card>
+          <H2>Thank you</H2>
+          <Body>{sent}</Body>
+        </Card>
+      ) : (
+        <RequestForm
+          onSent={(activatedNow, email) => {
+            setSent(
+              activatedNow
+                ? 'Preview: your parish plan is switched on for 30 days. Open it above.'
+                : `We will email an invoice to ${email}. Once it is paid, your parish plan is switched on and the leader dashboard appears here.`,
+            );
+            myOrganizations().then((r) => r.ok && setOrgs(r.value));
+          }}
+        />
+      )}
+    </Screen>
+  );
+}
+
+function RequestForm({ onSent }: { onSent: (activatedNow: boolean, email: string) => void }) {
+  const { account } = useAppState();
+  const [orgName, setOrgName] = useState('');
+  const [orgKind, setOrgKind] = useState<Organization['kind']>('parish');
+  const [contactName, setContactName] = useState(account?.name ?? '');
+  const [contactEmail, setContactEmail] = useState(account?.email ?? '');
+  const [country, setCountry] = useState('');
+  const [members, setMembers] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  return (
+    <Card>
+      <Label>Request a parish plan</Label>
+      {!accountsConfigured ? <Notice>Preview: the plan is switched on straight away so you can try it. No invoice is sent.</Notice> : null}
+      <Segmented options={KINDS} value={orgKind} onChange={setOrgKind} />
+      <Field id="org-name" label="Name of your parish, school or group" value={orgName} onChangeText={setOrgName} maxLength={100} />
+      <Field id="contact-name" label="Your name" value={contactName} onChangeText={setContactName} autoComplete="name" />
+      <Field id="contact-email" label="Email for the invoice" value={contactEmail} onChangeText={setContactEmail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" />
+      <Field id="country" label="Country" value={country} onChangeText={setCountry} />
+      <Field id="members" label="About how many members? (optional)" value={members} onChangeText={(t) => setMembers(t.replace(/[^0-9]/g, ''))} keyboardType="number-pad" />
+      <Field id="message" label="Anything we should know? (optional)" value={message} onChangeText={setMessage} multiline maxLength={1000} />
+      <ErrorText>{error}</ErrorText>
+      <Button
+        title={busy ? 'Sending…' : 'Send request'}
+        disabled={busy}
+        onPress={async () => {
+          setBusy(true);
+          setError(null);
+          const r = await requestParishPlan({
+            orgName,
+            orgKind,
+            contactName,
+            contactEmail,
+            country,
+            expectedMembers: members ? Number(members) : undefined,
+            message,
+          });
+          setBusy(false);
+          if (!r.ok) return setError(r.error);
+          onSent(r.value.activatedNow, contactEmail.trim());
+        }}
+      />
+    </Card>
+  );
+}

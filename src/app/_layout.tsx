@@ -7,6 +7,7 @@ import { AppState as RNAppState, Platform } from 'react-native';
 import { getState, importExtensionEvents, pushConfigToNative, setAccount } from '../state/store';
 import { restoreAccount } from '../features/auth';
 import { refreshGroups } from '../features/groups';
+import { initBilling } from '../features/billing';
 import { scheduleReminders } from '../features/reminders';
 
 function openFromNotification(response: Notifications.NotificationResponse | null) {
@@ -18,6 +19,7 @@ export default function RootLayout() {
   useEffect(() => {
     // Native storage may have been cleared (reinstall, OS update): re-send the config.
     pushConfigToNative();
+    initBilling().catch(() => {});
     restoreAccount()
       .then((account) => account && setAccount(account))
       .then(() => refreshGroups())
@@ -63,6 +65,12 @@ export default function RootLayout() {
         <Stack.Screen name="prayer/[id]" options={{ title: '' }} />
         <Stack.Screen name="privacy" options={{ title: 'Privacy' }} />
         <Stack.Screen name="saint" options={{ title: 'Saint of the day' }} />
+        <Stack.Screen name="plus" options={{ title: 'Plus', presentation: 'modal' }} />
+        <Stack.Screen name="rosary" options={{ title: 'The Rosary' }} />
+        <Stack.Screen name="chaplet" options={{ title: 'Divine Mercy Chaplet' }} />
+        <Stack.Screen name="novena" options={{ title: 'Novena' }} />
+        <Stack.Screen name="parish" options={{ title: 'Parish plan' }} />
+        <Stack.Screen name="dashboard" options={{ title: 'Leader dashboard' }} />
         <Stack.Screen name="group/[id]" options={{ title: 'Group' }} />
         <Stack.Screen name="group/new" options={{ title: 'Start a group' }} />
         <Stack.Screen name="group/join" options={{ title: 'Join a group' }} />

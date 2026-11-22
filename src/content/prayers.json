@@ -140,18 +140,79 @@
       "gate": false,
       "reviewStatus": "pending",
       "text": "Visit, we beseech thee, O Lord, this house and family, and drive far from it all snares of the enemy; let thy holy angels dwell herein to keep us in peace, and let thy blessing be always upon us. Through Christ our Lord. Amen.\n\nInto your hands, O Lord, I commend my spirit.\n\nMay the Lord grant us a quiet night and a perfect end. Amen."
+    },
+    {
+      "id": "fatima-prayer",
+      "title": "Fatima Prayer",
+      "category": "marian",
+      "gate": false,
+      "reviewStatus": "pending",
+      "text": "O my Jesus, forgive us our sins, save us from the fires of hell; lead all souls to heaven, especially those in most need of thy mercy. Amen."
+    },
+    {
+      "id": "rosary-closing",
+      "title": "Prayer after the Rosary",
+      "category": "marian",
+      "gate": false,
+      "reviewStatus": "pending",
+      "text": "Let us pray. O God, whose only-begotten Son, by his life, death and resurrection, has purchased for us the rewards of eternal life; grant, we beseech thee, that meditating upon these mysteries of the Most Holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ our Lord. Amen."
+    },
+    {
+      "id": "chaplet-eternal-father",
+      "title": "Eternal Father",
+      "category": "chaplet",
+      "gate": false,
+      "reviewStatus": "pending",
+      "rightsCheck": "Chaplet wording follows the English translation of St. Faustina's Diary (no. 476). Confirm permission or use our own translation.",
+      "text": "Eternal Father, I offer you the Body and Blood, Soul and Divinity of your dearly beloved Son, our Lord Jesus Christ, in atonement for our sins and those of the whole world."
+    },
+    {
+      "id": "chaplet-sorrowful-passion",
+      "title": "For the sake of his sorrowful Passion",
+      "category": "chaplet",
+      "gate": false,
+      "reviewStatus": "pending",
+      "rightsCheck": "As above.",
+      "text": "For the sake of his sorrowful Passion, have mercy on us and on the whole world."
+    },
+    {
+      "id": "chaplet-holy-god",
+      "title": "Holy God",
+      "category": "chaplet",
+      "gate": false,
+      "reviewStatus": "pending",
+      "rightsCheck": "As above.",
+      "text": "Holy God, Holy Mighty One, Holy Immortal One, have mercy on us and on the whole world."
     }
   ],
   "scripture": {
     "source": "Douay-Rheims Bible, Challoner revision (public domain). Psalm numbering follows the Vulgate.",
     "reviewStatus": "pending",
     "verses": [
-      { "ref": "Psalm 45:11", "text": "Be still and see that I am God." },
-      { "ref": "1 Thessalonians 5:17", "text": "Pray without ceasing." },
-      { "ref": "Matthew 11:28", "text": "Come to me, all you that labour, and are burdened, and I will refresh you." },
-      { "ref": "Matthew 26:41", "text": "Watch ye, and pray that ye enter not into temptation. The spirit indeed is willing, but the flesh weak." },
-      { "ref": "Matthew 6:6", "text": "But thou when thou shalt pray, enter into thy chamber, and having shut the door, pray to thy Father in secret: and thy Father who seeth in secret will repay thee." },
-      { "ref": "Psalm 118:105", "text": "Thy word is a lamp to my feet, and a light to my paths." }
+      {
+        "ref": "Psalm 45:11",
+        "text": "Be still and see that I am God."
+      },
+      {
+        "ref": "1 Thessalonians 5:17",
+        "text": "Pray without ceasing."
+      },
+      {
+        "ref": "Matthew 11:28",
+        "text": "Come to me, all you that labour, and are burdened, and I will refresh you."
+      },
+      {
+        "ref": "Matthew 26:41",
+        "text": "Watch ye, and pray that ye enter not into temptation. The spirit indeed is willing, but the flesh weak."
+      },
+      {
+        "ref": "Matthew 6:6",
+        "text": "But thou when thou shalt pray, enter into thy chamber, and having shut the door, pray to thy Father in secret: and thy Father who seeth in secret will repay thee."
+      },
+      {
+        "ref": "Psalm 118:105",
+        "text": "Thy word is a lamp to my feet, and a light to my paths."
+      }
     ]
   },
   "rosary": {
@@ -159,19 +220,43 @@
     "mysteries": {
       "joyful": {
         "title": "Joyful Mysteries",
-        "items": ["The Annunciation", "The Visitation", "The Nativity", "The Presentation in the Temple", "The Finding in the Temple"]
+        "items": [
+          "The Annunciation",
+          "The Visitation",
+          "The Nativity",
+          "The Presentation in the Temple",
+          "The Finding in the Temple"
+        ]
       },
       "sorrowful": {
         "title": "Sorrowful Mysteries",
-        "items": ["The Agony in the Garden", "The Scourging at the Pillar", "The Crowning with Thorns", "The Carrying of the Cross", "The Crucifixion"]
+        "items": [
+          "The Agony in the Garden",
+          "The Scourging at the Pillar",
+          "The Crowning with Thorns",
+          "The Carrying of the Cross",
+          "The Crucifixion"
+        ]
       },
       "glorious": {
         "title": "Glorious Mysteries",
-        "items": ["The Resurrection", "The Ascension", "The Descent of the Holy Spirit", "The Assumption", "The Coronation of Mary"]
+        "items": [
+          "The Resurrection",
+          "The Ascension",
+          "The Descent of the Holy Spirit",
+          "The Assumption",
+          "The Coronation of Mary"
+        ]
       },
       "luminous": {
         "title": "Luminous Mysteries",
-        "items": ["The Baptism of the Lord", "The Wedding at Cana", "The Proclamation of the Kingdom", "The Transfiguration", "The Institution of the Eucharist"]
+        "items": [
+          "The Baptism of the Lord",
+          "The Wedding at Cana",
+          "The Proclamation of the Kingdom",
+          "The Transfiguration",
+          "The Institution of the Eucharist"
+        ]
       }
     }
   }

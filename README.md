@@ -11,7 +11,7 @@ This repository holds the MVP (version 1.0) codebase: one Expo (React Native, Ty
 | Area | State |
 |---|---|
 | Shared app: screens, content, calendar, stats | Written, typechecked, and the Android JS bundle builds |
-| Core logic: calendar, readings, Rosary, prayer times, gate rules, groups, stats | 80 unit tests passing |
+| Core logic: calendar, readings, Rosary, prayer times, gate rules, groups, guided prayers, campaigns, stats | 89 unit tests passing |
 | Android gate (Kotlin AccessibilityService) | Written; **not yet compiled or run on a device** |
 | iOS gate (Swift: FamilyControls, ManagedSettings, 3 extensions) | Written; **not yet compiled**, and it needs Apple's Family Controls entitlement |
 | Prayer and calendar text | Every entry is `reviewStatus: pending` until the theological adviser signs it off |
@@ -59,6 +59,38 @@ Members of a parish, youth group, school or family pray together: create a group
 - Groups need an account. Run `supabase/migrations/0002_prayer_groups.sql` (after `0001`) in the Supabase SQL editor. Row-level security lets members see only their own groups; creating and joining go through the `create_prayer_group` and `join_prayer_group` functions.
 - **Privacy:** for each member the server stores only the *days* they prayed (one row per day per group), never their intentions or how often. The join screen tells members their group will see their name and the days they pray.
 - Without Supabase keys, the browser preview and development builds use an on-device stand-in with a sample group (code `MONICA`) whose members are labelled as samples.
+
+## Making money: Plus, parish plans and sponsored campaigns
+
+What is free and what is paid is defined in one place: `src/core/plans.ts`. The prayer gate, intentions, readings, saint of the day and groups of up to 15 stay free.
+
+### Pause & Pray Plus (individuals)
+
+Guided Rosary with a bead counter (`src/app/rosary.tsx`), the Divine Mercy Chaplet (`src/app/chaplet.tsx`) and a nine-day novena for the user's intentions (`src/app/novena.tsx`, content in `src/content/novenas.json`). Paywall: `src/app/plus.tsx`. Billing: `src/features/billing.ts`, via [RevenueCat](https://www.revenuecat.com) (`react-native-purchases`), which handles Google Play and App Store subscriptions and receipts.
+
+To switch it on:
+1. Create the subscription products (for example monthly and yearly) in Google Play Console and App Store Connect, with regional prices.
+2. In RevenueCat, add both apps, an entitlement called `plus` attached to those products, and a default offering with the packages.
+3. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` and `EXPO_PUBLIC_REVENUECAT_IOS_KEY` (public SDK keys) in `.env`, then make a new development build.
+
+Without keys, the browser preview and development builds use a stand-in that charges nothing; release builds hide Plus.
+
+### Parish plans (organisations)
+
+Groups of any size, a leader dashboard (`src/app/dashboard.tsx`: totals per group for today, 7 and 30 days; never who prayed what), announcements, a choice of group devotion (intentions, Angelus, Divine Mercy or a Rosary decade) and the organisation's name on its groups. Request form and plan page: `src/app/parish.tsx`. Server: `supabase/migrations/0003_parish_plans.sql`, which also enforces the 15-member limit for free groups.
+
+Selling is by invoice, so app-store fees do not apply to it:
+1. A leader sends a request in the app (Me → For parishes and schools). It lands in the `plan_requests` table.
+2. You invoice them (for example through Paystack or Flutterwave).
+3. Once paid, run `select public.activate_parish_plan('<request id>', '2027-12-31');` in the Supabase SQL editor. This creates the organisation, makes the requester its leader and sets the paid-until date. To renew, update `organizations.plan_active_until`.
+
+Before relying on this, confirm with both stores' current rules that selling a group service to organisations outside in-app billing is acceptable for your setup.
+
+### Sponsored seasonal campaigns
+
+"40 days of Pause & Pray" (Ash Wednesday to Holy Saturday) and "Advent with Pause & Pray" appear on Today a week before they start, with progress during the season (`src/core/campaigns.ts`, `src/components/CampaignCard.tsx`, `src/content/campaigns.json`). A sponsor line ("Made possible by …") is set without an app update in the `campaign_sponsors` table (`supabase/migrations/0004_campaign_sponsors.sql`), for one year (`lent-2027`) or every year (`lent`).
+
+Never charge for prayers or Mass intentions, and keep ads out: the data is religious and sensitive.
 
 ## For Catholics everywhere
 
@@ -155,7 +187,7 @@ Before the first iOS build, add `ios.appleTeamId` to `app.json`. The extension t
 ## Before release: content and calendar checks
 
 - [ ] Theological adviser reviews every text in `src/content/prayers.json`, the intention prayers in `src/content/intentions.json` and every entry in `src/content/calendar.json`, then sets `reviewStatus` to `approved`.
-- [ ] **Rights check:** the Hour of Mercy text follows the English translation of St. Faustina's *Diary* (no. 187). Confirm permission, or replace it with our own translation (see `rightsCheck` in `prayers.json`).
+- [ ] **Rights check:** the Hour of Mercy text and the Divine Mercy Chaplet prayers follow the English translation of St. Faustina's *Diary* (nos. 187 and 476). Confirm permission, or replace it with our own translation (see `rightsCheck` in `prayers.json`).
 - [ ] Check the Douay-Rheims verse texts against a printed Challoner edition.
 - [ ] **CBCN:** confirm whether Nigeria moves Epiphany, Ascension and Corpus Christi to Sunday (`national.NG.transfers` in `calendar.json`, currently set to the universal calendar), which days are holy days of obligation, and any other national feasts and memorials. Bl. Cyprian Michael Iwene Tansi (20 January) is in the list, marked `verify`.
 - [ ] Saint descriptions are written by us. The adviser should check them for accuracy.

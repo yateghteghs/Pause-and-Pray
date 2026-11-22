@@ -1,5 +1,6 @@
 /**
- * Prayer groups on Supabase (see supabase/migrations/0002_prayer_groups.sql).
+ * Prayer groups and parish plans on Supabase
+ * (supabase/migrations/0002_prayer_groups.sql and 0003_parish_plans.sql).
  *
  * Groups need an account. The server keeps, for each member, only the days on
  * which they prayed; never what they prayed for. Without a Supabase project,
@@ -8,7 +9,19 @@
  */
 import { currentStreak } from '../core/stats';
 import { addDays, DayKey, dayKey, localDayKey, parseDayKey } from '../core/dates';
-import { GroupDetail, GroupSummary, groupTimeToLocal, localTimeZone, makeInviteCode, normaliseCode } from '../core/groups';
+import {
+  Announcement,
+  GroupDetail,
+  GroupDevotion,
+  GroupSummary,
+  groupTimeToLocal,
+  localTimeZone,
+  makeInviteCode,
+  normaliseCode,
+  OrgDashboardRow,
+  Organization,
+} from '../core/groups';
+import { FREE_GROUP_MEMBER_LIMIT } from '../core/plans';
 import { PrayerTime } from '../core/schedule';
 import { getJSON, setJSON } from '../storage/kv';
 import { getState, removePrayerTime, setGroups, upsertGroupPrayerTime } from '../state/store';
@@ -25,6 +38,7 @@ function myName(): string {
 
 function friendly(message: string): string {
   if (/no group has that code/i.test(message)) return 'No group has that code. Check it with the person who invited you.';
+  if (/group is full/i.test(message)) return `This group is full (${FREE_GROUP_MEMBER_LIMIT} members). Its leader can add a parish plan for more.`;
   if (/sign in/i.test(message)) return 'Sign in to use prayer groups.';
   if (/network|fetch/i.test(message)) return 'No connection. Check your internet and try again.';
   return message;
@@ -80,8 +94,14 @@ interface DemoMember {
 }
 interface DemoGroup extends GroupSummary {
   members: DemoMember[];
+  announcements?: Announcement[];
+}
+interface DemoOrg extends Organization {
+  /** The user is an admin of every demo organisation they request. */
+  groupIds: string[];
 }
 const DEMO_KEY = 'pause-and-pray/preview-groups/v1';
+const DEMO_ORGS_KEY = 'pause-and-pray/preview-orgs/v1';
 export const DEMO_CODE = 'MONICA';
 
 function sampleGroup(): DemoGroup {
@@ -109,7 +129,12 @@ function sampleGroup(): DemoGroup {
 const demo = {
   load: () => getJSON<DemoGroup[]>(DEMO_KEY, []),
   save: (g: DemoGroup[]) => setJSON(DEMO_KEY, g),
-  summary: ({ members: _m, ...g }: DemoGroup): GroupSummary => g,
+  orgs: () => getJSON<DemoOrg[]>(DEMO_ORGS_KEY, []),
+  saveOrgs: (o: DemoOrg[]) => setJSON(DEMO_ORGS_KEY, o),
+  summary: ({ members: _m, announcements: _a, ...g }: DemoGroup): GroupSummary => {
+    const org = demo.orgs().find((o) => o.id === g.orgId);
+    return { ...g, orgName: org?.name, orgActive: Boolean(org?.activeUntil && org.activeUntil > Date.now()) };
+  },
 };
 
 // ------------------------------------------------------------------ API
@@ -126,7 +151,9 @@ export async function refreshGroups(): Promise<Result<GroupSummary[]>> {
   }
   const { data, error } = await supabase()
     .from('prayer_group_members')
-    .select('role, prayer_groups (id, name, invite_code, intention, prayer_hour, prayer_minute, timezone)');
+    .select(
+      'role, prayer_groups (id, name, invite_code, intention, prayer_hour, prayer_minute, timezone, devotion, org_id, organizations (name, plan_active_until))',
+    );
   if (error) return { ok: false, error: friendly(error.message) };
   const list: GroupSummary[] = (data ?? []).flatMap((row: any) => {
     const g = row.prayer_groups;
@@ -140,6 +167,10 @@ export async function refreshGroups(): Promise<Result<GroupSummary[]>> {
       minute: g.prayer_minute ?? undefined,
       timezone: g.timezone ?? undefined,
       role: row.role,
+      devotion: g.devotion ?? 'intentions',
+      orgId: g.org_id ?? undefined,
+      orgName: g.organizations?.name ?? undefined,
+      orgActive: Boolean(g.organizations?.plan_active_until && Date.parse(g.organizations.plan_active_until) > Date.now()),
     }];
   });
   store(list);
@@ -151,6 +182,9 @@ export interface NewGroup {
   intention?: string;
   hour?: number;
   minute?: number;
+  /** Parish plan: create the group inside this organisation. */
+  orgId?: string;
+  devotion?: GroupDevotion;
 }
 
 export async function createGroup(input: NewGroup): Promise<Result<GroupSummary>> {
@@ -167,6 +201,8 @@ export async function createGroup(input: NewGroup): Promise<Result<GroupSummary>
       minute: input.minute,
       timezone,
       role: 'admin',
+      orgId: input.orgId,
+      devotion: input.devotion ?? 'intentions',
       members: [{ name: myName(), me: true, days: [] }],
     };
     demo.save([...demo.load(), g]);
@@ -174,14 +210,17 @@ export async function createGroup(input: NewGroup): Promise<Result<GroupSummary>
     await shareTodayIfPrayed();
     return { ok: true, value: demo.summary(g) };
   }
-  const { data, error } = await supabase().rpc('create_prayer_group', {
+  const common = {
     p_name: name,
     p_display_name: myName(),
     p_intention: input.intention ?? null,
     p_hour: input.hour ?? null,
     p_minute: input.minute ?? null,
     p_timezone: timezone,
-  });
+  };
+  const { data, error } = input.orgId
+    ? await supabase().rpc('create_org_group', { ...common, p_org: input.orgId, p_devotion: input.devotion ?? 'intentions' })
+    : await supabase().rpc('create_prayer_group', common);
   if (error || !data) return { ok: false, error: friendly(error?.message ?? 'Could not create the group.') };
   const list = await refreshGroups();
   await shareTodayIfPrayed();
@@ -197,6 +236,7 @@ export async function joinGroup(codeInput: string): Promise<Result<GroupSummary>
     const already = groups.find((g) => g.code === code);
     if (already) return { ok: true, value: demo.summary(already) };
     if (code !== DEMO_CODE) return { ok: false, error: `No group has that code. In this preview, try ${DEMO_CODE}.` };
+    // (The sample group is small; the 15-member limit is enforced by the server's join_prayer_group.)
     const g = sampleGroup();
     g.members.unshift({ name: myName(), me: true, days: [] });
     demo.save([...groups, g]);
@@ -224,7 +264,10 @@ export async function leaveGroup(id: string): Promise<Result<null>> {
   return { ok: true, value: null };
 }
 
-export async function updateGroup(id: string, patch: { intention?: string; hour?: number | null; minute?: number | null }): Promise<Result<null>> {
+export async function updateGroup(
+  id: string,
+  patch: { intention?: string; hour?: number | null; minute?: number | null; devotion?: GroupDevotion },
+): Promise<Result<null>> {
   if (!accountsConfigured) {
     demo.save(
       demo.load().map((g) =>
@@ -235,6 +278,7 @@ export async function updateGroup(id: string, patch: { intention?: string; hour?
               hour: patch.hour ?? undefined,
               minute: patch.minute ?? undefined,
               timezone: localTimeZone(),
+              devotion: patch.devotion ?? g.devotion,
             }
           : g,
       ),
@@ -247,6 +291,7 @@ export async function updateGroup(id: string, patch: { intention?: string; hour?
         prayer_hour: patch.hour ?? null,
         prayer_minute: patch.minute ?? null,
         timezone: localTimeZone(),
+        ...(patch.devotion ? { devotion: patch.devotion } : {}),
       })
       .eq('id', id);
     if (error) return { ok: false, error: friendly(error.message) };
@@ -267,14 +312,17 @@ export async function getGroup(id: string): Promise<Result<GroupDetail>> {
         ...demo.summary(g),
         members: g.members.map((m) => ({ name: m.name, isMe: Boolean(m.me), prayedToday: m.days.includes(today) })),
         streak: currentStreak(allDays, new Date()),
+        announcements: [...(g.announcements ?? [])].sort((a, b) => b.at - a.at),
+        memberLimit: demo.summary(g).orgActive ? null : FREE_GROUP_MEMBER_LIMIT,
       },
     };
   }
   const since = dayKey(addDays(parseDayKey(today), -60));
-  const [{ data: auth }, members, days] = await Promise.all([
+  const [{ data: auth }, members, days, notes] = await Promise.all([
     supabase().auth.getUser(),
     supabase().from('prayer_group_members').select('user_id, display_name, role').eq('group_id', id),
     supabase().from('prayer_group_days').select('user_id, prayed_on').eq('group_id', id).gte('prayed_on', since),
+    supabase().from('group_announcements').select('id, body, created_at').eq('group_id', id).order('created_at', { ascending: false }).limit(20),
   ]);
   if (members.error || days.error) return { ok: false, error: friendly((members.error ?? days.error)!.message) };
   const summary = getState().groups.find((g) => g.id === id);
@@ -287,6 +335,8 @@ export async function getGroup(id: string): Promise<Result<GroupDetail>> {
       ...summary,
       members: (members.data ?? []).map((m) => ({ name: m.display_name, isMe: m.user_id === me, prayedToday: prayedToday.has(m.user_id) })),
       streak: currentStreak(new Set((days.data ?? []).map((d) => d.prayed_on)), new Date()),
+      announcements: (notes.data ?? []).map((n) => ({ id: String(n.id), body: n.body, at: Date.parse(n.created_at) })),
+      memberLimit: summary.orgActive ? null : FREE_GROUP_MEMBER_LIMIT,
     },
   };
 }
@@ -310,4 +360,147 @@ export async function recordGroupPrayer(): Promise<void> {
   await supabase()
     .from('prayer_group_days')
     .upsert(groups.map((g) => ({ group_id: g.id, user_id: auth.user!.id, prayed_on: today })), { ignoreDuplicates: true });
+}
+
+// ------------------------------------------------------------------ parish plans
+
+export async function postAnnouncement(groupId: string, body: string): Promise<Result<null>> {
+  const text = body.trim();
+  if (!text) return { ok: false, error: 'Write the announcement first.' };
+  if (!accountsConfigured) {
+    demo.save(
+      demo.load().map((g) =>
+        g.id === groupId ? { ...g, announcements: [{ id: String(Date.now()), body: text, at: Date.now() }, ...(g.announcements ?? [])] } : g,
+      ),
+    );
+    return { ok: true, value: null };
+  }
+  const { error } = await supabase().from('group_announcements').insert({ group_id: groupId, body: text });
+  return error ? { ok: false, error: friendly(error.message) } : { ok: true, value: null };
+}
+
+export async function deleteAnnouncement(groupId: string, id: string): Promise<Result<null>> {
+  if (!accountsConfigured) {
+    demo.save(demo.load().map((g) => (g.id === groupId ? { ...g, announcements: (g.announcements ?? []).filter((a) => a.id !== id) } : g)));
+    return { ok: true, value: null };
+  }
+  const { error } = await supabase().from('group_announcements').delete().eq('id', Number(id));
+  return error ? { ok: false, error: friendly(error.message) } : { ok: true, value: null };
+}
+
+export interface PlanRequest {
+  orgName: string;
+  orgKind: Organization['kind'];
+  contactName: string;
+  contactEmail: string;
+  country?: string;
+  expectedMembers?: number;
+  message?: string;
+}
+
+/**
+ * A leader asks for a parish plan. You invoice them and activate it
+ * (activate_parish_plan in 0003_parish_plans.sql). In the preview it is
+ * activated straight away for 30 days so the features can be tried.
+ */
+export async function requestParishPlan(r: PlanRequest): Promise<Result<{ activatedNow: boolean }>> {
+  if (r.orgName.trim().length < 2) return { ok: false, error: 'Enter the name of your parish, school or group.' };
+  if (!r.contactName.trim()) return { ok: false, error: 'Enter your name.' };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.contactEmail.trim())) return { ok: false, error: 'Enter an email address we can send the invoice to.' };
+  if (!accountsConfigured) {
+    const org: DemoOrg = {
+      id: `demo-org-${Date.now()}`,
+      name: r.orgName.trim(),
+      kind: r.orgKind,
+      activeUntil: Date.now() + 30 * 86_400_000,
+      groupIds: [],
+    };
+    demo.saveOrgs([...demo.orgs(), org]);
+    return { ok: true, value: { activatedNow: true } };
+  }
+  const { error } = await supabase().from('plan_requests').insert({
+    org_name: r.orgName.trim(),
+    org_kind: r.orgKind,
+    contact_name: r.contactName.trim(),
+    contact_email: r.contactEmail.trim(),
+    country: r.country?.trim() || null,
+    expected_members: r.expectedMembers ?? null,
+    message: r.message?.trim() || null,
+  });
+  return error ? { ok: false, error: friendly(error.message) } : { ok: true, value: { activatedNow: false } };
+}
+
+/** Organisations the user leads. */
+export async function myOrganizations(): Promise<Result<Organization[]>> {
+  if (!getState().account) return { ok: true, value: [] };
+  if (!accountsConfigured) return { ok: true, value: demo.orgs().map(({ groupIds: _g, ...o }) => o) };
+  const { data, error } = await supabase().from('organization_admins').select('organizations (id, name, kind, plan_active_until)');
+  if (error) return { ok: false, error: friendly(error.message) };
+  return {
+    ok: true,
+    value: (data ?? []).flatMap((row: any) =>
+      row.organizations
+        ? [{
+            id: row.organizations.id,
+            name: row.organizations.name,
+            kind: row.organizations.kind,
+            activeUntil: row.organizations.plan_active_until ? Date.parse(row.organizations.plan_active_until) : undefined,
+          }]
+        : [],
+    ),
+  };
+}
+
+/** Moves a group the user leads into their organisation (parish plan). */
+export async function attachGroupToOrg(groupId: string, orgId: string): Promise<Result<null>> {
+  if (!accountsConfigured) {
+    demo.save(demo.load().map((g) => (g.id === groupId ? { ...g, orgId } : g)));
+  } else {
+    const { error } = await supabase().rpc('attach_group_to_org', { p_group: groupId, p_org: orgId });
+    if (error) return { ok: false, error: friendly(error.message) };
+  }
+  await refreshGroups();
+  return { ok: true, value: null };
+}
+
+/** Totals per group for the leader dashboard; never who prayed what. */
+export async function orgDashboard(orgId: string): Promise<Result<OrgDashboardRow[]>> {
+  if (!accountsConfigured) {
+    const today = parseDayKey(localDayKey(new Date()));
+    const within = (days: DayKey[], n: number) =>
+      days.filter((d) => {
+        const diff = (today.getTime() - parseDayKey(d).getTime()) / 86_400_000;
+        return diff >= 0 && diff < n;
+      }).length;
+    return {
+      ok: true,
+      value: demo
+        .load()
+        .filter((g) => g.orgId === orgId)
+        .map((g) => {
+          const n = g.members.length || 1;
+          return {
+            groupId: g.id,
+            groupName: g.name,
+            members: g.members.length,
+            prayedToday: g.members.filter((m) => m.days.includes(dayKey(today))).length,
+            rate7d: g.members.reduce((t, m) => t + within(m.days, 7), 0) / (n * 7),
+            rate30d: g.members.reduce((t, m) => t + within(m.days, 30), 0) / (n * 30),
+          };
+        }),
+    };
+  }
+  const { data, error } = await supabase().rpc('org_dashboard', { p_org: orgId });
+  if (error) return { ok: false, error: friendly(error.message) };
+  return {
+    ok: true,
+    value: (data ?? []).map((r: any) => ({
+      groupId: r.group_id,
+      groupName: r.group_name,
+      members: r.members,
+      prayedToday: r.prayed_today,
+      rate7d: Number(r.rate_7d),
+      rate30d: Number(r.rate_30d),
+    })),
+  };
 }

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "note": "Seasonal campaigns. Dates come from the liturgical calendar each year. A sponsor can be set here or, without an app update, in the Supabase table public.campaign_sponsors (supabase/migrations/0004_campaign_sponsors.sql).",
+  "campaigns": [
+    {
+      "id": "advent",
+      "season": "advent",
+      "title": "Advent with Pause & Pray",
+      "goal": "Pray every day of Advent, and prepare a place for Christ.",
+      "sponsor": null
+    },
+    {
+      "id": "lent",
+      "season": "lent",
+      "title": "40 days of Pause & Pray",
+      "goal": "Pray every day from Ash Wednesday to Holy Saturday.",
+      "sponsor": null
+    }
+  ]
+}

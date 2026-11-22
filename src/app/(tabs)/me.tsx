@@ -1,12 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { hasPlus } from '../../core/plans';
+import { plusAvailable } from '../../features/billing';
+import { groupsAvailable } from '../../features/groups';
 import { Body, Card, Label, NavRow, Screen } from '../../components/ui';
 import { colors, space } from '../../components/theme';
 import { computeStats } from '../../core/stats';
 import { useAppState } from '../../state/store';
 
 export default function StatsScreen() {
-  const { events, account, intentions } = useAppState();
+  const { events, account, intentions, plus } = useAppState();
   const s = computeStats(events, new Date());
   const rows: [string, string | number][] = [
     ['Current streak', `${s.currentStreak} ${s.currentStreak === 1 ? 'day' : 'days'}`],
@@ -27,6 +30,12 @@ export default function StatsScreen() {
         />
         <NavRow label="My intentions" detail={intentions.length ? intentions.join(' · ') : 'Choose three'} onPress={() => router.push('/intentions')} />
         <NavRow label="Privacy and your data" onPress={() => router.push('/privacy')} />
+      </Card>
+      <Card style={{ paddingVertical: space.xs }}>
+        {plusAvailable ? (
+          <NavRow label="Pause & Pray Plus" detail={hasPlus(plus) ? 'Active · manage your subscription' : 'Guided Rosary, Divine Mercy Chaplet, novenas'} onPress={() => router.push('/plus')} />
+        ) : null}
+        {groupsAvailable ? <NavRow label="For parishes and schools" detail="Parish plan and leader dashboard" onPress={() => router.push('/parish')} /> : null}
       </Card>
       <Card>
         <Label>Prayed rather than skipped</Label>

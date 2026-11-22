@@ -3,6 +3,38 @@
  * Server access lives in src/features/groups.ts.
  */
 
+export type GroupDevotion = 'intentions' | 'angelus' | 'divine-mercy' | 'rosary-decade';
+
+export const DEVOTION_LABELS: Record<GroupDevotion, string> = {
+  intentions: 'Prayers for our intentions',
+  angelus: 'The Angelus',
+  'divine-mercy': 'Divine Mercy prayer',
+  'rosary-decade': 'A decade of the Rosary',
+};
+
+export interface Announcement {
+  id: string;
+  body: string;
+  at: number;
+}
+
+export interface OrgDashboardRow {
+  groupId: string;
+  groupName: string;
+  members: number;
+  prayedToday: number;
+  /** Share of member-days with prayer, 0-1. */
+  rate7d: number;
+  rate30d: number;
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  kind: 'parish' | 'school' | 'chaplaincy' | 'association' | 'other';
+  activeUntil?: number;
+}
+
 export interface GroupSummary {
   id: string;
   name: string;
@@ -14,6 +46,12 @@ export interface GroupSummary {
   minute?: number;
   timezone?: string;
   role: 'admin' | 'member';
+  /** Parish plan: the organisation the group belongs to. */
+  orgId?: string;
+  orgName?: string;
+  /** True while the organisation's parish plan is paid. */
+  orgActive?: boolean;
+  devotion?: GroupDevotion;
 }
 
 export interface GroupMemberToday {
@@ -26,6 +64,9 @@ export interface GroupDetail extends GroupSummary {
   members: GroupMemberToday[];
   /** Consecutive days (ending today or yesterday) on which at least one member prayed. */
   streak: number;
+  announcements: Announcement[];
+  /** Members allowed: a number for free groups, null with a parish plan. */
+  memberLimit: number | null;
 }
 
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // no 0/O, 1/I/L

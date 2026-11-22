@@ -7,6 +7,7 @@ import { COLOUR_HEX, liturgicalDay } from '../../core/liturgical';
 import { computeStats } from '../../core/stats';
 import { duePrayer, formatTime, nextPrayer } from '../../core/schedule';
 import { previewPrayerTimeNow, useAppState } from '../../state/store';
+import { CampaignCard } from '../../components/CampaignCard';
 import { IS_WEB_PREVIEW } from '../../features/demo';
 import { accountsAvailable } from '../../features/auth';
 
@@ -42,6 +43,8 @@ export default function Today() {
           <Button kind="secondary" title="Pray now" onPress={() => router.push({ pathname: '/pause', params: { time: due.time.id } })} />
         </View>
       ) : null}
+
+      <CampaignCard />
 
       <Card style={{ padding: 0, overflow: 'hidden' }}>
         <View style={[s.band, { backgroundColor: COLOUR_HEX[day.colour] }]} />
