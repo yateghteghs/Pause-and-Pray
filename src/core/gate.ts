@@ -1,8 +1,13 @@
 /**
- * Gate rules shared by the app and (mirrored in Kotlin/Swift) by the native
- * blockers. Keep src/native/*.kt / ios logic in step with this file.
+ * Gate rules shared by the app and (mirrored in Kotlin and Swift) by the
+ * native blockers in modules/app-gate. Keep them in step with this file.
+ *
+ *  1. A prayer time that has come round and not been prayed pauses the chosen
+ *     apps until "I've prayed", in every mode. There is no time limit and no skip.
+ *  2. "Every open" mode also pauses the apps each time they are opened; there,
+ *     "I've prayed" or "Skip for now" opens them for 15, 30 or 60 minutes.
  */
-import { activeWindow, PrayerTime } from './schedule';
+import { duePrayer, PrayerTime } from './schedule';
 
 export type GateMode = 'every-open' | 'prayer-times';
 export type UnlockMinutes = 15 | 30 | 60;
@@ -13,15 +18,26 @@ export interface GateConfig {
   mode: GateMode;
   unlockMinutes: UnlockMinutes;
   schedule: PrayerTime[];
-  /** packageName -> epoch ms until which the app is unlocked. */
+  /** Epoch ms of the last "I've prayed" (settles every prayer time due before it). */
+  lastPrayedAt: number;
+  /** Every-open mode: packageName -> epoch ms until which the app is open. */
   unlockedUntil: Record<string, number>;
 }
 
 export function shouldGate(app: string, nowMs: number, cfg: GateConfig): boolean {
   if (!cfg.gatedApps.includes(app)) return false;
-  if ((cfg.unlockedUntil[app] ?? 0) > nowMs) return false;
-  if (cfg.mode === 'every-open') return true;
-  return activeWindow(cfg.schedule, new Date(nowMs)) !== undefined;
+  if (duePrayer(cfg.schedule, nowMs, cfg.lastPrayedAt)) return true;
+  if (cfg.mode === 'prayer-times') return false;
+  return (cfg.unlockedUntil[app] ?? 0) <= nowMs;
+}
+
+/** "Skip for now" is only offered outside prayer times. */
+export function canSkip(nowMs: number, cfg: Pick<GateConfig, 'schedule' | 'lastPrayedAt'>): boolean {
+  return !duePrayer(cfg.schedule, nowMs, cfg.lastPrayedAt);
+}
+
+export function markPrayed(cfg: GateConfig, nowMs: number): GateConfig {
+  return { ...cfg, lastPrayedAt: nowMs };
 }
 
 export function unlock(cfg: GateConfig, app: string, nowMs: number, minutes = cfg.unlockMinutes): GateConfig {

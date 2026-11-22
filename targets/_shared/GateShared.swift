@@ -19,6 +19,7 @@ enum GateShared {
   private static let selectionKey = "selection"
   private static let configKey = "config"
   private static let unlockedUntilKey = "unlockedUntil"
+  private static let lastPrayedAtKey = "lastPrayedAt"
   private static let eventsKey = "extensionEvents"
 
   static let store = ManagedSettingsStore(named: ManagedSettingsStore.Name("pauseAndPray"))
@@ -32,7 +33,8 @@ enum GateShared {
     let hour: Int
     let minute: Int
     let enabled: Bool
-    let windowMinutes: Int
+    /** Epoch ms; occurrences before it do not count. */
+    let since: Double
   }
 
   struct Config: Codable {
@@ -40,6 +42,7 @@ enum GateShared {
     let mode: String
     let unlockMinutes: Int
     let schedule: [ScheduleItem]
+    let lastPrayedAt: Double
     var everyOpen: Bool { mode == "every-open" }
   }
 
@@ -63,6 +66,21 @@ enum GateShared {
 
   static func saveConfig(json: String) {
     defaults.set(json, forKey: configKey)
+    // The app's "last prayed" wins only if newer.
+    if let cfg = loadConfig(), cfg.lastPrayedAt > lastPrayedAt() {
+      defaults.set(cfg.lastPrayedAt, forKey: lastPrayedAtKey)
+    }
+  }
+
+  /// Epoch ms of the last "I've prayed".
+  static func lastPrayedAt() -> Double {
+    defaults.double(forKey: lastPrayedAtKey)
+  }
+
+  /// "I've prayed": settles every prayer time that is due and lifts the shield.
+  static func markPrayed(epochMs: Double) {
+    defaults.set(epochMs, forKey: lastPrayedAtKey)
+    reapplyIfNeeded()
   }
 
   static func loadConfig() -> Config? {
@@ -89,41 +107,49 @@ enum GateShared {
     defaults.double(forKey: unlockedUntilKey) > now.timeIntervalSince1970 + 5
   }
 
-  static func inPrayerWindow(_ cfg: Config, now: Date = Date()) -> Bool {
-    let c = Calendar.current.dateComponents([.hour, .minute], from: now)
-    let minutes = (c.hour ?? 0) * 60 + (c.minute ?? 0)
+  /// The most recent moment, at or before now, that this time came round (epoch ms).
+  static func latestOccurrence(_ item: ScheduleItem, now: Date) -> Double {
+    let cal = Calendar.current
+    var date = cal.date(bySettingHour: item.hour, minute: item.minute, second: 0, of: now) ?? now
+    if date > now { date = cal.date(byAdding: .day, value: -1, to: date) ?? date }
+    return date.timeIntervalSince1970 * 1000
+  }
+
+  /// A prayer time has come round since the last "I've prayed".
+  static func prayerDue(now: Date = Date()) -> Bool {
+    guard let cfg = loadConfig() else { return false }
+    let last = lastPrayedAt()
     return cfg.schedule.contains { item in
       guard item.enabled else { return false }
-      let start = item.hour * 60 + item.minute
-      let end = start + max(item.windowMinutes, minWindowMinutes)
-      return end <= 1440 ? (minutes >= start && minutes < end) : (minutes >= start || minutes < end - 1440)
+      let at = latestOccurrence(item, now: now)
+      return at >= item.since && at > last
     }
   }
 
-  /// Puts the shield in the state the settings call for right now.
+  /// Puts the shield in the state the rules call for right now (mirrors src/core/gate.ts).
   static func reapplyIfNeeded(now: Date = Date()) {
     guard let cfg = loadConfig(), !cfg.gatedApps.isEmpty else { clearShield(); return }
-    if isUnlocked(now: now) { clearShield(); return }
-    if cfg.everyOpen || inPrayerWindow(cfg, now: now) { applyShield() } else { clearShield() }
+    if prayerDue(now: now) { applyShield(); return }
+    if cfg.everyOpen && !isUnlocked(now: now) { applyShield() } else { clearShield() }
   }
 
   // MARK: monitoring
 
-  /// Registers one repeating DeviceActivity schedule per prayer time, then sets the shield.
+  /// Registers one repeating DeviceActivity schedule per prayer time. The
+  /// monitor extension turns the shield on when each one starts; it stays on
+  /// until "I've prayed" (the 15-minute interval is only Apple's minimum length).
   static func startMonitoring() throws {
     let center = DeviceActivityCenter()
     center.stopMonitoring(center.activities.filter { $0.rawValue.hasPrefix(windowPrefix) })
     guard let cfg = loadConfig() else { clearShield(); return }
-    if !cfg.everyOpen {
-      for item in cfg.schedule where item.enabled {
-        let endTotal = (item.hour * 60 + item.minute + max(item.windowMinutes, minWindowMinutes)) % 1440
-        let schedule = DeviceActivitySchedule(
-          intervalStart: DateComponents(hour: item.hour, minute: item.minute),
-          intervalEnd: DateComponents(hour: endTotal / 60, minute: endTotal % 60),
-          repeats: true
-        )
-        try center.startMonitoring(DeviceActivityName(windowPrefix + item.id), during: schedule)
-      }
+    for item in cfg.schedule where item.enabled {
+      let endTotal = (item.hour * 60 + item.minute + minWindowMinutes) % 1440
+      let schedule = DeviceActivitySchedule(
+        intervalStart: DateComponents(hour: item.hour, minute: item.minute),
+        intervalEnd: DateComponents(hour: endTotal / 60, minute: endTotal % 60),
+        repeats: true
+      )
+      try center.startMonitoring(DeviceActivityName(windowPrefix + item.id), during: schedule)
     }
     reapplyIfNeeded()
   }

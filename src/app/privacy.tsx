@@ -25,7 +25,7 @@ export default function Privacy() {
       <Card>
         <H2>Why we are careful</H2>
         <Body>
-          Using a Catholic prayer app reveals your religion. Under the Nigeria Data Protection Act 2023 and the GDPR that
+          Using a Catholic prayer app reveals your religion. Under data-protection laws such as the GDPR in Europe and the NDPA in Nigeria, that
           is sensitive personal data, so we keep it on your phone.
         </Body>
       </Card>

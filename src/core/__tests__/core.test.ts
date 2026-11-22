@@ -1,6 +1,6 @@
 import { mysterySetFor } from '../rosary';
-import { activeWindow, DEFAULT_SCHEDULE, resolvePrayerId } from '../schedule';
-import { GateConfig, shouldGate, unlock } from '../gate';
+import { defaultSchedule, duePrayer, newPersonalTime, nextPrayer, resolvePrayerId } from '../schedule';
+import { canSkip, GateConfig, markPrayed, shouldGate, unlock } from '../gate';
 import { computeStats, PauseEvent } from '../stats';
 import { GATE_PRAYERS, pausePrayer, PRAYERS } from '../prayers';
 
@@ -15,52 +15,90 @@ describe('rosary', () => {
   });
 });
 
-describe('schedule', () => {
-  test('active windows', () => {
-    expect(activeWindow(DEFAULT_SCHEDULE, at(2026, 11, 23, 12, 5))?.id).toBe('angelus-12');
-    expect(activeWindow(DEFAULT_SCHEDULE, at(2026, 11, 23, 15, 14))?.id).toBe('mercy-15');
-    expect(activeWindow(DEFAULT_SCHEDULE, at(2026, 11, 23, 15, 15))).toBeUndefined();
-    expect(activeWindow(DEFAULT_SCHEDULE, at(2026, 11, 23, 21, 40))).toBeUndefined(); // night prayer off by default
+describe('prayer times', () => {
+  const created = at(2026, 11, 22, 20).getTime(); // set up on Sunday evening
+  const schedule = defaultSchedule(created); // 7am personal time; devotions off
+  const mercy = { ...schedule.find((t) => t.id === 'mercy-15')!, enabled: true };
+  const withMercy = schedule.map((t) => (t.id === 'mercy-15' ? mercy : t));
+
+  test('devotions are off by default', () => {
+    expect(schedule.filter((t) => t.kind === 'devotion').every((t) => !t.enabled)).toBe(true);
   });
 
-  test('windows that cross midnight', () => {
-    const late = [{ ...DEFAULT_SCHEDULE[5], enabled: true, hour: 23, minute: 50, windowMinutes: 30 }];
-    expect(activeWindow(late, at(2026, 11, 23, 0, 10))?.id).toBe('night');
-    expect(activeWindow(late, at(2026, 11, 23, 0, 25))).toBeUndefined();
+  test('nothing is due before the first prayer time comes round', () => {
+    expect(duePrayer(schedule, at(2026, 11, 22, 23).getTime(), 0)).toBeUndefined();
+    expect(duePrayer(schedule, at(2026, 11, 23, 6, 59).getTime(), 0)).toBeUndefined();
+  });
+
+  test('a prayer time stays due until the user prays, however long that takes', () => {
+    expect(duePrayer(schedule, at(2026, 11, 23, 7, 0).getTime(), 0)?.time.id).toBe('personal-1');
+    expect(duePrayer(schedule, at(2026, 11, 23, 13, 0).getTime(), 0)?.time.id).toBe('personal-1');
+    const prayed = at(2026, 11, 23, 13, 5).getTime();
+    expect(duePrayer(schedule, at(2026, 11, 23, 20, 0).getTime(), prayed)).toBeUndefined();
+    expect(duePrayer(schedule, at(2026, 11, 24, 7, 1).getTime(), prayed)?.time.id).toBe('personal-1');
+  });
+
+  test('a devotion, once turned on, works like a prayer time', () => {
+    const prayedAt7 = at(2026, 11, 23, 7, 10).getTime();
+    expect(duePrayer(withMercy, at(2026, 11, 23, 14, 59).getTime(), prayedAt7)).toBeUndefined();
+    expect(duePrayer(withMercy, at(2026, 11, 23, 15, 0).getTime(), prayedAt7)?.time.id).toBe('mercy-15');
+  });
+
+  test('a time added later in the day starts tomorrow', () => {
+    const added = at(2026, 11, 23, 16).getTime();
+    const extra = newPersonalTime(schedule, 9, 0, added);
+    expect(extra.id).toBe('personal-2');
+    const s2 = [...schedule, extra];
+    const prayed = at(2026, 11, 23, 7, 5).getTime();
+    expect(duePrayer(s2, at(2026, 11, 23, 17).getTime(), prayed)).toBeUndefined();
+    expect(duePrayer(s2, at(2026, 11, 24, 9, 1).getTime(), at(2026, 11, 24, 7, 5).getTime())?.time.id).toBe('personal-2');
+  });
+
+  test('next prayer', () => {
+    expect(nextPrayer(withMercy, at(2026, 11, 23, 10).getTime())?.time.id).toBe('mercy-15');
+    expect(nextPrayer(withMercy, at(2026, 11, 23, 16).getTime())?.time.id).toBe('personal-1');
   });
 
   test('Regina Caeli replaces the Angelus in Easter Time', () => {
-    const angelus = DEFAULT_SCHEDULE.find((t) => t.id === 'angelus-12')!;
+    const angelus = schedule.find((t) => t.id === 'angelus-12')!;
     expect(resolvePrayerId(angelus, at(2027, 4, 10))).toBe('regina-caeli');
     expect(resolvePrayerId(angelus, at(2027, 6, 10))).toBe('angelus');
   });
 });
 
 describe('gate', () => {
+  const created = at(2026, 11, 22, 20).getTime();
   const base: GateConfig = {
     gatedApps: ['com.instagram.android'],
-    mode: 'every-open',
+    mode: 'prayer-times',
     unlockMinutes: 15,
-    schedule: DEFAULT_SCHEDULE,
+    schedule: defaultSchedule(created),
+    lastPrayedAt: 0,
     unlockedUntil: {},
   };
-  const now = at(2026, 11, 23, 10).getTime();
+  const morning = at(2026, 11, 23, 8).getTime();
 
-  test('every-open mode gates chosen apps only', () => {
-    expect(shouldGate('com.instagram.android', now, base)).toBe(true);
-    expect(shouldGate('com.android.chrome', now, base)).toBe(false);
+  test('prayer-times mode: paused from the prayer time until "I\'ve prayed", no skip', () => {
+    expect(shouldGate('com.instagram.android', at(2026, 11, 23, 6).getTime(), base)).toBe(false);
+    expect(shouldGate('com.instagram.android', morning, base)).toBe(true);
+    expect(shouldGate('com.android.chrome', morning, base)).toBe(false);
+    expect(canSkip(morning, base)).toBe(false);
+    const prayed = markPrayed(base, morning);
+    expect(shouldGate('com.instagram.android', morning + 60_000, prayed)).toBe(false);
   });
 
-  test('unlock window', () => {
-    const cfg = unlock(base, 'com.instagram.android', now);
-    expect(shouldGate('com.instagram.android', now + 14 * 60_000, cfg)).toBe(false);
-    expect(shouldGate('com.instagram.android', now + 15 * 60_000, cfg)).toBe(true);
-  });
-
-  test('prayer-times mode gates only inside a window', () => {
-    const cfg = { ...base, mode: 'prayer-times' as const };
-    expect(shouldGate('com.instagram.android', now, cfg)).toBe(false);
-    expect(shouldGate('com.instagram.android', at(2026, 11, 23, 12, 1).getTime(), cfg)).toBe(true);
+  test('every-open mode: unlock window, and a due prayer time still wins', () => {
+    const cfg = { ...base, mode: 'every-open' as const, lastPrayedAt: morning };
+    const later = at(2026, 11, 23, 10).getTime();
+    expect(shouldGate('com.instagram.android', later, cfg)).toBe(true);
+    expect(canSkip(later, cfg)).toBe(true);
+    const open = unlock(cfg, 'com.instagram.android', later);
+    expect(shouldGate('com.instagram.android', later + 14 * 60_000, open)).toBe(false);
+    expect(shouldGate('com.instagram.android', later + 15 * 60_000, open)).toBe(true);
+    // the next morning's prayer time pauses the app even inside an unlock window
+    const nextMorning = at(2026, 11, 24, 7, 5).getTime();
+    const openNextDay = unlock(cfg, 'com.instagram.android', nextMorning - 60_000);
+    expect(shouldGate('com.instagram.android', nextMorning, openNextDay)).toBe(true);
   });
 });
 

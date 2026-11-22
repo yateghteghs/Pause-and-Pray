@@ -1,7 +1,9 @@
 /**
  * The Prayer Pause screen. Opened by the Android gate through the deep link
- * pauseandpray://pause?app=<package>, by an iOS shield notification, or by a
- * prayer-time reminder (?time=<schedule id>).
+ * pauseandpray://pause?app=<package>, by an iOS shield notification, by a
+ * prayer-time reminder (?time=<prayer time id>), or by "Pray now" (?mode=now).
+ *
+ * At a prayer time the apps stay paused until "I've prayed": there is no skip.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -10,38 +12,46 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as AppGate from '../../modules/app-gate';
 import { Button } from '../components/ui';
 import { colors, space } from '../components/theme';
-import { PausePlan, pausePlan, pausePrayer, prayerById } from '../core/prayers';
-import { resolvePrayerId } from '../core/schedule';
+import { PausePlan, pausePlan, prayerTimePlan } from '../core/prayers';
+import { duePrayer, formatTime } from '../core/schedule';
 import { PauseOutcome } from '../core/stats';
-import { getState, nextPauseCounter, recordPause, useAppState } from '../state/store';
+import { getState, markPrayed, nextPauseCounter, recordPause, useAppState } from '../state/store';
 import { gospelVerse } from '../core/readings';
+import { recordGroupPrayer } from '../features/groups';
 
 /** "I've prayed" becomes active after a short moment, so the tap follows the prayer. */
 const PRAY_DELAY_MS = 5000;
 
 export default function PrayerPause() {
   const { app, time, mode } = useLocalSearchParams<{ app?: string; time?: string; mode?: string }>();
-  /** Opened by a paused app (Android ?app=, iOS shield notification), not by "Pray now" or a reminder. */
-  const isGate = !time && mode !== 'now';
   const state = useAppState();
   const started = useRef(0);
   /** The plan whose "I've prayed" button has unlocked after PRAY_DELAY_MS. */
   const [readyFor, setReadyFor] = useState<string | null>(null);
   const [done, setDone] = useState<string | null>(null);
 
+  // Read once per pause (the counter advances in the effect below).
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const counter = useMemo(() => getState().pauseCounter, [app, time, mode]);
+  // The screen is remounted for each new link (see getId in _layout), so this is when this pause opened.
+  const [openedAt] = useState(() => Date.now());
+
+  /** The prayer time this pause belongs to: the one in the link, or the one that is due. */
+  const due = duePrayer(state.gate.schedule, openedAt, state.gate.lastPrayedAt);
+  const prayerTime = state.gate.schedule.find((t) => t.id === time) ?? due?.time;
+  /** A prayer time is waiting: the apps stay paused until the user prays. */
+  const locked = Boolean(due);
+  /** Opened by a paused app (Android ?app=, iOS shield notification). */
+  const fromApp = mode !== 'now' && !time && (Boolean(app) || Platform.OS === 'ios');
+
   const plan = useMemo((): PausePlan => {
-    const slot = state.gate.schedule.find((t) => t.id === time);
-    if (slot) {
-      // Prayer times keep their own prayer (Angelus, Hour of Mercy…), then the intentions.
-      const p = prayerById(resolvePrayerId(slot, new Date())) ?? pausePrayer(0);
-      const forIntentions = pausePlan(state.intentions, getState().pauseCounter, 'pray-now');
-      const sections = [{ title: p.title, text: p.text }];
-      if (state.intentions.length) sections.push(...forIntentions.sections.filter((x) => x.intention));
-      return { sections, prayerId: p.id };
+    if (prayerTime) {
+      const group = state.groups.find((g) => g.id === prayerTime.groupId);
+      return prayerTimePlan(prayerTime, new Date(openedAt), state.intentions, counter, group);
     }
-    return pausePlan(state.intentions, getState().pauseCounter, isGate ? 'gate' : 'pray-now');
+    return pausePlan(state.intentions, counter, fromApp ? 'gate' : 'pray-now');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [app, time, mode]);
+  }, [prayerTime?.id, counter, openedAt]);
 
   // Advance the rotation so the next pause shows a different prayer.
   useEffect(() => {
@@ -56,13 +66,16 @@ export default function PrayerPause() {
   }, [plan.prayerId]);
   const ready = readyFor === plan.prayerId;
 
-  // Read once per pause (the counter advances in the effect above).
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const counter = useMemo(() => getState().pauseCounter, [app, time, mode]);
-  const gospel = useMemo(() => gospelVerse(new Date(), counter, { country: state.country }), [counter, state.country]);
+  const gospel = useMemo(() => gospelVerse(new Date(openedAt), counter, { country: state.country }), [openedAt, counter, state.country]);
 
   const appLabel = app ? state.appLabels[app] ?? 'your app' : undefined;
   const minutes = state.gate.unlockMinutes;
+  const everyOpen = state.gate.mode === 'every-open';
+
+  function leave() {
+    if (router.canGoBack()) router.back();
+    else router.replace('/');
+  }
 
   function finish(outcome: PauseOutcome) {
     recordPause({
@@ -79,16 +92,19 @@ export default function PrayerPause() {
       return;
     }
 
-    // Both "I've prayed" and "Skip for now" unlock; only the stats differ.
-    const target = app ?? 'shielded-app';
-    AppGate.unlock(target, minutes);
+    if (outcome === 'prayed') {
+      markPrayed();
+      recordGroupPrayer().catch(() => {});
+    }
+    // Every-open mode: praying (or skipping, outside a prayer time) opens the app for a while.
+    if (everyOpen && fromApp) AppGate.unlock(app ?? 'shielded-app', minutes);
+
     if (Platform.OS === 'android' && app && AppGate.openApp(app)) return;
-    if (isGate && Platform.OS === 'ios' && getState().gate.gatedApps.length) {
-      setDone(`Your apps are open for ${minutes} minutes. God bless you.`);
+    if (fromApp && Platform.OS === 'ios' && getState().gate.gatedApps.length) {
+      setDone(everyOpen ? `Your apps are open for ${minutes} minutes. God bless you.` : 'Your apps are open again. God bless you.');
       return;
     }
-    if (router.canGoBack()) router.back();
-    else router.replace('/');
+    leave();
   }
 
   if (done) {
@@ -103,10 +119,16 @@ export default function PrayerPause() {
     );
   }
 
+  const kicker = prayerTime
+    ? `${prayerTime.kind === 'personal' ? 'Your prayer time' : prayerTime.label} · ${formatTime(prayerTime)}`
+    : fromApp
+      ? 'Pause and pray before you scroll'
+      : 'Pray now';
+
   return (
     <SafeAreaView style={s.root}>
       <ScrollView contentContainerStyle={s.scroll}>
-        <Text style={s.kicker}>{isGate ? 'Pause and pray before you scroll' : 'Pray now'}</Text>
+        <Text style={s.kicker}>{kicker}</Text>
         {gospel ? (
           <View style={s.gospel}>
             <Text style={s.gospelText}>{gospel.verse.text}</Text>
@@ -116,7 +138,7 @@ export default function PrayerPause() {
         {plan.sections.map((section, i) =>
           section.intention ? (
             <View key={`i-${i}`} style={s.intention}>
-              <Text style={s.intentionLabel}>Praying for</Text>
+              <Text style={s.intentionLabel}>{section.heading ?? 'Praying for'}</Text>
               <Text style={s.intentionText}>{section.intention}</Text>
               <Text style={s.intentionPrayer}>{section.text}</Text>
             </View>
@@ -129,20 +151,24 @@ export default function PrayerPause() {
           ),
         )}
         {!state.intentions.length ? (
-          <Text style={s.note}>Choose three intentions in Settings and your pauses will pray for them.</Text>
+          <Text style={s.note}>Choose three intentions in Me and your pauses will pray for them.</Text>
         ) : null}
       </ScrollView>
       <View style={s.actions}>
         <Button title={ready ? "I've prayed" : 'Pray slowly…'} onPress={() => finish('prayed')} disabled={!ready} />
-        {isGate && (app || Platform.OS === 'ios') ? (
+        {fromApp ? (
           <>
             <Button kind="secondary" title={`Put the phone down${appLabel ? ` (close ${appLabel})` : ''}`} onPress={() => finish('closed')} />
-            <Button kind="ghost" title="Skip for now" onPress={() => finish('skipped')} />
+            {!locked && everyOpen ? <Button kind="ghost" title="Skip for now" onPress={() => finish('skipped')} /> : null}
           </>
         ) : (
-          <Button kind="ghost" title="Close" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
+          <Button kind="ghost" title={locked ? 'Not yet' : 'Close'} onPress={leave} />
         )}
-        {app ? <Text style={s.actionNote}>{appLabel} opens for {minutes} minutes after you pray or skip.</Text> : null}
+        {fromApp && locked ? (
+          <Text style={s.actionNote}>Your apps stay paused until you have prayed.</Text>
+        ) : fromApp && everyOpen ? (
+          <Text style={s.actionNote}>{appLabel ?? 'Your apps'} open for {minutes} minutes after you pray or skip.</Text>
+        ) : null}
       </View>
     </SafeAreaView>
   );

@@ -31,7 +31,11 @@ class ShieldActionExtension: ShieldActionDelegate {
       let request = UNNotificationRequest(identifier: "pause-and-pray.pray-now", content: content, trigger: nil)
       UNUserNotificationCenter.current().add(request) { _ in done(.close) }
     case .secondaryButtonPressed:
-      // "Skip for now" unlocks right away and is counted honestly in the stats.
+      // Only offered outside prayer times. "Skip for now" opens the apps right away and is counted in the stats.
+      if GateShared.prayerDue() {
+        done(.close)
+        return
+      }
       GateShared.recordEvent("skipped")
       let minutes = GateShared.loadConfig()?.unlockMinutes ?? 15
       try? GateShared.unlock(minutes: minutes)

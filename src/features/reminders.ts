@@ -32,6 +32,8 @@ export async function ensurePermission(): Promise<boolean> {
 }
 
 const BODIES: Record<string, string> = {
+  personal: 'It’s your prayer time. Your apps are paused until you pray.',
+  group: 'Your group is praying now. Join them: your apps are paused until you pray.',
   angelus: 'The Angel of the Lord declared unto Mary…',
   'divine-mercy-hour': 'It is three o’clock, the Hour of Mercy. Jesus, I trust in you.',
   'morning-offering': 'Offer this day to God before the scrolling starts.',
@@ -46,7 +48,7 @@ export async function scheduleReminders(schedule: PrayerTime[], enabled: boolean
     await Notifications.scheduleNotificationAsync({
       content: {
         title: t.label,
-        body: BODIES[t.prayerId] ?? 'Pause and pray.',
+        body: BODIES[t.prayerId ?? t.kind] ?? 'Pause and pray.',
         data: { url: `/pause?time=${t.id}` },
       },
       trigger: {

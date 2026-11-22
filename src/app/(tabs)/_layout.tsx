@@ -31,7 +31,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="index" options={{ title: 'Today', headerTitle: 'Pause & Pray', tabBarIcon: icon('home', 'home-outline') }} />
       <Tabs.Screen name="readings" options={{ title: 'Readings', headerTitle: 'Today’s readings', tabBarIcon: icon('book', 'book-outline') }} />
       <Tabs.Screen name="prayers" options={{ title: 'Prayers', tabBarIcon: icon('rose', 'rose-outline') }} />
-      <Tabs.Screen name="saint" options={{ title: 'Saint', headerTitle: 'Saint of the day', tabBarIcon: icon('star', 'star-outline') }} />
+      <Tabs.Screen name="groups" options={{ title: 'Groups', headerTitle: 'Prayer groups', tabBarIcon: icon('people', 'people-outline') }} />
       <Tabs.Screen name="me" options={{ title: 'Me', headerTitle: 'Your prayer', tabBarIcon: icon('person-circle', 'person-circle-outline') }} />
     </Tabs>
   );

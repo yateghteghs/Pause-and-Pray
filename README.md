@@ -11,7 +11,7 @@ This repository holds the MVP (version 1.0) codebase: one Expo (React Native, Ty
 | Area | State |
 |---|---|
 | Shared app: screens, content, calendar, stats | Written, typechecked, and the Android JS bundle builds |
-| Core logic: calendar, readings, Rosary, schedule, gate rules, stats | 65 unit tests passing |
+| Core logic: calendar, readings, Rosary, prayer times, gate rules, groups, stats | 80 unit tests passing |
 | Android gate (Kotlin AccessibilityService) | Written; **not yet compiled or run on a device** |
 | iOS gate (Swift: FamilyControls, ManagedSettings, 3 extensions) | Written; **not yet compiled**, and it needs Apple's Family Controls entitlement |
 | Prayer and calendar text | Every entry is `reviewStatus: pending` until the theological adviser signs it off |
@@ -32,7 +32,7 @@ This repository holds the MVP (version 1.0) codebase: one Expo (React Native, Ty
 
 ```
 src/
-  app/            Expo Router screens; (tabs)/ holds the footer menu (Today, Readings, Prayers, Saint, Me)
+  app/            Expo Router screens; (tabs)/ holds the footer menu (Today, Readings, Prayers, Groups, Me)
   content/        prayers.json, calendar.json  ← all prayer and calendar text, translatable
   core/           pure TypeScript logic + __tests__
   state/          on-device store (expo-sqlite key-value)
@@ -43,13 +43,34 @@ modules/app-gate/ native module
 targets/          iOS extensions: activity-monitor, shield-config, shield-action (+ _shared)
 ```
 
+## How prayer times work
+
+- The user sets **their own prayer times** (onboarding step "When will you pray?", and Me → Settings). When one comes, the chosen apps **stay paused until they tap "I've prayed"**: no time limit and no skip. "Put the phone down" closes the app without unlocking it.
+- **Devotions are optional**: Morning Offering, the Angelus (6am, noon, 6pm; the Regina Caeli in Easter Time), the Hour of Mercy (3pm) and Night Prayer are off by default. Switched on, each works exactly like a personal prayer time, with its own prayer followed by the user's intentions.
+- **Group prayer times** arrive the same way when the user belongs to a group that set one, converted to the member's own time zone.
+- A time that is added or switched on partway through the day starts the next time it comes round, so it never locks the apps the moment it is set.
+- Optional "Also pause between prayer times" (every-open mode) adds a short prayer on every app open, which *can* be skipped and opens the app for 15/30/60 minutes; a due prayer time still wins.
+- Rules: `src/core/schedule.ts` (`duePrayer`) and `src/core/gate.ts`, mirrored in `GateStore.kt` (Android) and `GateShared.swift` (iOS), with tests in `src/core/__tests__/core.test.ts`.
+
+## Prayer groups
+
+Members of a parish, youth group, school or family pray together: create a group or join with a 6-letter invite code, share a group intention and an optional group prayer time, and see who has prayed today and the group's streak. Code: `src/app/(tabs)/groups.tsx`, `src/app/group/`, `src/features/groups.ts`, `src/core/groups.ts`.
+
+- Groups need an account. Run `supabase/migrations/0002_prayer_groups.sql` (after `0001`) in the Supabase SQL editor. Row-level security lets members see only their own groups; creating and joining go through the `create_prayer_group` and `join_prayer_group` functions.
+- **Privacy:** for each member the server stores only the *days* they prayed (one row per day per group), never their intentions or how often. The join screen tells members their group will see their name and the days they pray.
+- Without Supabase keys, the browser preview and development builds use an on-device stand-in with a sample group (code `MONICA`) whose members are labelled as samples.
+
+## For Catholics everywhere
+
+The General Roman Calendar is the default. National calendars layer on top (Nigeria for now, chosen automatically for phones set to Nigeria, or in Me → Settings → Church calendar). To add a country, add its layer to `src/content/calendar.json` and a line to `src/core/country.ts`. Intention prayers no longer name a single country.
+
 ## Added after the MVP spec
 
 | Feature | Code and data |
 |---|---|
 | Optional sign up / sign in (Supabase) | `src/features/auth.ts`, `src/app/welcome.tsx`, `sign-up.tsx`, `sign-in.tsx`, account card in `settings.tsx`, `supabase/migrations/` |
 | Three prayer intentions, with prayers for each | `src/content/intentions.json` (two prayers per suggested intention, a template for the user's own), `pausePlan()` in `src/core/prayers.ts`, `src/components/IntentionsPicker.tsx`, `src/app/intentions.tsx`. A paused app prays for one intention in turn, then an Our Father, Hail Mary or Glory Be; **Pray now** prays for all three |
-| Footer menu | `src/app/(tabs)/`: Today, Readings, Prayers (with today's Rosary), Saint, Me (stats, settings, intentions, privacy) |
+| Footer menu | `src/app/(tabs)/`: Today, Readings (with saint of the day), Prayers (with today's Rosary), Groups, Me (stats, settings, intentions, privacy) |
 | Daily Mass readings | `src/content/lectionary.json` (references), `src/core/readings.ts`, `src/app/readings.tsx`; the Prayer Pause shows a verse from today's Gospel |
 | Saint of the day, life and times | `lived`, `place`, `life` in `src/content/calendar.json`; `saintOfDay()` in `src/core/liturgical.ts`; `src/app/saint.tsx` |
 
@@ -119,9 +140,11 @@ Before the first iOS build, add `ios.appleTeamId` to `app.json`. The extension t
 
 ## Changes from the spec (please review)
 
+0. **Prayer times lock until prayed, and the Angelus and Hour of Mercy are optional** (asked for after the spec; see "How prayer times work"). "Skip for now" exists only in the optional every-open mode, outside prayer times. Accounts and prayer groups are also new, and the app is no longer Nigeria-only.
+
 1. **Android: no AlarmManager and no foreground service.** The service checks the schedule each time an app opens, so it needs no exact alarms. Android keeps an enabled accessibility service running by itself. This removes two Play Console declarations (exact alarms and foreground service type), so those items in the spec's Play checklist no longer apply. If testing shows the service being killed on some phones (Tecno, Infinix and Itel are worth checking), a foreground service can be added back.
 2. **iOS: the shield cannot open the app.** Apple does not let a Shield Action extension open its parent app. So "Pray now" posts a notification, and tapping it opens the Prayer Pause screen. "Skip for now" on the shield unlocks at once and is recorded for the stats.
-3. **iOS: an unlock opens all chosen apps.** Apple's app tokens are opaque, so the unlock lifts the shield for every gated app at once. Unlock windows and prayer windows are at least 15 minutes long, which is Apple's shortest schedule.
+3. **iOS: an unlock opens all chosen apps.** Apple's app tokens are opaque, so "I've prayed" lifts the shield for every gated app at once. Apple's shortest monitored interval is 15 minutes; the app uses it only to switch the shield on at each prayer time, and the shield then stays on until the user prays.
 4. **"Minutes reclaimed" is not measured yet.** The app cannot honestly know how long someone would have scrolled. Instead it shows **minutes in prayer** (measured) and **times you put the phone down**. That second figure comes from a new third button on the Prayer Pause screen, "Put the phone down". How to define "minutes reclaimed" is now an open decision.
 5. **"I've prayed" turns on after 5 seconds**, so the tap comes after the prayer. You can change this with `PRAY_DELAY_MS` in `pause.tsx`.
 6. **Storage is SQLite** (`expo-sqlite/kv-store`), one of the spec's two options. MMKV is not part of this Expo SDK's tested set.

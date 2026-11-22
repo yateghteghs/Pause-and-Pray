@@ -25,6 +25,21 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
 
   private func make(_ name: String?) -> ShieldConfiguration {
     let before = name.map { "Before \($0), " } ?? ""
+    // At a prayer time the apps stay paused until the user prays: no skip.
+    if GateShared.prayerDue() {
+      return ShieldConfiguration(
+        backgroundBlurStyle: .systemThickMaterialDark,
+        backgroundColor: green,
+        icon: UIImage(systemName: "hands.sparkles.fill"),
+        title: ShieldConfiguration.Label(text: "It's your prayer time", color: .white),
+        subtitle: ShieldConfiguration.Label(
+          text: "Your apps open again when you have prayed.\n\nHail Mary, full of grace, the Lord is with thee…",
+          color: .white
+        ),
+        primaryButtonLabel: ShieldConfiguration.Label(text: "Pray now", color: green),
+        primaryButtonBackgroundColor: .white
+      )
+    }
     return ShieldConfiguration(
       backgroundBlurStyle: .systemThickMaterialDark,
       backgroundColor: green,

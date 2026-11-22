@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Body, Card, H1, Label, Screen } from '../../components/ui';
-import { colors, space } from '../../components/theme';
-import { COLOUR_HEX, saintOfDay } from '../../core/liturgical';
-import { formatDayKey } from '../../core/dates';
-import { useAppState } from '../../state/store';
+import { Body, Card, H1, Label, Screen } from '../components/ui';
+import { colors, space } from '../components/theme';
+import { COLOUR_HEX, saintOfDay } from '../core/liturgical';
+import { formatDayKey } from '../core/dates';
+import { useAppState } from '../state/store';
 
 export default function Saint() {
   const { country } = useAppState();

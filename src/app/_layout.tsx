@@ -6,6 +6,7 @@ import { colors } from '../components/theme';
 import { AppState as RNAppState, Platform } from 'react-native';
 import { getState, importExtensionEvents, pushConfigToNative, setAccount } from '../state/store';
 import { restoreAccount } from '../features/auth';
+import { refreshGroups } from '../features/groups';
 import { scheduleReminders } from '../features/reminders';
 
 function openFromNotification(response: Notifications.NotificationResponse | null) {
@@ -19,6 +20,7 @@ export default function RootLayout() {
     pushConfigToNative();
     restoreAccount()
       .then((account) => account && setAccount(account))
+      .then(() => refreshGroups())
       .catch(() => {});
     const s = getState();
     if (s.onboarded) scheduleReminders(s.gate.schedule, s.remindersEnabled).catch(() => {});
@@ -51,11 +53,19 @@ export default function RootLayout() {
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="intentions" options={{ title: 'My intentions' }} />
 
-        <Stack.Screen name="pause" options={{ headerShown: false, presentation: 'fullScreenModal', gestureEnabled: false }} />
+        <Stack.Screen
+          name="pause"
+          getId={({ params }) => JSON.stringify(params ?? {})}
+          options={{ headerShown: false, presentation: 'fullScreenModal', gestureEnabled: false }}
+        />
         <Stack.Screen name="apps" options={{ title: 'Apps to pause' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
         <Stack.Screen name="prayer/[id]" options={{ title: '' }} />
         <Stack.Screen name="privacy" options={{ title: 'Privacy' }} />
+        <Stack.Screen name="saint" options={{ title: 'Saint of the day' }} />
+        <Stack.Screen name="group/[id]" options={{ title: 'Group' }} />
+        <Stack.Screen name="group/new" options={{ title: 'Start a group' }} />
+        <Stack.Screen name="group/join" options={{ title: 'Join a group' }} />
       </Stack>
     </>
   );

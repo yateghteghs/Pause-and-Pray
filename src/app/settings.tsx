@@ -1,16 +1,24 @@
-import { Platform, View , Text } from 'react-native';
+import { useState } from 'react';
+import { Platform, Text } from 'react-native';
 import { router } from 'expo-router';
 import * as AppGate from '../../modules/app-gate';
 import { Body, Button, Card, Label, NavRow, Screen, Segmented, SwitchRow } from '../components/ui';
-import { space , colors } from '../components/theme';
-import { formatTime, PrayerTime } from '../core/schedule';
+import { colors, space } from '../components/theme';
+import { PrayerTimesEditor } from '../components/PrayerTimesEditor';
+import { COUNTRIES } from '../core/country';
 import { scheduleReminders } from '../features/reminders';
-import { useState } from 'react';
-import { deleteAccount, signOut, accountsAvailable } from '../features/auth';
-import { setAccount, continueAsGuest , getState, setGateMode, setRemindersEnabled, setUnlockMinutes, updatePrayerTime, useAppState } from '../state/store';
-
-/** The Angelus and the Hour of Mercy keep their traditional times; others can move in 15-minute steps. */
-const FIXED_TIMES = new Set(['angelus-6', 'angelus-12', 'mercy-15', 'angelus-18']);
+import { accountsAvailable, deleteAccount, signOut } from '../features/auth';
+import { refreshGroups } from '../features/groups';
+import {
+  continueAsGuest,
+  getState,
+  setAccount,
+  setCountry,
+  setGateMode,
+  setRemindersEnabled,
+  setUnlockMinutes,
+  useAppState,
+} from '../state/store';
 
 function refreshReminders() {
   const s = getState();
@@ -21,21 +29,22 @@ export default function Settings() {
   const state = useAppState();
   const { gate } = state;
 
-  const moveTime = (t: PrayerTime, delta: number) => {
-    const total = (t.hour * 60 + t.minute + delta + 1440) % 1440;
-    updatePrayerTime(t.id, { hour: Math.floor(total / 60), minute: total % 60 });
-    refreshReminders();
-  };
-
   return (
     <Screen>
       {accountsAvailable ? <AccountCard /> : null}
 
-      <Card style={{ paddingVertical: space.xs }}>
-        <NavRow
-          label="My intentions"
-          detail={state.intentions.length ? state.intentions.join(' · ') : 'Choose three'}
-          onPress={() => router.push('/intentions')}
+      <Card>
+        <Label>Prayer times</Label>
+        <Body muted>When a prayer time comes, your chosen apps stay paused until you tap “I’ve prayed”.</Body>
+        <PrayerTimesEditor schedule={gate.schedule} onChange={refreshReminders} />
+        <SwitchRow
+          label="Reminders"
+          detail="A notification at each prayer time"
+          value={state.remindersEnabled}
+          onChange={(v) => {
+            setRemindersEnabled(v);
+            refreshReminders();
+          }}
         />
       </Card>
 
@@ -48,72 +57,48 @@ export default function Settings() {
         {Platform.OS === 'android' && AppGate.isNativeGateAvailable && !AppGate.isAccessibilityServiceEnabled() ? (
           <NavRow label="Gate is off" detail="Turn on the Pause & Pray accessibility service" onPress={AppGate.openAccessibilitySettings} />
         ) : null}
+        <NavRow
+          label="My intentions"
+          detail={state.intentions.length ? state.intentions.join(' · ') : 'Choose three'}
+          onPress={() => router.push('/intentions')}
+        />
       </Card>
 
       <Card>
-        <Label>When to pause</Label>
+        <Label>Also pause between prayer times</Label>
         <Segmented
           options={[
-            { value: 'every-open', label: 'Every open' },
-            { value: 'prayer-times', label: 'Prayer times only' },
+            { value: 'prayer-times', label: 'No' },
+            { value: 'every-open', label: 'Every time I open an app' },
           ]}
           value={gate.mode}
           onChange={setGateMode}
         />
         <Body muted>
           {gate.mode === 'every-open'
-            ? 'A prayer appears each time you open a chosen app, unless you prayed in the last few minutes.'
-            : 'Chosen apps pause only during the prayer times switched on below.'}
+            ? 'A short prayer also appears each time you open a chosen app. You can skip it, except at a prayer time.'
+            : 'Your apps pause only at your prayer times.'}
         </Body>
-      </Card>
-
-      <Card>
-        <Label>After praying, open the app for</Label>
-        <Segmented
-          options={[
-            { value: 15, label: '15 min' },
-            { value: 30, label: '30 min' },
-            { value: 60, label: '60 min' },
-          ]}
-          value={gate.unlockMinutes}
-          onChange={setUnlockMinutes}
-        />
-      </Card>
-
-      <Card>
-        <Label>Prayer times</Label>
-        {gate.schedule.map((t) => (
-          <View key={t.id}>
-            <SwitchRow
-              label={`${t.label} · ${formatTime(t)}`}
-              detail={t.prayerId === 'angelus' ? 'Regina Caeli in Easter Time' : undefined}
-              value={t.enabled}
-              onChange={(enabled) => {
-                updatePrayerTime(t.id, { enabled });
-                refreshReminders();
-              }}
+        {gate.mode === 'every-open' ? (
+          <>
+            <Label>Between prayer times, open the app for</Label>
+            <Segmented
+              options={[
+                { value: 15, label: '15 min' },
+                { value: 30, label: '30 min' },
+                { value: 60, label: '60 min' },
+              ]}
+              value={gate.unlockMinutes}
+              onChange={setUnlockMinutes}
             />
-            {!FIXED_TIMES.has(t.id) && t.enabled ? (
-              <View style={{ flexDirection: 'row', gap: space.sm, paddingBottom: space.sm }}>
-                <View style={{ flex: 1 }}>
-                  <Button kind="secondary" title="− 15 min" onPress={() => moveTime(t, -15)} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Button kind="secondary" title="+ 15 min" onPress={() => moveTime(t, 15)} />
-                </View>
-              </View>
-            ) : null}
-          </View>
-        ))}
-        <SwitchRow
-          label="Reminders"
-          detail="A notification at each prayer time"
-          value={state.remindersEnabled}
-          onChange={(v) => {
-            setRemindersEnabled(v);
-            refreshReminders();
-          }}
-        />
+          </>
+        ) : null}
+      </Card>
+
+      <Card>
+        <Label>Church calendar</Label>
+        <Segmented options={COUNTRIES.map((c) => ({ value: c.code, label: c.label }))} value={state.country} onChange={setCountry} />
+        <Body muted>Adds a country’s own feasts and saints to the General Roman Calendar.</Body>
       </Card>
 
       <Card style={{ paddingVertical: space.xs }}>
@@ -150,6 +135,7 @@ function AccountCard() {
           await signOut();
           setAccount(null);
           continueAsGuest();
+          await refreshGroups();
         }}
       />
       {confirming ? (
@@ -163,6 +149,7 @@ function AccountCard() {
               if (!r.ok) return setError(r.error ?? 'Could not delete the account. Try again.');
               setAccount(null);
               continueAsGuest();
+              await refreshGroups();
               setConfirming(false);
             }}
           />

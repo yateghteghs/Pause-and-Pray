@@ -1,5 +1,6 @@
 import { easterSunday, liturgicalDay, moveableDates, saintOfDay } from '../liturgical';
 import calendarData from '../../content/calendar.json';
+import { defaultCountry } from '../country';
 import { dayKey } from '../dates';
 
 const local = (y: number, m: number, d: number) => new Date(y, m - 1, d, 10, 0);
@@ -127,8 +128,16 @@ describe('liturgical day', () => {
     expect(liturgicalDay(local(2026, 12, 29)).title).toBe('5th Day in the Octave of Christmas');
   });
 
-  test('Nigerian national layer', () => {
-    expect(liturgicalDay(local(2027, 1, 20)).title).toBe('Bl. Cyprian Michael Iwene Tansi');
+  test('the universal calendar is the default; national layers are optional', () => {
+    expect(liturgicalDay(local(2027, 1, 20)).title).toBe('Wednesday of the 2nd Week in Ordinary Time');
+    expect(liturgicalDay(local(2027, 1, 20), { country: 'NG' }).title).toBe('Bl. Cyprian Michael Iwene Tansi');
+  });
+
+  test('the national calendar follows the phone region', () => {
+    expect(defaultCountry('en-NG')).toBe('NG');
+    expect(defaultCountry('en-GB')).toBe('universal');
+    expect(defaultCountry('es-MX')).toBe('universal');
+    expect(defaultCountry('fr')).toBe('universal');
   });
 });
 

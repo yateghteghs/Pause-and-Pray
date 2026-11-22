@@ -15,13 +15,17 @@ export interface NativeGateConfig {
   gatedApps: string[];
   mode: 'every-open' | 'prayer-times';
   unlockMinutes: number;
-  schedule: { id: string; hour: number; minute: number; enabled: boolean; windowMinutes: number }[];
+  /** Prayer times; occurrences before `since` (epoch ms) do not count. */
+  schedule: { id: string; hour: number; minute: number; enabled: boolean; since: number }[];
+  /** Epoch ms of the last "I've prayed". */
+  lastPrayedAt: number;
 }
 
 interface AppGateNative {
   // Shared
   setConfig(json: string): void;
   unlock(app: string, minutes: number): void;
+  markPrayed(epochMs: number): void;
   // Android
   getInstalledApps?(): Promise<InstalledApp[]>;
   isAccessibilityServiceEnabled?(): boolean;
@@ -48,6 +52,11 @@ export function setConfig(cfg: NativeGateConfig): void {
 /** Lift the gate for `app` (Android package; ignored on iOS, which unlocks all shielded apps). */
 export function unlock(app: string, minutes: number): void {
   native?.unlock(app, minutes);
+}
+
+/** "I've prayed": lifts the pause for every prayer time that is due. */
+export function markPrayed(epochMs: number): void {
+  native?.markPrayed(epochMs);
 }
 
 // ------------------------------------------------------------------ Android

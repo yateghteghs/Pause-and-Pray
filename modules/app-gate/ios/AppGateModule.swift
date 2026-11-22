@@ -16,6 +16,10 @@ public class AppGateModule: Module {
       try GateShared.unlock(minutes: minutes)
     }
 
+    Function("markPrayed") { (epochMs: Double) in
+      GateShared.markPrayed(epochMs: epochMs)
+    }
+
     AsyncFunction("requestAuthorization") { () async -> Bool in
       do {
         try await AuthorizationCenter.shared.requestAuthorization(for: .individual)

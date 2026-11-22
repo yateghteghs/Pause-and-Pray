@@ -1,10 +1,12 @@
 import { useSyncExternalStore } from 'react';
 import * as AppGate from '../../modules/app-gate';
 import { GateConfig, GateMode, UnlockMinutes } from '../core/gate';
-import { DEFAULT_SCHEDULE, PrayerTime } from '../core/schedule';
+import { defaultSchedule, isCurrentSchedule, newPersonalTime, PrayerTime } from '../core/schedule';
+import { CountryCode, defaultCountry } from '../core/country';
 import { PauseEvent } from '../core/stats';
 import { getJSON, setJSON, remove } from '../storage/kv';
 import type { Account } from '../features/auth';
+import type { GroupSummary } from '../core/groups';
 
 export interface AppState {
   onboarded: boolean;
@@ -13,8 +15,10 @@ export interface AppState {
   account: Account | null;
   /** Up to three things the user is praying for. Kept on the phone only. */
   intentions: string[];
-  /** National calendar layered on the universal one. */
-  country: 'NG';
+  /** Prayer groups the user belongs to (needs an account). */
+  groups: GroupSummary[];
+  /** National calendar layered on the General Roman Calendar ('universal' for none). */
+  country: CountryCode;
   remindersEnabled: boolean;
   gate: Omit<GateConfig, 'unlockedUntil'>;
   /** Android: labels for the gated packages, for display only. */
@@ -26,17 +30,22 @@ export interface AppState {
 const KEY = 'pause-and-pray/state/v1';
 const MAX_EVENTS = 5000;
 
-const DEFAULT_STATE: AppState = {
-  onboarded: false,
-  account: null,
-  intentions: [],
-  country: 'NG',
-  remindersEnabled: true,
-  gate: { gatedApps: [], mode: 'every-open', unlockMinutes: 15, schedule: DEFAULT_SCHEDULE },
-  appLabels: {},
-  events: [],
-  pauseCounter: 0,
-};
+function defaultState(): AppState {
+  return {
+    onboarded: false,
+    account: null,
+    intentions: [],
+    groups: [],
+    country: defaultCountry(),
+    remindersEnabled: true,
+    gate: { gatedApps: [], mode: 'prayer-times', unlockMinutes: 15, schedule: defaultSchedule(Date.now()), lastPrayedAt: 0 },
+    appLabels: {},
+    events: [],
+    pauseCounter: 0,
+  };
+}
+
+const DEFAULT_STATE: AppState = defaultState();
 
 let state: AppState = load();
 const listeners = new Set<() => void>();
@@ -46,7 +55,12 @@ function load(): AppState {
   return {
     ...DEFAULT_STATE,
     ...saved,
-    gate: { ...DEFAULT_STATE.gate, ...saved.gate },
+    gate: {
+      ...DEFAULT_STATE.gate,
+      ...saved.gate,
+      // Schedules saved before prayer times locked until prayed are replaced.
+      schedule: isCurrentSchedule(saved.gate?.schedule) ? saved.gate.schedule : DEFAULT_STATE.gate.schedule,
+    },
   };
 }
 
@@ -62,9 +76,8 @@ export function pushConfigToNative() {
     gatedApps: state.gate.gatedApps,
     mode: state.gate.mode,
     unlockMinutes: state.gate.unlockMinutes,
-    schedule: state.gate.schedule.map(({ id, hour, minute, enabled, windowMinutes }) => ({
-      id, hour, minute, enabled, windowMinutes,
-    })),
+    schedule: state.gate.schedule.map(({ id, hour, minute, enabled, since }) => ({ id, hour, minute, enabled, since })),
+    lastPrayedAt: state.gate.lastPrayedAt,
   });
 }
 
@@ -100,9 +113,55 @@ export function setUnlockMinutes(unlockMinutes: UnlockMinutes) {
   commit({ ...state, gate: { ...state.gate, unlockMinutes } }, true);
 }
 
-export function updatePrayerTime(id: PrayerTime['id'], patch: Partial<PrayerTime>) {
-  const schedule = state.gate.schedule.map((t) => (t.id === id ? { ...t, ...patch } : t));
+/** Changing a time or switching it on counts from now, so it does not lock the apps straight away. */
+export function updatePrayerTime(id: PrayerTime['id'], patch: Partial<Omit<PrayerTime, 'since'>>) {
+  const restart = patch.hour !== undefined || patch.minute !== undefined || patch.enabled === true;
+  const schedule = state.gate.schedule.map((t) => (t.id === id ? { ...t, ...patch, ...(restart ? { since: Date.now() } : {}) } : t));
   commit({ ...state, gate: { ...state.gate, schedule } }, true);
+}
+
+export function addPrayerTime(hour: number, minute: number): PrayerTime {
+  const time = newPersonalTime(state.gate.schedule, hour, minute, Date.now());
+  commit({ ...state, gate: { ...state.gate, schedule: [...state.gate.schedule, time] } }, true);
+  return time;
+}
+
+export function removePrayerTime(id: PrayerTime['id']) {
+  commit({ ...state, gate: { ...state.gate, schedule: state.gate.schedule.filter((t) => t.id !== id) } }, true);
+}
+
+/** Adds or replaces the shared prayer time of a group. */
+export function upsertGroupPrayerTime(time: PrayerTime) {
+  const others = state.gate.schedule.filter((t) => t.id !== time.id);
+  const existing = state.gate.schedule.find((t) => t.id === time.id);
+  const moved = !existing || existing.hour !== time.hour || existing.minute !== time.minute;
+  commit({ ...state, gate: { ...state.gate, schedule: [...others, { ...time, since: moved ? Date.now() : existing.since }] } }, true);
+}
+
+/** "I've prayed": settles every prayer time that is due. */
+export function markPrayed(nowMs = Date.now()) {
+  AppGate.markPrayed(nowMs);
+  commit({ ...state, gate: { ...state.gate, lastPrayedAt: nowMs } }, true);
+}
+
+export function setGroups(groups: GroupSummary[]) {
+  commit({ ...state, groups });
+}
+
+/** Browser preview only: makes the first prayer time due now, to show what happens when it comes. */
+export function previewPrayerTimeNow() {
+  const nowMs = Date.now();
+  const d = new Date(nowMs - 60_000);
+  const schedule = state.gate.schedule.map((t, i, all) =>
+    t.id === all.find((x) => x.kind === 'personal')?.id
+      ? { ...t, hour: d.getHours(), minute: d.getMinutes(), enabled: true, since: nowMs - 120_000 }
+      : t,
+  );
+  commit({ ...state, gate: { ...state.gate, schedule } }, true);
+}
+
+export function setCountry(country: CountryCode) {
+  commit({ ...state, country });
 }
 
 export function setRemindersEnabled(remindersEnabled: boolean) {
@@ -149,5 +208,5 @@ export function importExtensionEvents() {
 /** Deletes every record kept by the app (privacy: right to erasure). */
 export function deleteAllData() {
   remove(KEY);
-  commit({ ...DEFAULT_STATE }, true);
+  commit(defaultState(), true);
 }

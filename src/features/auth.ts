@@ -4,7 +4,7 @@
  * Only the account itself (name, email, password handled by Supabase Auth)
  * lives on the server. Prayer history, intentions and settings stay on the
  * phone, because they reveal the user's religion (sensitive data under the
- * NDPA 2023 and the GDPR).
+ * GDPR, Nigeria's NDPA 2023 and similar laws).
  *
  * Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY (see .env.example).
  * Without them, the browser preview and development builds use a stand-in
@@ -33,7 +33,8 @@ export const previewAccounts = !accountsConfigured && (Platform.OS === 'web' || 
 export const accountsAvailable = accountsConfigured || previewAccounts;
 
 let client: SupabaseClient | null = null;
-function supabase(): SupabaseClient {
+/** The Supabase client (only when accounts are configured). */
+export function supabase(): SupabaseClient {
   if (!client) {
     client = createClient(url!, anonKey!, {
       auth: {

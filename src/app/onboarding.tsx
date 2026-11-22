@@ -6,11 +6,12 @@ import { Body, Button, Card, H1, Label, Screen } from '../components/ui';
 import { colors, space } from '../components/theme';
 import { completeOnboarding, setIntentions, useAppState } from '../state/store';
 import { IntentionsPicker } from '../components/IntentionsPicker';
+import { PrayerTimesEditor } from '../components/PrayerTimesEditor';
 import { ensurePermission, scheduleReminders } from '../features/reminders';
 import { IS_WEB_PREVIEW } from '../features/demo';
 
-type Step = 'welcome' | 'how' | 'intentions' | 'permission' | 'apps' | 'reminders';
-const STEPS: Step[] = ['welcome', 'how', 'intentions', 'permission', 'apps', 'reminders'];
+type Step = 'welcome' | 'how' | 'intentions' | 'times' | 'permission' | 'apps' | 'reminders';
+const STEPS: Step[] = ['welcome', 'how', 'intentions', 'times', 'permission', 'apps', 'reminders'];
 
 export default function Onboarding() {
   const [step, setStep] = useState<Step>('welcome');
@@ -47,10 +48,10 @@ export default function Onboarding() {
         <>
           <H1>How it works</H1>
           <Card>
-            <Body>1. You choose the apps to pause.</Body>
-            <Body>2. When you open one, a prayer appears first.</Body>
-            <Body>3. Tap “I’ve prayed” and the app opens for 15, 30 or 60 minutes. “Skip for now” is always there, and is counted honestly.</Body>
-            <Body>4. Optional gates at the Angelus (6am, noon, 6pm) and the Hour of Mercy (3pm).</Body>
+            <Body>1. You choose your prayer times and the apps to pause.</Body>
+            <Body>2. When a prayer time comes, those apps pause and a prayer for your intentions appears.</Body>
+            <Body>3. They stay paused until you tap “I’ve prayed”. Then they open as normal until your next prayer time.</Body>
+            <Body>4. If you like, add the Angelus (6am, noon, 6pm) or the Hour of Mercy (3pm). They work the same way.</Body>
           </Card>
           <Card>
             <Label>Your privacy</Label>
@@ -70,6 +71,15 @@ export default function Onboarding() {
           <IntentionsPicker value={state.intentions} onChange={setIntentions} />
           <Button title={state.intentions.length === 3 ? 'Continue' : `Choose ${3 - state.intentions.length} more`} onPress={next} disabled={state.intentions.length < 3} />
           <Button kind="ghost" title="Skip for now" onPress={next} />
+        </>
+      )}
+
+      {step === 'times' && (
+        <>
+          <H1>When will you pray?</H1>
+          <Body>Set one or more prayer times. At each one your chosen apps pause until you have prayed.</Body>
+          <PrayerTimesEditor schedule={state.gate.schedule} />
+          <Button title="Continue" onPress={next} />
         </>
       )}
 
@@ -95,8 +105,8 @@ export default function Onboarding() {
         <>
           <H1>Prayer-time reminders</H1>
           <Body>
-            We can remind you at the Angelus and the 3pm Hour of Mercy. You can change the times, or turn them off, in
-            Settings.
+            We can send a notification at each prayer time, so you know your apps are about to pause. You can turn this
+            off in Me, then Settings.
           </Body>
           <Button
             title="Turn on reminders"

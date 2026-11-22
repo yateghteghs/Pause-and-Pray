@@ -23,6 +23,10 @@ class AppGateModule : Module() {
       GateStore.unlock(context, app, minutes)
     }
 
+    Function("markPrayed") { epochMs: Double ->
+      GateStore.markPrayed(context, epochMs.toLong())
+    }
+
     AsyncFunction("getInstalledApps") {
       val pm = context.packageManager
       val launcher = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)

@@ -1,5 +1,6 @@
 import content from '../content/prayers.json';
 import intentionsContent from '../content/intentions.json';
+import { PrayerTime, resolvePrayerId } from './schedule';
 import { civilDate, diffDays, utcDate } from './dates';
 
 export interface Prayer {
@@ -47,6 +48,8 @@ export function verseOfTheDay(local: Date): Verse {
 export interface PauseSection {
   /** The intention this part prays for, or undefined for the closing prayer. */
   intention?: string;
+  /** Shown above the intention; defaults to "Praying for". */
+  heading?: string;
   title: string;
   text: string;
 }
@@ -99,4 +102,35 @@ export function pausePlan(intentions: string[], counter: number, mode: 'gate' | 
     sections,
     prayerId: mode === 'gate' ? `intention:${picked[0]}` : 'intention:all',
   };
+}
+
+/**
+ * What to pray at a prayer time.
+ *  - devotion: its own prayer (Angelus, Hour of Mercy…), then the user's intentions.
+ *  - group: the group's intention, then the user's own, then a closing prayer.
+ *  - personal: all of the user's intentions, then a closing prayer.
+ */
+export function prayerTimePlan(
+  time: PrayerTime,
+  local: Date,
+  intentions: string[],
+  counter: number,
+  group?: { name: string; intention?: string },
+): PausePlan {
+  const own = pausePlan(intentions, counter, 'pray-now');
+  if (time.kind === 'devotion') {
+    const p = prayerById(resolvePrayerId(time, local) ?? '') ?? pausePrayer(counter);
+    return {
+      sections: [{ title: p.title, text: p.text }, ...own.sections.filter((x) => x.intention)],
+      prayerId: p.id,
+    };
+  }
+  if (time.kind === 'group' && group) {
+    const intention = group.intention?.trim() || `The members of ${group.name}`;
+    return {
+      sections: [{ heading: `Praying with ${group.name}`, intention, title: intention, text: intentionPrayer(intention, counter) }, ...own.sections],
+      prayerId: `group:${time.groupId ?? time.id}`,
+    };
+  }
+  return { ...own, prayerId: `time:${time.id}` };
 }

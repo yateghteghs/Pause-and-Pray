@@ -1,7 +1,7 @@
 import intentions from '../../content/intentions.json';
 import { intentionPrayer, pausePlan, prayerById } from '../prayers';
 
-const mine = ['My family', 'Peace and safety in Nigeria', 'My studies and exams'];
+const mine = ['My family', 'Peace and safety in my country', 'My studies and exams'];
 
 describe('intention prayers', () => {
   test('every suggested intention has at least two prayers', () => {

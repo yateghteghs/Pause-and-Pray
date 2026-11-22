@@ -178,7 +178,7 @@ export function moveableDates(year: number, opts: CalendarOptions = {}): Moveabl
 }
 
 function resolveOptions(opts: CalendarOptions): Required<CalendarOptions> {
-  const country = opts.country ?? 'NG';
+  const country = opts.country ?? 'universal';
   const national = (calendarData.national as Record<string, any>)[country];
   const t = national?.transfers ?? {};
   return {
