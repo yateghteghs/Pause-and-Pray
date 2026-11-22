@@ -5,6 +5,7 @@ import { colors, space } from '../../components/theme';
 import { KIND_LABEL, READINGS_CREDIT, readingsFor } from '../../core/readings';
 import { verseOfTheDay } from '../../core/prayers';
 import { useAppState } from '../../state/store';
+import { ListenButton } from '../../components/ListenButton';
 import { saintOfDay } from '../../core/liturgical';
 import { formatDayKey } from '../../core/dates';
 
@@ -53,10 +54,15 @@ export default function Readings() {
       <SaintCard country={country} />
       <Label>Mass of the day</Label>
       <H1>{day.title}</H1>
+      <ListenButton
+        label="Listen to all the readings"
+        items={() => day.readings.map((r) => ({ key: `reading:${r.ref}`, text: `${KIND_LABEL[r.kind]}. ${r.ref.replace(/(\d+):(\d+)/g, 'chapter $1, verse $2')}.\n${r.verses.map((v) => v.text).join(' ')}` }))}
+      />
       {day.readings.map((r) => (
         <Card key={r.kind}>
           <Label>{KIND_LABEL[r.kind]}</Label>
           <Text style={s.ref}>{r.ref}</Text>
+          <ListenButton items={() => [{ key: `reading:${r.ref}`, text: r.verses.map((v) => v.text).join(' ') }]} />
           <View style={{ gap: 6 }}>
             {r.verses.map((v) => (
               <Text key={v.label} style={[s.verse, r.kind === 'psalm' && s.psalm]}>

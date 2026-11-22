@@ -1,6 +1,8 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { Body, Card, H1, Screen } from '../../components/ui';
 import { prayerById } from '../../core/prayers';
+import { prayerItem } from '../../core/audio';
+import { ListenButton } from '../../components/ListenButton';
 
 export default function PrayerDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -10,6 +12,7 @@ export default function PrayerDetail() {
     <Screen>
       <Stack.Screen options={{ title: prayer.title }} />
       <H1>{prayer.title}</H1>
+      <ListenButton items={() => [prayerItem(prayer.id)]} />
       <Card>
         <Body style={{ fontSize: 19, lineHeight: 30 }}>{prayer.text}</Body>
       </Card>

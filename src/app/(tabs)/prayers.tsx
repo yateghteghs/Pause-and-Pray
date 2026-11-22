@@ -7,7 +7,11 @@ import { hasPlus, PLUS_FEATURES } from '../../core/plans';
 import { plusAvailable } from '../../features/billing';
 import { useAppState } from '../../state/store';
 
-const PLUS_ROUTES = { 'rosary-guide': '/rosary', 'chaplet-guide': '/chaplet', novena: '/novena' } as const;
+const PLUS_ROUTES: Partial<Record<string, '/rosary' | '/chaplet' | '/novena'>> = {
+  'rosary-guide': '/rosary',
+  'chaplet-guide': '/chaplet',
+  novena: '/novena',
+};
 
 const GROUPS: { id: string; title: string }[] = [
   { id: 'basic', title: 'Daily prayers' },
@@ -25,12 +29,12 @@ export default function Prayers() {
       {plusAvailable ? (
         <Card style={{ paddingVertical: space.sm }}>
           <Label>{unlocked ? 'Pray more deeply · Plus' : 'Pray more deeply · with Plus'}</Label>
-          {PLUS_FEATURES.map((f) => (
+          {PLUS_FEATURES.filter((f) => PLUS_ROUTES[f.id]).map((f) => (
             <NavRow
               key={f.id}
               label={f.title}
               detail={unlocked ? f.detail : `Plus · ${f.detail}`}
-              onPress={() => router.push(unlocked ? PLUS_ROUTES[f.id] : '/plus')}
+              onPress={() => router.push(unlocked ? PLUS_ROUTES[f.id]! : '/plus')}
             />
           ))}
         </Card>

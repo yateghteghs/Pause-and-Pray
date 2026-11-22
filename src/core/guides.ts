@@ -16,6 +16,8 @@ export interface GuideStep {
   text: string;
   /** How many times the prayer is said on this step (beads). */
   count: number;
+  /** The prayer in prayers.json, if any (recordings are keyed by it). */
+  prayerId?: string;
 }
 
 const ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth'];
@@ -23,7 +25,7 @@ const ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth'];
 function prayer(id: string, count = 1, heading?: string): GuideStep {
   const p = prayerById(id);
   if (!p) throw new Error(`Missing prayer ${id}`);
-  return { heading, title: p.title, text: p.text, count };
+  return { heading, title: p.title, text: p.text, count, prayerId: id };
 }
 
 export function rosarySteps(set: MysterySet): GuideStep[] {

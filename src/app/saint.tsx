@@ -3,6 +3,7 @@ import { Body, Card, H1, Label, Screen } from '../components/ui';
 import { colors, space } from '../components/theme';
 import { COLOUR_HEX, saintOfDay } from '../core/liturgical';
 import { formatDayKey } from '../core/dates';
+import { ListenButton } from '../components/ListenButton';
 import { useAppState } from '../state/store';
 
 export default function Saint() {
@@ -20,6 +21,10 @@ export default function Saint() {
     <Screen>
       <Label>{when === 'today' ? 'Saint of the day' : `Coming up · ${formatDayKey(when)}`}</Label>
       <H1>{saint.title}</H1>
+      <ListenButton
+        label="Listen to their story"
+        items={() => [{ key: `saint:${saint.id.replace('fixed-', '')}`, text: `${saint.title}. ${saint.lived ? `Lived ${saint.lived}, in ${saint.place}.` : ''}\n${saint.life ?? saint.about ?? ''}` }]}
+      />
       <View style={s.facts}>
         <Fact label="Lived" value={saint.lived} />
         <Fact label="Where" value={saint.place} />

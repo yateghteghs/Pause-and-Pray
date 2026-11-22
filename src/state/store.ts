@@ -20,6 +20,8 @@ export interface AppState {
   groups: GroupSummary[];
   /** Pause & Pray Plus subscription, as last reported by the store. */
   plus: PlusStatus;
+  /** Read aloud: speaking speed and language (recordings are matched to the language). */
+  voice: { rate: 'slower' | 'normal'; language: string };
   /** Novena in progress: which one, when it started, and the calendar days (YYYY-MM-DD) it was prayed. */
   novena?: { id: string; startedOn: string; daysDone: string[] };
   /** National calendar layered on the General Roman Calendar ('universal' for none). */
@@ -42,6 +44,7 @@ function defaultState(): AppState {
     intentions: [],
     groups: [],
     plus: { active: false },
+    voice: { rate: 'slower', language: 'en' },
     country: defaultCountry(),
     remindersEnabled: true,
     gate: { gatedApps: [], mode: 'prayer-times', unlockMinutes: 15, schedule: defaultSchedule(Date.now()), lastPrayedAt: 0 },
@@ -152,6 +155,10 @@ export function markPrayed(nowMs = Date.now()) {
 
 export function setPlus(plus: PlusStatus) {
   commit({ ...state, plus });
+}
+
+export function setVoice(voice: Partial<AppState['voice']>) {
+  commit({ ...state, voice: { ...state.voice, ...voice } });
 }
 
 export function setNovena(novena: AppState['novena']) {

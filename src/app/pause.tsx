@@ -18,6 +18,7 @@ import { PauseOutcome } from '../core/stats';
 import { getState, markPrayed, nextPauseCounter, recordPause, useAppState } from '../state/store';
 import { gospelVerse } from '../core/readings';
 import { recordGroupPrayer } from '../features/groups';
+import { ListenButton } from '../components/ListenButton';
 
 /** "I've prayed" becomes active after a short moment, so the tap follows the prayer. */
 const PRAY_DELAY_MS = 5000;
@@ -129,6 +130,16 @@ export default function PrayerPause() {
     <SafeAreaView style={s.root}>
       <ScrollView contentContainerStyle={s.scroll}>
         <Text style={s.kicker}>{kicker}</Text>
+        <ListenButton
+          light
+          label="Pray aloud"
+          items={() =>
+            plan.sections.map((x) => ({
+              key: x.intention ? `intention:${x.intention}` : x.prayerId ? `prayer:${x.prayerId}` : `text:${x.title}`,
+              text: x.intention ? `${x.heading ?? 'Praying for'} ${x.intention}.\n${x.text}` : `${x.title}.\n${x.text}`,
+            }))
+          }
+        />
         {gospel ? (
           <View style={s.gospel}>
             <Text style={s.gospelText}>{gospel.verse.text}</Text>

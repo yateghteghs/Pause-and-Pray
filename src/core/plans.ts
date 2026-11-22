@@ -5,12 +5,13 @@
  * readings, saint of the day, the prayer library, stats and small groups.
  */
 
-export type PlusFeature = 'rosary-guide' | 'chaplet-guide' | 'novena';
+export type PlusFeature = 'rosary-guide' | 'chaplet-guide' | 'novena' | 'read-aloud';
 
 export const PLUS_FEATURES: { id: PlusFeature; title: string; detail: string }[] = [
   { id: 'rosary-guide', title: 'Guided Rosary', detail: 'Pray all five decades with the mysteries of the day and a bead counter.' },
   { id: 'chaplet-guide', title: 'Divine Mercy Chaplet', detail: 'Bead by bead, with every prayer on screen.' },
   { id: 'novena', title: 'Novenas', detail: 'Nine days of prayer for your intentions, with a reading for each day.' },
+  { id: 'read-aloud', title: 'Read aloud', detail: 'Listen to prayers, the Mass readings, the novena and the saint’s story, or pray the Rosary along with the voice.' },
 ];
 
 export const FREE_FOREVER = [

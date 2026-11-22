@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "note": "Recorded audio. Each track replaces the phone's read-aloud voice for one item. Keys: prayer:<prayer id>, intention:<intention label>, saint:<MM-DD>. Add tracks here, or without an app update in the Supabase table public.audio_tracks (supabase/migrations/0006_audio_tracks.sql). See docs/AUDIO_RECORDING.md.",
+  "tracks": []
+}

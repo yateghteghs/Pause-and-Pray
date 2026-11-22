@@ -52,6 +52,8 @@ export interface PauseSection {
   intention?: string;
   /** Shown above the intention; defaults to "Praying for". */
   heading?: string;
+  /** Set when the section is a prayer from prayers.json (recordings are keyed by it). */
+  prayerId?: string;
   title: string;
   text: string;
 }
@@ -88,7 +90,7 @@ export function pausePlan(intentions: string[], counter: number, mode: 'gate' | 
   const chosen = intentions.filter((i) => i.trim());
   if (!chosen.length) {
     const p = pausePrayer(counter);
-    return { sections: [{ title: p.title, text: p.text }], prayerId: p.id };
+    return { sections: [{ title: p.title, text: p.text, prayerId: p.id }], prayerId: p.id };
   }
   // Within a round, each intention gets its turn before any repeats; the next round uses the other wording.
   const round = Math.floor(counter / chosen.length);
@@ -99,7 +101,7 @@ export function pausePlan(intentions: string[], counter: number, mode: 'gate' | 
     text: intentionPrayer(intention, mode === 'gate' ? round : counter),
   }));
   const close = closing(counter);
-  sections.push({ title: close.title, text: close.text });
+  sections.push({ title: close.title, text: close.text, prayerId: close.id });
   return {
     sections,
     prayerId: mode === 'gate' ? `intention:${picked[0]}` : 'intention:all',
@@ -123,7 +125,7 @@ export function prayerTimePlan(
   if (time.kind === 'devotion') {
     const p = prayerById(resolvePrayerId(time, local) ?? '') ?? pausePrayer(counter);
     return {
-      sections: [{ title: p.title, text: p.text }, ...own.sections.filter((x) => x.intention)],
+      sections: [{ title: p.title, text: p.text, prayerId: p.id }, ...own.sections.filter((x) => x.intention)],
       prayerId: p.id,
     };
   }
@@ -142,7 +144,7 @@ export function prayerTimePlan(
 function groupDevotion(devotion: string | undefined, local: Date): PauseSection[] {
   const p = (id: string, title?: string): PauseSection => {
     const found = prayerById(id)!;
-    return { title: title ?? found.title, text: found.text };
+    return { title: title ?? found.title, text: found.text, prayerId: id };
   };
   switch (devotion) {
     case 'angelus':

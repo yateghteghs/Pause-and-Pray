@@ -8,6 +8,8 @@ import { intentionPrayer, prayerById } from '../core/prayers';
 import { localDayKey } from '../core/dates';
 import { markPrayed, recordPause, setNovena, useAppState } from '../state/store';
 import { recordGroupPrayer } from '../features/groups';
+import { ListenButton } from '../components/ListenButton';
+import { prayerItem } from '../core/audio';
 
 export default function NovenaScreen() {
   const { plus, novena, intentions } = useAppState();
@@ -57,6 +59,16 @@ export default function NovenaScreen() {
       ) : (
         <>
           <H1>Day {day.day}</H1>
+          <ListenButton
+            label="Pray this day aloud"
+            items={() => [
+              { key: `novena:${n.id}:${day.day}`, text: `${day.verse}\n${day.reflection}` },
+              ...intentions.map((i, k) => ({ key: `intention:${i}`, text: `Praying for ${i}.\n${intentionPrayer(i, day.day + k)}` })),
+              prayerItem('our-father'),
+              prayerItem('hail-mary'),
+              prayerItem('glory-be'),
+            ]}
+          />
           <Card>
             <Text style={s.verse}>{day.verse}</Text>
             <Text style={s.ref}>{day.ref}</Text>

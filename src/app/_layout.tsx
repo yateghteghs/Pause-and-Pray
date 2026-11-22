@@ -8,6 +8,7 @@ import { getState, importExtensionEvents, pushConfigToNative, setAccount } from 
 import { restoreAccount } from '../features/auth';
 import { refreshGroups } from '../features/groups';
 import { initBilling } from '../features/billing';
+import { refreshTracks } from '../features/audio';
 import { scheduleReminders } from '../features/reminders';
 
 function openFromNotification(response: Notifications.NotificationResponse | null) {
@@ -20,6 +21,7 @@ export default function RootLayout() {
     // Native storage may have been cleared (reinstall, OS update): re-send the config.
     pushConfigToNative();
     initBilling().catch(() => {});
+    refreshTracks().catch(() => {});
     restoreAccount()
       .then((account) => account && setAccount(account))
       .then(() => refreshGroups())

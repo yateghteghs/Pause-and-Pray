@@ -11,7 +11,7 @@ This repository holds the MVP (version 1.0) codebase: one Expo (React Native, Ty
 | Area | State |
 |---|---|
 | Shared app: screens, content, calendar, stats | Written, typechecked, and the Android JS bundle builds |
-| Core logic: calendar, readings, Rosary, prayer times, gate rules, groups, guided prayers, campaigns, pricing, stats | 105 unit tests passing |
+| Core logic: calendar, readings, Rosary, prayer times, gate rules, groups, guided prayers, campaigns, pricing, audio, stats | 110 unit tests passing |
 | Android gate (Kotlin AccessibilityService) | Written; **not yet compiled or run on a device** |
 | iOS gate (Swift: FamilyControls, ManagedSettings, 3 extensions) | Written; **not yet compiled**, and it needs Apple's Family Controls entitlement |
 | Prayer and calendar text | Every entry is `reviewStatus: pending` until the theological adviser signs it off |
@@ -90,6 +90,12 @@ To switch it on:
 3. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` and `EXPO_PUBLIC_REVENUECAT_IOS_KEY` (public SDK keys) in `.env`, then make a new development build.
 
 Without keys, the browser preview and development builds use a stand-in that charges nothing; release builds hide Plus.
+
+### Read aloud and recorded audio (Plus)
+
+Listen buttons on prayers, the Prayer Pause, the Mass readings, the novena and the saint's story, and "Pray along aloud" in the Rosary and Chaplet, which says each prayer and moves to the next bead by itself. Code: `src/features/audio.ts`, `src/components/ListenButton.tsx`, `src/core/audio.ts`. Speed is set in Me → Settings.
+
+Each item plays a **recording** if one exists for it in the user's language, and otherwise the **phone's own voice** (`expo-speech`). Recordings are listed in `src/content/audio.json` or, without an app update, in the `audio_tracks` table (`supabase/migrations/0006_audio_tracks.sql`). How to record and upload them: [`docs/AUDIO_RECORDING.md`](docs/AUDIO_RECORDING.md).
 
 ### Parish plans (organisations)
 

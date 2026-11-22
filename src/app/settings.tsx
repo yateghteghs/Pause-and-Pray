@@ -9,6 +9,9 @@ import { COUNTRIES } from '../core/country';
 import { scheduleReminders } from '../features/reminders';
 import { accountsAvailable, deleteAccount, signOut } from '../features/auth';
 import { refreshGroups } from '../features/groups';
+import { plusAvailable } from '../features/billing';
+import { ListenButton } from '../components/ListenButton';
+import { prayerItem } from '../core/audio';
 import {
   continueAsGuest,
   getState,
@@ -17,6 +20,7 @@ import {
   setGateMode,
   setRemindersEnabled,
   setUnlockMinutes,
+  setVoice,
   useAppState,
 } from '../state/store';
 
@@ -94,6 +98,24 @@ export default function Settings() {
           </>
         ) : null}
       </Card>
+
+      {plusAvailable ? (
+        <Card>
+          <Label>Read aloud (Plus)</Label>
+          <Segmented
+            options={[
+              { value: 'slower', label: 'Slower, for prayer' },
+              { value: 'normal', label: 'Normal' },
+            ]}
+            value={state.voice.rate}
+            onChange={(rate) => setVoice({ rate })}
+          />
+          <ListenButton label="Hear a sample" items={() => [prayerItem('glory-be')]} />
+          <Body muted>
+            Uses your phone’s voice in English. Recorded prayers replace it as they are added, and more languages will follow.
+          </Body>
+        </Card>
+      ) : null}
 
       <Card>
         <Label>Church calendar</Label>

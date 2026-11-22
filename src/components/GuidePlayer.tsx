@@ -1,10 +1,13 @@
-import { useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
+import { playQueue, stopAudio } from '../features/audio';
+import { hasPlus } from '../core/plans';
+import { useAppState , markPrayed, recordPause } from '../state/store';
 import { Button } from './ui';
 import { colors, space } from './theme';
 import { GuideStep, totalCount } from '../core/guides';
-import { markPrayed, recordPause } from '../state/store';
 import { recordGroupPrayer } from '../features/groups';
 
 /** Steps through a guided prayer one bead at a time. Finishing counts as praying. */
@@ -12,7 +15,11 @@ export function GuidePlayer({ steps, prayerId, finishTitle }: { steps: GuideStep
   const [index, setIndex] = useState(0);
   const [bead, setBead] = useState(1);
   const [finished, setFinished] = useState(false);
+  /** Pray along: the voice says each prayer and moves on by itself. */
+  const [aloud, setAloud] = useState(false);
+  const { plus } = useAppState();
   const started = useRef<number | null>(null);
+  const nextRef = useRef<() => void>(() => {});
   const step = steps[index];
   const total = totalCount(steps);
   const said = steps.slice(0, index).reduce((n, s) => n + s.count, 0) + bead - 1;
@@ -34,7 +41,35 @@ export function GuidePlayer({ steps, prayerId, finishTitle }: { steps: GuideStep
     });
     markPrayed();
     recordGroupPrayer().catch(() => {});
+    setAloud(false);
+    stopAudio();
     setFinished(true);
+  }
+
+  useEffect(() => {
+    nextRef.current = next;
+  });
+
+  useEffect(() => {
+    if (!aloud || finished) return;
+    const s = steps[index];
+    let cancelled = false;
+    // Speak the title once per step; repeated beads say just the prayer.
+    const text = bead === 1 ? `${s.title}.\n${s.text}` : s.text;
+    playQueue([{ key: s.prayerId ? `prayer:${s.prayerId}` : `text:${s.title}`, text }], 'guide').then((completed) => {
+      if (completed && !cancelled) nextRef.current();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [aloud, index, bead, finished, steps]);
+
+  useEffect(() => () => void stopAudio(), []);
+
+  function toggleAloud() {
+    if (!hasPlus(plus)) return router.push('/plus');
+    if (aloud) stopAudio();
+    setAloud(!aloud);
   }
 
   function back() {
@@ -76,6 +111,10 @@ export function GuidePlayer({ steps, prayerId, finishTitle }: { steps: GuideStep
         ) : null}
       </ScrollView>
       <View style={g.actions}>
+        <Pressable accessibilityRole="switch" accessibilityState={{ checked: aloud }} onPress={toggleAloud} style={g.aloud}>
+          <Ionicons name={aloud ? 'pause-circle' : 'volume-high-outline'} size={20} color={colors.primary} />
+          <Text style={g.aloudText}>{aloud ? 'Praying along aloud · tap to pause' : 'Pray along aloud'}</Text>
+        </Pressable>
         <Button
           title={index === steps.length - 1 && bead === step.count ? 'Amen' : step.count > 1 && bead < step.count ? 'Next bead' : 'Next'}
           onPress={next}
@@ -98,6 +137,8 @@ const g = StyleSheet.create({
   beadOn: { backgroundColor: colors.primary },
   beadNow: { transform: [{ scale: 1.25 }] },
   beadCount: { marginLeft: space.sm, color: colors.muted, fontWeight: '600' },
+  aloud: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 6 },
+  aloudText: { color: colors.primary, fontWeight: '700' },
   actions: { padding: space.md, gap: space.xs, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.line },
   done: { flex: 1, justifyContent: 'center', padding: space.lg, gap: space.md },
   doneTitle: { fontSize: 28, fontWeight: '700', color: colors.ink },
