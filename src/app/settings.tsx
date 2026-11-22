@@ -1,16 +1,13 @@
-import { Platform, View } from 'react-native';
+import { Platform, View , Text } from 'react-native';
 import { router } from 'expo-router';
 import * as AppGate from '../../modules/app-gate';
 import { Body, Button, Card, Label, NavRow, Screen, Segmented, SwitchRow } from '../components/ui';
-import { space } from '../components/theme';
+import { space , colors } from '../components/theme';
 import { formatTime, PrayerTime } from '../core/schedule';
 import { scheduleReminders } from '../features/reminders';
 import { useState } from 'react';
-import { Text } from 'react-native';
 import { deleteAccount, signOut, accountsAvailable } from '../features/auth';
-import { colors } from '../components/theme';
-import { setAccount, continueAsGuest } from '../state/store';
-import { getState, setGateMode, setRemindersEnabled, setUnlockMinutes, updatePrayerTime, useAppState } from '../state/store';
+import { setAccount, continueAsGuest , getState, setGateMode, setRemindersEnabled, setUnlockMinutes, updatePrayerTime, useAppState } from '../state/store';
 
 /** The Angelus and the Hour of Mercy keep their traditional times; others can move in 15-minute steps. */
 const FIXED_TIMES = new Set(['angelus-6', 'angelus-12', 'mercy-15', 'angelus-18']);

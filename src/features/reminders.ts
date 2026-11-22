@@ -3,6 +3,7 @@
  * prayer times. Nothing leaves the phone.
  */
 import * as Notifications from 'expo-notifications';
+import { AndroidImportance } from 'expo-notifications';
 import { Platform } from 'react-native';
 import { PrayerTime } from '../core/schedule';
 
@@ -21,7 +22,7 @@ export async function ensurePermission(): Promise<boolean> {
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync(CHANNEL, {
       name: 'Prayer times',
-      importance: Notifications.AndroidImportance.HIGH,
+      importance: AndroidImportance.HIGH,
     });
   }
   const current = await Notifications.getPermissionsAsync();

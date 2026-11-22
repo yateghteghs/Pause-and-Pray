@@ -25,13 +25,12 @@ export default function Apps() {
 
 function AndroidApps() {
   const state = useAppState();
-  const [apps, setApps] = useState<AppGate.InstalledApp[] | null>(null);
+  const [apps, setApps] = useState<AppGate.InstalledApp[] | null>(IS_WEB_PREVIEW ? DEMO_APPS : null);
   const [query, setQuery] = useState('');
   const selected = new Set(state.gate.gatedApps);
 
   useEffect(() => {
-    if (IS_WEB_PREVIEW) setApps(DEMO_APPS);
-    else AppGate.getInstalledApps().then(setApps).catch(() => setApps([]));
+    if (!IS_WEB_PREVIEW) AppGate.getInstalledApps().then(setApps).catch(() => setApps([]));
   }, []);
 
   const sorted = useMemo(() => {
@@ -98,7 +97,7 @@ function IosApps() {
     <Screen>
       <Card>
         <Body>
-          Apple's picker opens next. Choose apps such as Instagram, TikTok, WhatsApp and YouTube, or a whole category
+          Apple’s picker opens next. Choose apps such as Instagram, TikTok, WhatsApp and YouTube, or a whole category
           like Social. Apple keeps the list private, even from us.
         </Body>
         <Button

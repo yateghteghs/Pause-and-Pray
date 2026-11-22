@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Body, Card, H1, Label, Screen } from '../components/ui';
-import { colors, space } from '../components/theme';
-import { KIND_LABEL, READINGS_CREDIT, readingsFor } from '../core/readings';
-import { verseOfTheDay } from '../core/prayers';
-import { useAppState } from '../state/store';
+import { Body, Card, H1, Label, Screen } from '../../components/ui';
+import { colors, space } from '../../components/theme';
+import { KIND_LABEL, READINGS_CREDIT, readingsFor } from '../../core/readings';
+import { verseOfTheDay } from '../../core/prayers';
+import { useAppState } from '../../state/store';
 
 export default function Readings() {
   const { country } = useAppState();
@@ -14,8 +14,8 @@ export default function Readings() {
     const verse = verseOfTheDay(now);
     return (
       <Screen>
-        <H1>Today's readings</H1>
-        <Body>Today's Mass readings are not in the app yet. They are being added and checked season by season.</Body>
+        <H1>Today’s readings</H1>
+        <Body>Today’s Mass readings are not in the app yet. They are being added and checked season by season.</Body>
         <Card>
           <Label>Word of God</Label>
           <Body style={{ fontStyle: 'italic' }}>“{verse.text}”</Body>

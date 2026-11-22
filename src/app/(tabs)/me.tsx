@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Body, Card, Label, Screen } from '../components/ui';
-import { colors, space } from '../components/theme';
-import { computeStats } from '../core/stats';
-import { useAppState } from '../state/store';
+import { router } from 'expo-router';
+import { Body, Card, Label, NavRow, Screen } from '../../components/ui';
+import { colors, space } from '../../components/theme';
+import { computeStats } from '../../core/stats';
+import { useAppState } from '../../state/store';
 
 export default function StatsScreen() {
-  const { events } = useAppState();
+  const { events, account, intentions } = useAppState();
   const s = computeStats(events, new Date());
   const rows: [string, string | number][] = [
     ['Current streak', `${s.currentStreak} ${s.currentStreak === 1 ? 'day' : 'days'}`],
@@ -18,6 +19,15 @@ export default function StatsScreen() {
   ];
   return (
     <Screen>
+      <Card style={{ paddingVertical: space.xs }}>
+        <NavRow
+          label={account ? account.name || account.email : 'Account'}
+          detail={account ? 'Account, apps to pause and prayer times' : 'Apps to pause, prayer times, sign in'}
+          onPress={() => router.push('/settings')}
+        />
+        <NavRow label="My intentions" detail={intentions.length ? intentions.join(' · ') : 'Choose three'} onPress={() => router.push('/intentions')} />
+        <NavRow label="Privacy and your data" onPress={() => router.push('/privacy')} />
+      </Card>
       <Card>
         <Label>Prayed rather than skipped</Label>
         <Text style={st.big}>{s.prayedRate == null ? '–' : `${Math.round(s.prayedRate * 100)}%`}</Text>

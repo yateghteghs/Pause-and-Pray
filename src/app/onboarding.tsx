@@ -37,7 +37,7 @@ export default function Onboarding() {
           <H1>{state.account?.name ? `Welcome, ${state.account.name.split(' ')[0]}.` : 'Pause and pray before you scroll.'}</H1>
           <Body>
             Pause & Pray asks you to say a short Catholic prayer before Instagram, TikTok, WhatsApp, YouTube or any app
-            you choose. Prayers, times and seasons follow the Church's calendar.
+            you choose. Prayers, times and seasons follow the Church’s calendar.
           </Body>
           <Button title="Begin" onPress={next} />
         </>
@@ -49,7 +49,7 @@ export default function Onboarding() {
           <Card>
             <Body>1. You choose the apps to pause.</Body>
             <Body>2. When you open one, a prayer appears first.</Body>
-            <Body>3. Tap “I've prayed” and the app opens for 15, 30 or 60 minutes. “Skip for now” is always there, and is counted honestly.</Body>
+            <Body>3. Tap “I’ve prayed” and the app opens for 15, 30 or 60 minutes. “Skip for now” is always there, and is counted honestly.</Body>
             <Body>4. Optional gates at the Angelus (6am, noon, 6pm) and the Hour of Mercy (3pm).</Body>
           </Card>
           <Card>
@@ -137,7 +137,7 @@ function AndroidPermission({ onDone, preview }: { onDone: () => void; preview?: 
       <Card>
         <Label>1 · Accessibility service</Label>
         <Body>
-          Pause & Pray uses Android's Accessibility Service only to see the <Text style={s.b}>name of the app</Text> that
+          Pause & Pray uses Android’s Accessibility Service only to see the <Text style={s.b}>name of the app</Text> that
           has just opened, so it can show a prayer before the apps you chose.
         </Body>
         <Body>
@@ -163,7 +163,7 @@ function IosPermission({ onDone }: { onDone: () => void }) {
       <H1>Allow Screen Time</H1>
       <Card>
         <Body>
-          Pause & Pray uses Apple's Screen Time to place a prayer screen over the apps you choose. Apple keeps your choice
+          Pause & Pray uses Apple’s Screen Time to place a prayer screen over the apps you choose. Apple keeps your choice
           private: even we cannot see which apps you picked.
         </Body>
         <Button

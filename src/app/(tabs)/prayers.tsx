@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
-import { Card, Label, NavRow, Screen } from '../components/ui';
-import { space } from '../components/theme';
-import { PRAYERS } from '../core/prayers';
+import { Card, Label, NavRow, Screen , Body, H2 } from '../../components/ui';
+import { space } from '../../components/theme';
+import { PRAYERS } from '../../core/prayers';
+import { mysteryOfTheDay } from '../../core/rosary';
 
 const GROUPS: { id: string; title: string }[] = [
   { id: 'basic', title: 'Daily prayers' },
@@ -11,8 +12,18 @@ const GROUPS: { id: string; title: string }[] = [
 ];
 
 export default function Prayers() {
+  const mystery = mysteryOfTheDay(new Date());
   return (
     <Screen>
+      <Card>
+        <Label>Today’s Rosary</Label>
+        <H2>{mystery.title}</H2>
+        {mystery.items.map((m, i) => (
+          <Body key={m}>
+            {i + 1}. {m}
+          </Body>
+        ))}
+      </Card>
       {GROUPS.map((g) => (
         <Card key={g.id} style={{ paddingVertical: space.sm }}>
           <Label>{g.title}</Label>

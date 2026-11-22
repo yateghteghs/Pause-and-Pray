@@ -44,20 +44,17 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: colors.bg },
         }}
       >
-        <Stack.Screen name="index" options={{ title: 'Pause & Pray', headerBackVisible: false, headerLeft: () => null, gestureEnabled: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="welcome" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="sign-up" options={{ title: 'Create account' }} />
         <Stack.Screen name="sign-in" options={{ title: 'Sign in' }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="intentions" options={{ title: 'My intentions' }} />
-        <Stack.Screen name="readings" options={{ title: "Today's readings" }} />
-        <Stack.Screen name="saint" options={{ title: 'Saint of the day' }} />
+
         <Stack.Screen name="pause" options={{ headerShown: false, presentation: 'fullScreenModal', gestureEnabled: false }} />
         <Stack.Screen name="apps" options={{ title: 'Apps to pause' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
-        <Stack.Screen name="prayers" options={{ title: 'Prayers' }} />
         <Stack.Screen name="prayer/[id]" options={{ title: '' }} />
-        <Stack.Screen name="stats" options={{ title: 'Your prayer' }} />
         <Stack.Screen name="privacy" options={{ title: 'Privacy' }} />
       </Stack>
     </>

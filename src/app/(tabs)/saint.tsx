@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Body, Card, H1, Label, Screen } from '../components/ui';
-import { colors, space } from '../components/theme';
-import { COLOUR_HEX, saintOfDay } from '../core/liturgical';
-import { formatDayKey } from '../core/dates';
-import { useAppState } from '../state/store';
+import { Body, Card, H1, Label, Screen } from '../../components/ui';
+import { colors, space } from '../../components/theme';
+import { COLOUR_HEX, saintOfDay } from '../../core/liturgical';
+import { formatDayKey } from '../../core/dates';
+import { useAppState } from '../../state/store';
 
 export default function Saint() {
   const { country } = useAppState();
@@ -11,7 +11,7 @@ export default function Saint() {
   if (!found) {
     return (
       <Screen>
-        <Body>No saint's day in the next two weeks.</Body>
+        <Body>No saint’s day in the next two weeks.</Body>
       </Screen>
     );
   }
@@ -28,7 +28,7 @@ export default function Saint() {
         <Body style={{ fontSize: 17, lineHeight: 27 }}>{saint.life}</Body>
       </Card>
       {!saint.observed && when === 'today' ? (
-        <Body muted>Today's celebration takes precedence, so this saint's memorial is not kept at Mass this year.</Body>
+        <Body muted>Today’s celebration takes precedence, so this saint’s memorial is not kept at Mass this year.</Body>
       ) : null}
       <View style={s.colourRow}>
         <View style={[s.dot, { backgroundColor: COLOUR_HEX[saint.colour] }]} />

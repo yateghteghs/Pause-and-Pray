@@ -1,18 +1,101 @@
 {
-  "version": 1,
+  "version": 2,
   "max": 3,
+  "reviewNote": "Intention prayers are written for Pause & Pray (except 'Eternal rest', a traditional prayer). All are reviewStatus pending until the theological adviser approves them.",
+  "reviewStatus": "pending",
   "suggestions": [
-    "My family",
-    "My studies and exams",
-    "Work, or finding a job",
-    "Healing for someone who is sick",
-    "Peace and safety in Nigeria",
-    "My vocation",
-    "My marriage",
-    "A loved one who has drifted from the faith",
-    "Someone I need to forgive",
-    "Strength against temptation",
-    "The souls in purgatory",
-    "Thanksgiving for my blessings"
+    {
+      "label": "My family",
+      "prayers": [
+        "Lord Jesus, you grew up in the home of Mary and Joseph. Bless my family today. Keep us close to you and to one another, heal what is wounded between us, and make our home a place of peace, patience and prayer. Holy Family of Nazareth, pray for us. Amen.",
+        "Heavenly Father, thank you for each person in my family. Watch over them wherever they are today. Protect them from harm, give them what they need, and help me to love them with your love. Amen."
+      ]
+    },
+    {
+      "label": "My studies and exams",
+      "prayers": [
+        "Come, Holy Spirit, Spirit of wisdom and understanding. Open my mind as I study, help me remember what I have learned, and keep me honest in all my work. Calm my fears before my exams, and let my learning serve you. St. Thomas Aquinas, pray for me. Amen.",
+        "Lord, you gave me this mind and this chance to learn. Help me use my time well and not waste it. Give me focus when I am distracted, strength when I am tired, and peace whatever the results. Mary, Seat of Wisdom, pray for me. Amen."
+      ]
+    },
+    {
+      "label": "Work, or finding a job",
+      "prayers": [
+        "St. Joseph, worker and provider, you know what it is to labour for a family. Pray for me as I look for work. Ask the Lord to open the right doors, give me patience while I wait, and help me trust that the Father will provide. Amen.",
+        "Lord, bless the work of my hands today. Help me to work honestly, treat others fairly and offer every task to you. Provide for all who are looking for work, and give them hope. Amen."
+      ]
+    },
+    {
+      "label": "Healing for someone who is sick",
+      "prayers": [
+        "Lord Jesus, you touched the sick and made them well. I bring before you the one I am praying for. Ease their pain, strengthen them in body and spirit, and guide all who care for them. Let them feel your presence today. Mary, Health of the Sick, pray for them. Amen.",
+        "Father of mercy, I place in your hands all who are sick, especially the one on my heart today. Grant them healing according to your will, courage in their suffering, and the peace that only you can give. Amen."
+      ]
+    },
+    {
+      "label": "Peace and safety in Nigeria",
+      "prayers": [
+        "God of peace, look with mercy on Nigeria. Protect our people from violence, kidnapping and hatred. Give wisdom and honesty to our leaders, comfort to those who mourn, and make each of us a builder of justice and peace. Our Lady, Queen of Nigeria, pray for us. Amen.",
+        "Lord Jesus, Prince of Peace, keep safe all who travel, farm, study and work in Nigeria today. Turn hearts from violence to forgiveness, and unite us as one people under God. Amen."
+      ]
+    },
+    {
+      "label": "My vocation",
+      "prayers": [
+        "Lord, you have a plan for my life. Help me listen for your call, whether to marriage, to the priesthood or religious life, or to serve you as a single person. Give me the courage to say yes, as Mary did. Amen.",
+        "Jesus, you called the apostles by name. Call me too, and help me hear you above all the noise. Show me how I can best love you and serve others with my life. Amen."
+      ]
+    },
+    {
+      "label": "My marriage",
+      "prayers": [
+        "Lord, you blessed the wedding at Cana. Bless our marriage. Help us to love each other faithfully, to forgive quickly, to listen patiently and to grow closer to you together. Mary and Joseph, pray for us. Amen.",
+        "Father, thank you for my spouse. Protect our marriage from all that would divide us. Renew our love today, and make our home a sign of your love. Amen."
+      ]
+    },
+    {
+      "label": "A loved one who has drifted from the faith",
+      "prayers": [
+        "Lord Jesus, Good Shepherd, you leave the ninety-nine to look for the one who is lost. Go after the one I love. Draw them gently back to you and to your Church. St. Monica, who prayed for years for her son, pray with me. Amen.",
+        "Father, I will not stop hoping for the one who has wandered from you. Let them meet your love in the people around them, and give me patience and a good example to share. Amen."
+      ]
+    },
+    {
+      "label": "Someone I need to forgive",
+      "prayers": [
+        "Lord Jesus, from the Cross you forgave those who hurt you. I find it hard to forgive. Heal the hurt in my heart, take away my bitterness, and give me the grace to forgive as you have forgiven me. Amen.",
+        "Father, forgive us our trespasses, as we forgive those who trespass against us. Help me to mean these words today. I place the person I need to forgive in your hands: bless them, and set me free. Amen."
+      ]
+    },
+    {
+      "label": "Strength against temptation",
+      "prayers": [
+        "Lord, you know my weakness. When I am tempted today, even on this phone, give me the strength to turn away and turn to you. Lead me not into temptation, but deliver me from evil. St. Michael, defend me. Amen.",
+        "Jesus, you were tempted in the desert and did not sin. Stay close to me today. Guard my eyes, my thoughts and my heart, and help me choose what is good. Amen."
+      ]
+    },
+    {
+      "label": "The souls in purgatory",
+      "prayers": [
+        "Eternal rest grant unto them, O Lord, and let perpetual light shine upon them. May they rest in peace. May their souls, and the souls of all the faithful departed, through the mercy of God, rest in peace. Amen.",
+        "Lord, remember those who have died, especially my own family and friends. Purify them in your mercy and bring them soon into the joy of heaven. Amen."
+      ]
+    },
+    {
+      "label": "Thanksgiving for my blessings",
+      "prayers": [
+        "Thank you, Lord, for the gift of this day, for life, for the people who love me, and for every blessing I forget to notice. Give me a grateful heart that praises you in good times and in hard times. Amen.",
+        "Father, every good gift comes from you. Thank you for your mercy, for my faith, for food on the table and for those who care for me. Let my whole life be my thank-you. Amen."
+      ]
+    }
+  ],
+  "custom": [
+    "Lord Jesus, I bring before you this intention: {intention}. You know what I need before I ask. Hear my prayer, grant what is good for me, and help me trust in your will. Amen.",
+    "Heavenly Father, I place this intention in your hands: {intention}. Through the prayers of Mary, our Mother, grant what is best, and give me peace while I wait on you. Amen."
+  ],
+  "closings": [
+    "our-father",
+    "hail-mary",
+    "glory-be"
   ]
 }

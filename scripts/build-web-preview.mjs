@@ -24,10 +24,11 @@ const bundles = readdirSync(jsDir).filter((f) => f.endsWith('.js'));
 if (bundles.length !== 1) throw new Error(`Expected one bundle, found: ${bundles.join(', ')}`);
 let js = readFileSync(join(jsDir, bundles[0]), 'utf8');
 
-// Inline image assets so the preview needs no server paths.
-js = js.replace(/"(\/assets\/[^"]+\.png)"/g, (match, path) => {
+// Inline images and the icon font so the preview needs no server paths.
+const MIME = { png: 'image/png', ttf: 'font/ttf' };
+js = js.replace(/"(\/assets\/[^"]+\.(png|ttf))"/g, (match, path, ext) => {
   try {
-    return `"data:image/png;base64,${readFileSync(join(out, path)).toString('base64')}"`;
+    return `"data:${MIME[ext]};base64,${readFileSync(join(out, path)).toString('base64')}"`;
   } catch {
     return match;
   }

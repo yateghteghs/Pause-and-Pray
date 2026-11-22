@@ -32,7 +32,7 @@ This repository holds the MVP (version 1.0) codebase: one Expo (React Native, Ty
 
 ```
 src/
-  app/            Expo Router screens (index = Today, onboarding, pause, apps, settings, prayers, stats, privacy)
+  app/            Expo Router screens; (tabs)/ holds the footer menu (Today, Readings, Prayers, Saint, Me)
   content/        prayers.json, calendar.json  ← all prayer and calendar text, translatable
   core/           pure TypeScript logic + __tests__
   state/          on-device store (expo-sqlite key-value)
@@ -48,7 +48,8 @@ targets/          iOS extensions: activity-monitor, shield-config, shield-action
 | Feature | Code and data |
 |---|---|
 | Optional sign up / sign in (Supabase) | `src/features/auth.ts`, `src/app/welcome.tsx`, `sign-up.tsx`, `sign-in.tsx`, account card in `settings.tsx`, `supabase/migrations/` |
-| Three prayer intentions | `src/content/intentions.json`, `src/components/IntentionsPicker.tsx`, onboarding step, `src/app/intentions.tsx` |
+| Three prayer intentions, with prayers for each | `src/content/intentions.json` (two prayers per suggested intention, a template for the user's own), `pausePlan()` in `src/core/prayers.ts`, `src/components/IntentionsPicker.tsx`, `src/app/intentions.tsx`. A paused app prays for one intention in turn, then an Our Father, Hail Mary or Glory Be; **Pray now** prays for all three |
+| Footer menu | `src/app/(tabs)/`: Today, Readings, Prayers (with today's Rosary), Saint, Me (stats, settings, intentions, privacy) |
 | Daily Mass readings | `src/content/lectionary.json` (references), `src/core/readings.ts`, `src/app/readings.tsx`; the Prayer Pause shows a verse from today's Gospel |
 | Saint of the day, life and times | `lived`, `place`, `life` in `src/content/calendar.json`; `saintOfDay()` in `src/core/liturgical.ts`; `src/app/saint.tsx` |
 
@@ -92,6 +93,10 @@ npm test
 npm run typecheck
 ```
 
+```bash
+npm run lint
+```
+
 The gate uses native code, so Expo Go is not enough. Build a development build instead:
 
 ```bash
@@ -126,7 +131,7 @@ Before the first iOS build, add `ios.appleTeamId` to `app.json`. The extension t
 
 ## Before release: content and calendar checks
 
-- [ ] Theological adviser reviews every text in `src/content/prayers.json` and every entry in `src/content/calendar.json`, then sets `reviewStatus` to `approved`.
+- [ ] Theological adviser reviews every text in `src/content/prayers.json`, the intention prayers in `src/content/intentions.json` and every entry in `src/content/calendar.json`, then sets `reviewStatus` to `approved`.
 - [ ] **Rights check:** the Hour of Mercy text follows the English translation of St. Faustina's *Diary* (no. 187). Confirm permission, or replace it with our own translation (see `rightsCheck` in `prayers.json`).
 - [ ] Check the Douay-Rheims verse texts against a printed Challoner edition.
 - [ ] **CBCN:** confirm whether Nigeria moves Epiphany, Ascension and Corpus Christi to Sunday (`national.NG.transfers` in `calendar.json`, currently set to the universal calendar), which days are holy days of obligation, and any other national feasts and memorials. Bl. Cyprian Michael Iwene Tansi (20 January) is in the list, marked `verify`.

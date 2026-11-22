@@ -8,7 +8,8 @@ const MAX = intentions.max;
 /** Choose up to three intentions from suggestions, or write your own. */
 export function IntentionsPicker({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
   const [custom, setCustom] = useState('');
-  const options = [...intentions.suggestions, ...value.filter((v) => !intentions.suggestions.includes(v))];
+  const labels = intentions.suggestions.map((s) => s.label);
+  const options = [...labels, ...value.filter((v) => !labels.includes(v))];
   const full = value.length >= MAX;
 
   const toggle = (item: string) => {

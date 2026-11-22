@@ -19,7 +19,7 @@ export default function Privacy() {
             what you type, or your messages.
           </Body>
         ) : (
-          <Body>Apple's Screen Time hides which apps you picked, even from us.</Body>
+          <Body>Apple’s Screen Time hides which apps you picked, even from us.</Body>
         )}
       </Card>
       <Card>
