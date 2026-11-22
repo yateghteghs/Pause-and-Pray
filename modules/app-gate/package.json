@@ -1,0 +1,7 @@
+{
+  "name": "app-gate",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "description": "Native app gate for Pause & Pray: Android AccessibilityService, iOS Screen Time (FamilyControls/ManagedSettings/DeviceActivity)."
+}

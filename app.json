@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "Pause & Pray",
+    "slug": "pause-and-pray",
+    "scheme": "pauseandpray",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1F5135"
+    },
+    "ios": {
+      "bundleIdentifier": "org.pauseandpray.app",
+      "supportsTablet": false,
+      "entitlements": {
+        "com.apple.developer.family-controls": true,
+        "com.apple.security.application-groups": [
+          "group.org.pauseandpray.app"
+        ]
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "org.pauseandpray.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#1F5135",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      [
+        "expo-notifications",
+        {
+          "color": "#1F5135"
+        }
+      ],
+      "@bacons/apple-targets"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

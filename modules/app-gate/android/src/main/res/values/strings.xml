@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_gate_service_label">Pause &amp; Pray</string>
+  <string name="app_gate_service_description">Pause &amp; Pray uses this service only to see the name of the app that has just opened, so it can show a short prayer before the apps you chose. It never reads screen content, what you type or your messages, and nothing leaves your phone.</string>
+</resources>
