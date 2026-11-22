@@ -3,7 +3,7 @@ import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as Notifications from 'expo-notifications';
 import { colors } from '../components/theme';
-import { AppState as RNAppState } from 'react-native';
+import { AppState as RNAppState, Platform } from 'react-native';
 import { getState, importExtensionEvents, pushConfigToNative } from '../state/store';
 import { scheduleReminders } from '../features/reminders';
 
@@ -18,6 +18,7 @@ export default function RootLayout() {
     pushConfigToNative();
     const s = getState();
     if (s.onboarded) scheduleReminders(s.gate.schedule, s.remindersEnabled).catch(() => {});
+    if (Platform.OS === 'web') return;
     openFromNotification(Notifications.getLastNotificationResponse());
     importExtensionEvents();
     const sub = Notifications.addNotificationResponseReceivedListener(openFromNotification);

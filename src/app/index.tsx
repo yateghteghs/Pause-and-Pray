@@ -9,6 +9,7 @@ import { verseOfTheDay } from '../core/prayers';
 import { computeStats } from '../core/stats';
 import { formatTime } from '../core/schedule';
 import { useAppState } from '../state/store';
+import { IS_WEB_PREVIEW } from '../features/demo';
 
 export default function Today() {
   const state = useAppState();
@@ -74,6 +75,20 @@ export default function Today() {
         </View>
         {next ? <Body muted>Next: {next.t.label} at {formatTime(next.t)}</Body> : null}
       </Card>
+
+      {IS_WEB_PREVIEW && state.gate.gatedApps.length ? (
+        <Card style={{ paddingVertical: space.xs }}>
+          <Label>Preview</Label>
+          {state.gate.gatedApps.slice(0, 3).map((pkg) => (
+            <NavRow
+              key={pkg}
+              label={`Open ${state.appLabels[pkg] ?? pkg}`}
+              detail="See what happens when you open a paused app"
+              onPress={() => router.push({ pathname: '/pause', params: { app: pkg } })}
+            />
+          ))}
+        </Card>
+      ) : null}
 
       <Card style={{ paddingVertical: space.xs }}>
         <NavRow label="Pray now" detail="Open a Prayer Pause without a gated app" onPress={() => router.push('/pause')} />

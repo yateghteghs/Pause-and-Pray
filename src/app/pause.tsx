@@ -104,7 +104,7 @@ export default function PrayerPause() {
         ) : (
           <Button kind="ghost" title="Close" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
         )}
-        {app ? <Text style={s.note}>{appLabel} opens for {minutes} minutes after you pray or skip.</Text> : null}
+        {app ? <Text style={s.actionNote}>{appLabel} opens for {minutes} minutes after you pray or skip.</Text> : null}
       </View>
     </SafeAreaView>
   );
@@ -119,5 +119,6 @@ const s = StyleSheet.create({
   lead: { color: '#FFFFFF', fontSize: 18, lineHeight: 26 },
   prayer: { color: '#FFFFFF', fontSize: 21, lineHeight: 32 },
   note: { color: '#CFE0D5', fontSize: 14, lineHeight: 20, textAlign: 'center' },
+  actionNote: { color: colors.muted, fontSize: 14, lineHeight: 20, textAlign: 'center' },
   actions: { padding: space.lg, gap: space.sm, backgroundColor: '#FBF8F1', borderTopLeftRadius: 22, borderTopRightRadius: 22 },
 });

@@ -6,6 +6,7 @@ import { Body, Button, Card, H1, Label, Screen } from '../components/ui';
 import { colors, space } from '../components/theme';
 import { completeOnboarding, useAppState } from '../state/store';
 import { ensurePermission, scheduleReminders } from '../features/reminders';
+import { IS_WEB_PREVIEW } from '../features/demo';
 
 type Step = 'welcome' | 'how' | 'permission' | 'apps' | 'reminders';
 const STEPS: Step[] = ['welcome', 'how', 'permission', 'apps', 'reminders'];
@@ -61,14 +62,21 @@ export default function Onboarding() {
         </>
       )}
 
-      {step === 'permission' && (Platform.OS === 'android' ? <AndroidPermission onDone={next} /> : <IosPermission onDone={next} />)}
+      {step === 'permission' &&
+        (IS_WEB_PREVIEW ? (
+          <AndroidPermission onDone={next} preview />
+        ) : Platform.OS === 'android' ? (
+          <AndroidPermission onDone={next} />
+        ) : (
+          <IosPermission onDone={next} />
+        ))}
 
       {step === 'apps' && (
         <>
           <H1>Choose apps to pause</H1>
           <Body>Start with the one that takes most of your time. You can change this later in Settings.</Body>
           <Button kind="secondary" title={state.gate.gatedApps.length ? `${state.gate.gatedApps.length} chosen, change` : 'Choose apps'} onPress={() => router.push('/apps')} />
-          <Button title="Continue" onPress={next} disabled={!state.gate.gatedApps.length && AppGate.isNativeGateAvailable} />
+          <Button title="Continue" onPress={next} disabled={!state.gate.gatedApps.length && (AppGate.isNativeGateAvailable || IS_WEB_PREVIEW)} />
         </>
       )}
 
@@ -106,9 +114,12 @@ export default function Onboarding() {
  * Prominent disclosure shown before the Accessibility permission, as Google
  * Play requires. Keep the wording in step with the Play Console declaration.
  */
-function AndroidPermission({ onDone }: { onDone: () => void }) {
-  const a11y = AppGate.isAccessibilityServiceEnabled();
-  const overlay = AppGate.canDrawOverlays();
+function AndroidPermission({ onDone, preview }: { onDone: () => void; preview?: boolean }) {
+  const [granted, setGranted] = useState({ a11y: false, overlay: false });
+  const a11y = preview ? granted.a11y : AppGate.isAccessibilityServiceEnabled();
+  const overlay = preview ? granted.overlay : AppGate.canDrawOverlays();
+  const openA11y = preview ? () => setGranted((g) => ({ ...g, a11y: true })) : AppGate.openAccessibilitySettings;
+  const openOverlay = preview ? () => setGranted((g) => ({ ...g, overlay: true })) : AppGate.openOverlaySettings;
   return (
     <>
       <H1>Two permissions</H1>
@@ -121,13 +132,13 @@ function AndroidPermission({ onDone }: { onDone: () => void }) {
         <Body>
           It never reads what is on your screen, what you type, or your messages. Nothing is sent off your phone.
         </Body>
-        <Button kind={a11y ? 'secondary' : 'primary'} title={a11y ? 'Turned on ✓' : 'Open Accessibility settings'} onPress={AppGate.openAccessibilitySettings} />
-        <Body muted>In the list, tap “Pause & Pray”, then turn it on.</Body>
+        <Button kind={a11y ? 'secondary' : 'primary'} title={a11y ? 'Turned on ✓' : 'Open Accessibility settings'} onPress={openA11y} />
+        <Body muted>{preview ? 'Preview: on a phone this opens Android settings. ' : ''}In the list, tap “Pause & Pray”, then turn it on.</Body>
       </Card>
       <Card>
         <Label>2 · Display over other apps</Label>
         <Body>Lets the Prayer Pause screen appear in front of the app you opened.</Body>
-        <Button kind={overlay ? 'secondary' : 'primary'} title={overlay ? 'Allowed ✓' : 'Allow'} onPress={AppGate.openOverlaySettings} />
+        <Button kind={overlay ? 'secondary' : 'primary'} title={overlay ? 'Allowed ✓' : 'Allow'} onPress={openOverlay} />
       </Card>
       <Button title={a11y && overlay ? 'Continue' : 'I will do this later'} kind={a11y && overlay ? 'primary' : 'ghost'} onPress={onDone} />
     </>

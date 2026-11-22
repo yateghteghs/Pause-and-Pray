@@ -43,6 +43,10 @@ modules/app-gate/ native module
 targets/          iOS extensions: activity-monitor, shield-config, shield-action (+ _shared)
 ```
 
+## Browser preview
+
+`node scripts/build-web-preview.mjs` builds the real app for the web into `preview/dist/`, inside a phone frame (`preview/index.html`). A browser cannot pause other apps, so the preview uses sample apps instead (`src/features/demo.ts`). It also has no reminders, and it keeps its data in the browser's local storage.
+
 ## Running it
 
 You need Node 20 or later. Native builds need Android Studio for Android and Xcode 16 or later for iOS.

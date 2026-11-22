@@ -1,0 +1,112 @@
+<title>Pause & Pray Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+  /* Layout: notes column beside a phone frame on wide screens; on a phone the app fills the screen under a slim notes bar. */
+  :root {
+    --ground: #E9EFEA;
+    --ink: #17231C;
+    --muted: #55645B;
+    --line: #C9D5CC;
+    --accent: #1F5135;
+    --frame: #101814;
+    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --ground: #0F1612; --ink: #E4ECE6; --muted: #9BAAA1; --line: #2A3A31; --accent: #8FC7A3; --frame: #000; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --ground: #0F1612; --ink: #E4ECE6; --muted: #9BAAA1; --line: #2A3A31; --accent: #8FC7A3; --frame: #000; color-scheme: dark; }
+
+  html, body { height: 100%; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    overflow: hidden;
+  }
+  .wrap {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    gap: 48px;
+    align-items: center;
+    justify-content: center;
+    padding-block: 24px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .notes { max-width: 340px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  h1 { font-family: var(--font-display); font-size: 34px; line-height: 1.1; margin: 0; text-wrap: balance; }
+  h2 { font-family: var(--font-display); font-size: 16px; margin: 6px 0 0; }
+  p, ol, ul { margin: 0; }
+  ol, ul { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .muted { color: var(--muted); }
+  .tagline { color: var(--accent); font-weight: 600; }
+  .phone {
+    flex: none;
+    width: 390px;
+    height: min(820px, 100%);
+    border-radius: 44px;
+    border: 12px solid var(--frame);
+    background: #FBF8F1;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .45);
+    display: flex;
+  }
+  #root { display: flex; flex: 1; height: 100%; min-width: 0; }
+  .long { display: contents; }
+  details summary { cursor: pointer; font-weight: 600; }
+
+  @media (max-width: 760px) {
+    .wrap { flex-direction: column; gap: 0; padding: 0; align-items: stretch; }
+    .notes { max-width: none; padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); border-bottom: 1px solid var(--line); gap: 8px; }
+    .notes .long { display: none; }
+    h1 { font-size: 20px; }
+    .phone { width: auto; height: auto; flex: 1; min-height: 0; border: 0; border-radius: 0; box-shadow: none; }
+  }
+  @media (min-width: 761px) { .short { display: none; } }
+</style>
+
+<div class="wrap">
+  <section class="notes" aria-label="About this preview">
+    <p class="eyebrow">Browser preview</p>
+    <h1>Pause &amp; Pray</h1>
+    <p class="tagline">Pause and pray before you scroll.</p>
+    <div class="long">
+      <p>This is the real app running in your browser. A browser cannot pause other apps, so the preview uses sample apps instead.</p>
+      <h2>Try this</h2>
+      <ol>
+        <li>Go through the five onboarding steps and choose Instagram.</li>
+        <li>On Today, tap <b>Open Instagram</b> to see the Prayer Pause.</li>
+        <li>Pray, then tap <b>I've prayed</b> when it turns on after 5 seconds. Or try <b>Put the phone down</b> or <b>Skip for now</b>.</li>
+        <li>Open <b>Stats</b> for your streak and <b>Settings</b> for the prayer times.</li>
+      </ol>
+      <h2>Only on a phone</h2>
+      <ul class="muted">
+        <li>Pausing your real apps (Android Accessibility Service, iPhone Screen Time)</li>
+        <li>Reminders at the Angelus and the 3pm Hour of Mercy</li>
+      </ul>
+      <p class="muted">To start over: Settings, then Privacy and your data, then Delete all my data.</p>
+    </div>
+    <details class="short">
+      <summary>What to try</summary>
+      <p class="muted">Finish onboarding and choose Instagram, then tap “Open Instagram” on Today. Pausing real apps and reminders work only in the phone app.</p>
+    </details>
+  </section>
+
+  <div class="phone">
+    <div id="root"></div>
+  </div>
+</div>
+
+<script src="app.js" defer></script>
+<script>
+  // Expo Router reads the page path; start the app at its home route.
+  try { history.replaceState(null, '', '/'); } catch (e) {}
+</script>

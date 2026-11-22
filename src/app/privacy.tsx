@@ -32,20 +32,23 @@ export default function Privacy() {
       <Button
         kind="secondary"
         title="Delete all my data"
-        onPress={() =>
+        onPress={() => {
+          const erase = async () => {
+            deleteAllData();
+            await scheduleReminders([], false);
+            router.replace('/onboarding');
+          };
+          // Browsers show no native alert; the preview deletes straight away.
+          if (Platform.OS === 'web') return void erase();
           Alert.alert('Delete all data?', 'This removes your streaks, history and settings from this phone.', [
             { text: 'Cancel', style: 'cancel' },
             {
               text: 'Delete',
               style: 'destructive',
-              onPress: async () => {
-                deleteAllData();
-                await scheduleReminders([], false);
-                router.replace('/onboarding');
-              },
+              onPress: erase,
             },
-          ])
-        }
+          ]);
+        }}
       />
     </Screen>
   );

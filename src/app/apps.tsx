@@ -4,6 +4,7 @@ import * as AppGate from '../../modules/app-gate';
 import { Body, Button, Card, Label, Screen } from '../components/ui';
 import { colors, space } from '../components/theme';
 import { setGatedApps, useAppState } from '../state/store';
+import { DEMO_APPS, IS_WEB_PREVIEW } from '../features/demo';
 
 /** Shown first when installed, because they are what most users want to pause. */
 const SUGGESTED = [
@@ -29,7 +30,8 @@ function AndroidApps() {
   const selected = new Set(state.gate.gatedApps);
 
   useEffect(() => {
-    AppGate.getInstalledApps().then(setApps).catch(() => setApps([]));
+    if (IS_WEB_PREVIEW) setApps(DEMO_APPS);
+    else AppGate.getInstalledApps().then(setApps).catch(() => setApps([]));
   }, []);
 
   const sorted = useMemo(() => {
@@ -50,7 +52,7 @@ function AndroidApps() {
     setGatedApps([...next], { [app.packageName]: app.label });
   }
 
-  if (!AppGate.isNativeGateAvailable) {
+  if (!AppGate.isNativeGateAvailable && !IS_WEB_PREVIEW) {
     return (
       <Screen>
         <Card>
@@ -66,6 +68,7 @@ function AndroidApps() {
   return (
     <Screen>
       <TextInput placeholder="Search apps" value={query} onChangeText={setQuery} style={s.search} placeholderTextColor={colors.muted} />
+      {IS_WEB_PREVIEW ? <Body muted>Preview: sample apps stand in for the ones installed on your phone.</Body> : null}
       <Label>{selected.size} chosen</Label>
       {apps == null ? (
         <ActivityIndicator color={colors.primary} />
