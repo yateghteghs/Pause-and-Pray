@@ -39,10 +39,16 @@ export type Rank =
   | 'weekday';
 
 export interface Celebration {
+  /** Stable key: "fixed-MM-DD" for fixed dates, or a slug such as "christ-the-king". */
+  id: string;
   title: string;
   rank: Rank;
   colour: Colour;
   about?: string;
+  /** Saints only: when they lived, where, and a short life. */
+  lived?: string;
+  place?: string;
+  life?: string;
   /** false when the entry falls on this date but is outranked (shown, not celebrated). */
   observed: boolean;
 }
@@ -72,11 +78,15 @@ export interface CalendarOptions {
 }
 
 interface FixedEntry {
+  id?: string;
   date: string;
   title: string;
   rank: Rank;
   colour: Colour;
   about?: string;
+  lived?: string;
+  place?: string;
+  life?: string;
   /** Explicit precedence override (lower wins). */
   prec?: number;
   /** Feast of the Lord: may replace a Sunday in Ordinary or Christmas Time. */
@@ -364,17 +374,17 @@ function christmasInfo(d: Date, m: MoveableDates): SeasonInfo {
 
 function moveableCelebrations(d: Date, m: MoveableDates): FixedEntry[] {
   const list: (Omit<FixedEntry, 'date'> & { on: Date })[] = [
-    { on: m.epiphany, title: 'The Epiphany of the Lord', rank: 'solemnity', colour: 'white', about: 'Christ is revealed to the nations, represented by the Magi from the East.' },
-    { on: m.baptism, title: 'The Baptism of the Lord', rank: 'feast', colour: 'white', lord: true, about: 'Jesus is baptised in the Jordan and the Father calls him his beloved Son.' },
+    { on: m.epiphany, id: 'epiphany', title: 'The Epiphany of the Lord', rank: 'solemnity', colour: 'white', about: 'Christ is revealed to the nations, represented by the Magi from the East.' },
+    { on: m.baptism, id: 'baptism', title: 'The Baptism of the Lord', rank: 'feast', colour: 'white', lord: true, about: 'Jesus is baptised in the Jordan and the Father calls him his beloved Son.' },
     // prec 1.2 lets a Sunday Ascension replace the 7th Sunday of Easter.
-    { on: m.ascension, title: 'The Ascension of the Lord', rank: 'solemnity', colour: 'white', prec: 1.2, about: 'Forty days after Easter the risen Lord returns to the Father.' },
-    { on: m.maryMotherOfTheChurch, title: 'The Blessed Virgin Mary, Mother of the Church', rank: 'memorial', colour: 'white', about: 'On the day after Pentecost the Church honours Mary, who prayed with the apostles as they awaited the Spirit.' },
-    { on: m.trinity, title: 'The Most Holy Trinity', rank: 'solemnity', colour: 'white', about: 'One God in three Persons: Father, Son and Holy Spirit.' },
-    { on: m.corpusChristi, title: 'The Most Holy Body and Blood of Christ', rank: 'solemnity', colour: 'white', about: 'Thanksgiving for the gift of the Eucharist.' },
-    { on: m.sacredHeart, title: 'The Most Sacred Heart of Jesus', rank: 'solemnity', colour: 'white', about: "The love of Christ's heart, pierced for us." },
-    { on: m.immaculateHeart, title: 'The Immaculate Heart of the Blessed Virgin Mary', rank: 'memorial', colour: 'white', about: 'Mary kept all these things, pondering them in her heart.' },
-    { on: m.christTheKing, title: 'Our Lord Jesus Christ, King of the Universe', rank: 'solemnity', colour: 'white', about: 'The last Sunday of the Church year proclaims Christ as King of all.' },
-    { on: m.holyFamily, title: 'The Holy Family of Jesus, Mary and Joseph', rank: 'feast', colour: 'white', lord: true, about: 'Jesus grew up in a family; the Church honours the home of Nazareth.' },
+    { on: m.ascension, id: 'ascension', title: 'The Ascension of the Lord', rank: 'solemnity', colour: 'white', prec: 1.2, about: 'Forty days after Easter the risen Lord returns to the Father.' },
+    { on: m.maryMotherOfTheChurch, id: 'mary-mother-of-the-church', title: 'The Blessed Virgin Mary, Mother of the Church', rank: 'memorial', colour: 'white', about: 'On the day after Pentecost the Church honours Mary, who prayed with the apostles as they awaited the Spirit.' },
+    { on: m.trinity, id: 'trinity', title: 'The Most Holy Trinity', rank: 'solemnity', colour: 'white', about: 'One God in three Persons: Father, Son and Holy Spirit.' },
+    { on: m.corpusChristi, id: 'corpus-christi', title: 'The Most Holy Body and Blood of Christ', rank: 'solemnity', colour: 'white', about: 'Thanksgiving for the gift of the Eucharist.' },
+    { on: m.sacredHeart, id: 'sacred-heart', title: 'The Most Sacred Heart of Jesus', rank: 'solemnity', colour: 'white', about: "The love of Christ's heart, pierced for us." },
+    { on: m.immaculateHeart, id: 'immaculate-heart', title: 'The Immaculate Heart of the Blessed Virgin Mary', rank: 'memorial', colour: 'white', about: 'Mary kept all these things, pondering them in her heart.' },
+    { on: m.christTheKing, id: 'christ-the-king', title: 'Our Lord Jesus Christ, King of the Universe', rank: 'solemnity', colour: 'white', about: 'The last Sunday of the Church year proclaims Christ as King of all.' },
+    { on: m.holyFamily, id: 'holy-family', title: 'The Holy Family of Jesus, Mary and Joseph', rank: 'feast', colour: 'white', lord: true, about: 'Jesus grew up in a family; the Church honours the home of Nazareth.' },
   ];
   return list.filter((e) => sameDay(e.on, d)).map(({ on, ...e }) => ({ ...e, date: dayKey(on) }));
 }
@@ -467,10 +477,14 @@ export function liturgicalDay(local: Date, opts: CalendarOptions = {}): Liturgic
 
   const privilegedWeekday = seasonPrec === 6;
   const celebrations: Celebration[] = candidates.map((c) => ({
+    id: c.id ?? `fixed-${c.date}`,
     title: c.title,
     rank: privilegedWeekday && (c.rank === 'memorial' || c.rank === 'optional') ? 'commemoration' : c.rank,
     colour: c.colour,
     about: c.about,
+    lived: c.lived,
+    place: c.place,
+    life: c.life,
     observed: c === winner,
   }));
 
@@ -506,3 +520,23 @@ export const COLOUR_HEX: Record<Colour, string> = {
 };
 
 export { SEASON_COLOURS };
+
+export interface SaintOfDay {
+  saint: Celebration;
+  /** "today", or the date (YYYY-MM-DD) of the next saint's day when today has none. */
+  when: 'today' | string;
+}
+
+/**
+ * The saint to feature: today's saint if there is one (observed or not),
+ * otherwise the next saint's day in the coming two weeks.
+ */
+export function saintOfDay(local: Date, opts: CalendarOptions = {}): SaintOfDay | undefined {
+  for (let i = 0; i < 14; i++) {
+    const d = addDays(civilDate(local), i);
+    const day = liturgicalDay(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 12), opts);
+    const saint = day.celebrations.find((c) => c.life);
+    if (saint) return { saint, when: i === 0 ? 'today' : day.date };
+  }
+  return undefined;
+}

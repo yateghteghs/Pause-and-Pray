@@ -62,3 +62,8 @@ export function previousSunday(d: Date, inclusive = false): Date {
   if (w === 0 && inclusive) return d;
   return addDays(d, w === 0 ? -7 : -w);
 }
+
+/** "Monday 30 November" style label for a day key, in the user's locale. */
+export function formatDayKey(key: DayKey): string {
+  return parseDayKey(key).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+}

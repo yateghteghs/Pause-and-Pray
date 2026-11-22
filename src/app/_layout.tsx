@@ -4,7 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import * as Notifications from 'expo-notifications';
 import { colors } from '../components/theme';
 import { AppState as RNAppState, Platform } from 'react-native';
-import { getState, importExtensionEvents, pushConfigToNative } from '../state/store';
+import { getState, importExtensionEvents, pushConfigToNative, setAccount } from '../state/store';
+import { restoreAccount } from '../features/auth';
 import { scheduleReminders } from '../features/reminders';
 
 function openFromNotification(response: Notifications.NotificationResponse | null) {
@@ -16,6 +17,9 @@ export default function RootLayout() {
   useEffect(() => {
     // Native storage may have been cleared (reinstall, OS update): re-send the config.
     pushConfigToNative();
+    restoreAccount()
+      .then((account) => account && setAccount(account))
+      .catch(() => {});
     const s = getState();
     if (s.onboarded) scheduleReminders(s.gate.schedule, s.remindersEnabled).catch(() => {});
     if (Platform.OS === 'web') return;
@@ -40,8 +44,14 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: colors.bg },
         }}
       >
-        <Stack.Screen name="index" options={{ title: 'Pause & Pray' }} />
+        <Stack.Screen name="index" options={{ title: 'Pause & Pray', headerBackVisible: false, headerLeft: () => null, gestureEnabled: false }} />
+        <Stack.Screen name="welcome" options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="sign-up" options={{ title: 'Create account' }} />
+        <Stack.Screen name="sign-in" options={{ title: 'Sign in' }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="intentions" options={{ title: 'My intentions' }} />
+        <Stack.Screen name="readings" options={{ title: "Today's readings" }} />
+        <Stack.Screen name="saint" options={{ title: 'Saint of the day' }} />
         <Stack.Screen name="pause" options={{ headerShown: false, presentation: 'fullScreenModal', gestureEnabled: false }} />
         <Stack.Screen name="apps" options={{ title: 'Apps to pause' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />

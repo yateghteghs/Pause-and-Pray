@@ -11,7 +11,7 @@ This repository holds the MVP (version 1.0) codebase: one Expo (React Native, Ty
 | Area | State |
 |---|---|
 | Shared app: screens, content, calendar, stats | Written, typechecked, and the Android JS bundle builds |
-| Core logic: calendar, Rosary, schedule, gate rules, stats | 38 unit tests passing |
+| Core logic: calendar, readings, Rosary, schedule, gate rules, stats | 65 unit tests passing |
 | Android gate (Kotlin AccessibilityService) | Written; **not yet compiled or run on a device** |
 | iOS gate (Swift: FamilyControls, ManagedSettings, 3 extensions) | Written; **not yet compiled**, and it needs Apple's Family Controls entitlement |
 | Prayer and calendar text | Every entry is `reviewStatus: pending` until the theological adviser signs it off |
@@ -42,6 +42,35 @@ modules/app-gate/ native module
   ios/            AppGateModule, GateShared (Swift)
 targets/          iOS extensions: activity-monitor, shield-config, shield-action (+ _shared)
 ```
+
+## Added after the MVP spec
+
+| Feature | Code and data |
+|---|---|
+| Optional sign up / sign in (Supabase) | `src/features/auth.ts`, `src/app/welcome.tsx`, `sign-up.tsx`, `sign-in.tsx`, account card in `settings.tsx`, `supabase/migrations/` |
+| Three prayer intentions | `src/content/intentions.json`, `src/components/IntentionsPicker.tsx`, onboarding step, `src/app/intentions.tsx` |
+| Daily Mass readings | `src/content/lectionary.json` (references), `src/core/readings.ts`, `src/app/readings.tsx`; the Prayer Pause shows a verse from today's Gospel |
+| Saint of the day, life and times | `lived`, `place`, `life` in `src/content/calendar.json`; `saintOfDay()` in `src/core/liturgical.ts`; `src/app/saint.tsx` |
+
+### Accounts
+
+Accounts are optional ("Continue without an account" is always offered). Only the account itself (name, email and Supabase-managed password) is on the server; prayers, intentions and history stay on the phone. To switch them on:
+
+1. Create a Supabase project and copy its URL and anon key into `.env` (see `.env.example`).
+2. Run `supabase/migrations/0001_delete_my_account.sql` in the Supabase SQL editor, so "Delete my account" works.
+3. In Supabase Auth settings, keep email confirmation on and set the site URL for password-reset emails.
+
+Without those keys, the web preview and development builds use a stand-in that keeps the name and email on the device and never stores a password. Release builds without keys hide accounts entirely.
+
+### Mass readings
+
+- **References** follow the Lectionary for Mass (Sunday cycle A/B/C, weekday cycle I/II). `lectionary.json` currently covers the rest of Year A (week 34), every day from Advent Sunday 2026 to the Baptism of the Lord 2027, the Year B Sundays and solemnities of Lent, Holy Week and Easter, and the fixed-date solemnities and major feasts. Other days show the verse of the day. Day keys and their tests are in `src/core/readings.ts` and `src/core/__tests__/readings.test.ts`.
+- **Text** is adapted from the World English Bible (public domain). The divine name is rendered "the LORD" (and "the Lord GOD"), as the Church asks for prayer and as the WEB Catholic Edition does; the deuterocanonical books come from that Catholic Edition. Because the wording changes, the app credits it as "adapted from the World English Bible".
+- **Numbering:** the Lectionary counts psalm titles as verses, and a few books (Isaiah 63–64, Malachi 3–4, the end of Romans) are numbered differently in the WEB. Psalm offsets are in `scripts/build-readings.mjs`; other differences are given per reading as `webRef`.
+- **To add days:** add entries to `lectionary.json`, then run `node scripts/build-readings.mjs`. The build stops on any reference it cannot find, or any psalm whose offset is not listed.
+- `data/web-bible.json` is built by `scripts/bible/build-bible.mjs` from the `world-english-bible` and `evangelization` npm packages (see the script header).
+
+**Before release:** the adviser checks every reference against the Lectionary that Nigerian parishes use. Partial verses (the "a" and "b" in "16b") are shown as whole verses. The rest of the year's references still need to be entered.
 
 ## Browser preview
 

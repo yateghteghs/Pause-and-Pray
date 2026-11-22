@@ -4,12 +4,13 @@ import { router, useFocusEffect } from 'expo-router';
 import * as AppGate from '../../modules/app-gate';
 import { Body, Button, Card, H1, Label, Screen } from '../components/ui';
 import { colors, space } from '../components/theme';
-import { completeOnboarding, useAppState } from '../state/store';
+import { completeOnboarding, setIntentions, useAppState } from '../state/store';
+import { IntentionsPicker } from '../components/IntentionsPicker';
 import { ensurePermission, scheduleReminders } from '../features/reminders';
 import { IS_WEB_PREVIEW } from '../features/demo';
 
-type Step = 'welcome' | 'how' | 'permission' | 'apps' | 'reminders';
-const STEPS: Step[] = ['welcome', 'how', 'permission', 'apps', 'reminders'];
+type Step = 'welcome' | 'how' | 'intentions' | 'permission' | 'apps' | 'reminders';
+const STEPS: Step[] = ['welcome', 'how', 'intentions', 'permission', 'apps', 'reminders'];
 
 export default function Onboarding() {
   const [step, setStep] = useState<Step>('welcome');
@@ -33,7 +34,7 @@ export default function Onboarding() {
       </Label>
       {step === 'welcome' && (
         <>
-          <H1>Pause and pray before you scroll.</H1>
+          <H1>{state.account?.name ? `Welcome, ${state.account.name.split(' ')[0]}.` : 'Pause and pray before you scroll.'}</H1>
           <Body>
             Pause & Pray asks you to say a short Catholic prayer before Instagram, TikTok, WhatsApp, YouTube or any app
             you choose. Prayers, times and seasons follow the Church's calendar.
@@ -59,6 +60,16 @@ export default function Onboarding() {
             </Body>
           </Card>
           <Button title="Continue" onPress={next} />
+        </>
+      )}
+
+      {step === 'intentions' && (
+        <>
+          <H1>What are you praying for?</H1>
+          <Body>Choose three intentions. One appears each time you pause to pray. They stay on this phone.</Body>
+          <IntentionsPicker value={state.intentions} onChange={setIntentions} />
+          <Button title={state.intentions.length === 3 ? 'Continue' : `Choose ${3 - state.intentions.length} more`} onPress={next} disabled={state.intentions.length < 3} />
+          <Button kind="ghost" title="Skip for now" onPress={next} />
         </>
       )}
 

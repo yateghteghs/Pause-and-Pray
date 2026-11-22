@@ -5,6 +5,11 @@ import { Body, Button, Card, Label, NavRow, Screen, Segmented, SwitchRow } from 
 import { space } from '../components/theme';
 import { formatTime, PrayerTime } from '../core/schedule';
 import { scheduleReminders } from '../features/reminders';
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { deleteAccount, signOut, accountsAvailable } from '../features/auth';
+import { colors } from '../components/theme';
+import { setAccount, continueAsGuest } from '../state/store';
 import { getState, setGateMode, setRemindersEnabled, setUnlockMinutes, updatePrayerTime, useAppState } from '../state/store';
 
 /** The Angelus and the Hour of Mercy keep their traditional times; others can move in 15-minute steps. */
@@ -27,6 +32,16 @@ export default function Settings() {
 
   return (
     <Screen>
+      {accountsAvailable ? <AccountCard /> : null}
+
+      <Card style={{ paddingVertical: space.xs }}>
+        <NavRow
+          label="My intentions"
+          detail={state.intentions.length ? state.intentions.join(' · ') : 'Choose three'}
+          onPress={() => router.push('/intentions')}
+        />
+      </Card>
+
       <Card style={{ paddingVertical: space.xs }}>
         <NavRow
           label="Apps to pause"
@@ -108,5 +123,57 @@ export default function Settings() {
         <NavRow label="Privacy and your data" onPress={() => router.push('/privacy')} />
       </Card>
     </Screen>
+  );
+}
+
+function AccountCard() {
+  const { account } = useAppState();
+  const [confirming, setConfirming] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  if (!account) {
+    return (
+      <Card style={{ paddingVertical: space.xs }}>
+        <NavRow label="Create an account or sign in" detail="Optional. Your prayers stay on this phone." onPress={() => router.push('/welcome')} />
+      </Card>
+    );
+  }
+  return (
+    <Card>
+      <Label>Account</Label>
+      <Body>{account.name || account.email}</Body>
+      <Body muted>
+        {account.email}
+        {account.kind === 'preview' ? ' · preview account on this device' : ''}
+      </Body>
+      <Button
+        kind="secondary"
+        title="Sign out"
+        onPress={async () => {
+          await signOut();
+          setAccount(null);
+          continueAsGuest();
+        }}
+      />
+      {confirming ? (
+        <>
+          <Body>Delete your account? Your name and email are removed from our server. Your prayer history on this phone is kept.</Body>
+          {error ? <Text style={{ color: colors.danger }}>{error}</Text> : null}
+          <Button
+            title="Yes, delete my account"
+            onPress={async () => {
+              const r = await deleteAccount();
+              if (!r.ok) return setError(r.error ?? 'Could not delete the account. Try again.');
+              setAccount(null);
+              continueAsGuest();
+              setConfirming(false);
+            }}
+          />
+          <Button kind="ghost" title="Keep my account" onPress={() => setConfirming(false)} />
+        </>
+      ) : (
+        <Button kind="ghost" title="Delete my account" onPress={() => setConfirming(true)} />
+      )}
+    </Card>
   );
 }

@@ -4,9 +4,15 @@ import { GateConfig, GateMode, UnlockMinutes } from '../core/gate';
 import { DEFAULT_SCHEDULE, PrayerTime } from '../core/schedule';
 import { PauseEvent } from '../core/stats';
 import { getJSON, setJSON, remove } from '../storage/kv';
+import type { Account } from '../features/auth';
 
 export interface AppState {
   onboarded: boolean;
+  /** Set once the user has signed up, signed in, or chosen to continue without an account. */
+  accountChoice?: 'account' | 'guest';
+  account: Account | null;
+  /** Up to three things the user is praying for. Kept on the phone only. */
+  intentions: string[];
   /** National calendar layered on the universal one. */
   country: 'NG';
   remindersEnabled: boolean;
@@ -22,6 +28,8 @@ const MAX_EVENTS = 5000;
 
 const DEFAULT_STATE: AppState = {
   onboarded: false,
+  account: null,
+  intentions: [],
   country: 'NG',
   remindersEnabled: true,
   gate: { gatedApps: [], mode: 'every-open', unlockMinutes: 15, schedule: DEFAULT_SCHEDULE },
@@ -110,6 +118,18 @@ export function nextPauseCounter(): number {
 export function recordPause(event: PauseEvent) {
   const events = [...state.events, event].slice(-MAX_EVENTS);
   commit({ ...state, events });
+}
+
+export function setAccount(account: Account | null) {
+  commit({ ...state, account, accountChoice: account ? 'account' : state.accountChoice });
+}
+
+export function continueAsGuest() {
+  commit({ ...state, accountChoice: 'guest', account: null });
+}
+
+export function setIntentions(intentions: string[]) {
+  commit({ ...state, intentions: intentions.map((i) => i.trim()).filter(Boolean).slice(0, 3) });
 }
 
 /** Merges pauses recorded outside the app (the iOS shield's "Skip for now"). */

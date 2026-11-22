@@ -1,11 +1,15 @@
 import { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Redirect, router } from 'expo-router';
 import { Body, Card, H2, Label, NavRow, Screen } from '../components/ui';
 import { colors, space } from '../components/theme';
 import { COLOUR_HEX, liturgicalDay } from '../core/liturgical';
 import { mysteryOfTheDay } from '../core/rosary';
 import { verseOfTheDay } from '../core/prayers';
+import { KIND_LABEL, readingsFor } from '../core/readings';
+import { saintOfDay } from '../core/liturgical';
+import { formatDayKey } from '../core/dates';
+import { accountsAvailable } from '../features/auth';
 import { computeStats } from '../core/stats';
 import { formatTime } from '../core/schedule';
 import { useAppState } from '../state/store';
@@ -17,8 +21,11 @@ export default function Today() {
   const day = useMemo(() => liturgicalDay(now, { country: state.country }), [state.country, now.toDateString()]);
   const mystery = mysteryOfTheDay(now);
   const verse = verseOfTheDay(now);
+  const readings = readingsFor(now, { country: state.country });
+  const saintDay = saintOfDay(now, { country: state.country });
   const stats = computeStats(state.events, now);
 
+  if (!state.accountChoice && accountsAvailable) return <Redirect href="/welcome" />;
   if (!state.onboarded) return <Redirect href="/onboarding" />;
 
   const minutesNow = now.getHours() * 60 + now.getMinutes();
@@ -28,7 +35,6 @@ export default function Today() {
     .sort((a, b) => a.at - b.at);
   const next = upcoming.find((u) => u.at > minutesNow) ?? upcoming[0];
 
-  const saint = day.saint && day.saint.title !== day.title ? day.saint : undefined;
 
   return (
     <Screen>
@@ -39,16 +45,65 @@ export default function Today() {
             {now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })} · {day.seasonLabel}
           </Label>
           <H2>{day.title}</H2>
-          {day.saint?.observed && day.saint.about ? <Body muted>{day.saint.about}</Body> : null}
-          {saint ? (
-            <Body muted>
-              Also today: {saint.title}
-              {saint.about ? `. ${saint.about}` : ''}
-            </Body>
-          ) : null}
+          {day.saint?.observed && day.saint.about && !day.saint.life ? <Body muted>{day.saint.about}</Body> : null}
           <Text style={s.colour}>Liturgical colour: {day.colour}</Text>
         </View>
       </Card>
+
+      {state.intentions.length ? (
+        <Card>
+          <Label>I'm praying for</Label>
+          {state.intentions.map((i) => (
+            <Body key={i}>• {i}</Body>
+          ))}
+          <Pressable accessibilityRole="button" onPress={() => router.push('/intentions')}>
+            <Text style={s.link}>Change</Text>
+          </Pressable>
+        </Card>
+      ) : (
+        <Card style={{ paddingVertical: space.xs }}>
+          <NavRow label="Choose three intentions" detail="What are you praying for?" onPress={() => router.push('/intentions')} />
+        </Card>
+      )}
+
+      {readings ? (
+        <Pressable accessibilityRole="button" onPress={() => router.push('/readings')}>
+          <Card>
+            <Label>Today's Mass readings</Label>
+            {readings.readings.map((r) => (
+              <View key={r.kind} style={s.readingRow}>
+                <Text style={s.readingKind}>{KIND_LABEL[r.kind]}</Text>
+                <Text style={s.readingRef}>{r.ref}</Text>
+              </View>
+            ))}
+            {(() => {
+              const g = readings.readings.find((r) => r.kind === 'gospel')?.verses[0];
+              return g ? <Body style={{ fontStyle: 'italic' }}>{g.text}</Body> : null;
+            })()}
+            <Text style={s.link}>Read today's readings ›</Text>
+          </Card>
+        </Pressable>
+      ) : (
+        <Card>
+          <Label>Word of God</Label>
+          <Body style={{ fontStyle: 'italic' }}>“{verse.text}”</Body>
+          <Body muted>{verse.ref} (Douay-Rheims)</Body>
+        </Card>
+      )}
+
+      {saintDay ? (
+        <Pressable accessibilityRole="button" onPress={() => router.push('/saint')}>
+          <Card>
+            <Label>{saintDay.when === 'today' ? 'Saint of the day' : `Next saint · ${formatDayKey(saintDay.when)}`}</Label>
+            <H2>{saintDay.saint.title}</H2>
+            <Text style={s.meta}>
+              {saintDay.saint.lived} · {saintDay.saint.place}
+            </Text>
+            <Body muted>{saintDay.saint.life?.split('. ').slice(0, 2).join('. ').replace(/\.?$/, '.')}</Body>
+            <Text style={s.link}>Read their story ›</Text>
+          </Card>
+        </Pressable>
+      ) : null}
 
       <Card>
         <Label>Today's Rosary</Label>
@@ -58,12 +113,6 @@ export default function Today() {
             {i + 1}. {m}
           </Body>
         ))}
-      </Card>
-
-      <Card>
-        <Label>Word of God</Label>
-        <Body style={{ fontStyle: 'italic' }}>“{verse.text}”</Body>
-        <Body muted>{verse.ref} (Douay-Rheims)</Body>
       </Card>
 
       <Card>
@@ -119,4 +168,9 @@ const s = StyleSheet.create({
   statsRow: { flexDirection: 'row', paddingVertical: space.sm },
   statValue: { fontSize: 28, fontWeight: '700', color: colors.primary },
   statLabel: { fontSize: 13, color: colors.muted },
+  link: { color: colors.primary, fontWeight: '700', fontSize: 15, paddingTop: space.xs },
+  meta: { fontSize: 13, color: colors.gold, fontWeight: '600' },
+  readingRow: { flexDirection: 'row', justifyContent: 'space-between', gap: space.sm },
+  readingKind: { fontSize: 14, color: colors.muted },
+  readingRef: { fontSize: 14, color: colors.ink, fontWeight: '600', flexShrink: 1, textAlign: 'right' },
 });

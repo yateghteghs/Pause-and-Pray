@@ -2,102 +2,906 @@
   "version": 1,
   "reviewNote": "Fixed-date celebrations of the General Roman Calendar plus a national-calendar layer. Short descriptions are our own words. The theological adviser must check every entry; national entries marked verify:true must be confirmed with the Catholic Bishops' Conference of Nigeria.",
   "universal": [
-    { "date": "01-01", "title": "Mary, the Holy Mother of God", "rank": "solemnity", "colour": "white", "about": "The Church begins the civil year honouring Mary as Mother of God (Theotokos), the title affirmed at the Council of Ephesus." },
-    { "date": "01-02", "title": "Sts. Basil the Great and Gregory Nazianzen", "rank": "memorial", "colour": "white", "about": "Two fourth-century bishops and friends whose teaching helped the Church express its faith in the Holy Trinity." },
-    { "date": "01-03", "title": "The Most Holy Name of Jesus", "rank": "optional", "colour": "white", "about": "A day to honour the name given to the Child at his circumcision: Jesus, 'God saves'." },
-    { "date": "01-17", "title": "St. Anthony, Abbot", "rank": "memorial", "colour": "white", "about": "An Egyptian hermit who gave away his wealth to pray in the desert and is remembered as a father of monks." },
-    { "date": "01-21", "title": "St. Agnes", "rank": "memorial", "colour": "red", "about": "A young Roman martyr who chose death rather than deny Christ." },
-    { "date": "01-24", "title": "St. Francis de Sales", "rank": "memorial", "colour": "white", "about": "A gentle bishop of Geneva who taught that every person, in every walk of life, is called to holiness. Patron of writers." },
-    { "date": "01-25", "title": "The Conversion of St. Paul", "rank": "feast", "colour": "white", "about": "Saul the persecutor met the risen Christ on the road to Damascus and became the Apostle to the Gentiles." },
-    { "date": "01-26", "title": "Sts. Timothy and Titus", "rank": "memorial", "colour": "white", "about": "Companions of St. Paul and shepherds of the early Church, to whom he wrote three of his letters." },
-    { "date": "01-28", "title": "St. Thomas Aquinas", "rank": "memorial", "colour": "white", "about": "A Dominican friar and Doctor of the Church whose writings joined faith and reason. Patron of students." },
-    { "date": "01-31", "title": "St. John Bosco", "rank": "memorial", "colour": "white", "about": "An Italian priest who gave his life to educating poor young people and founded the Salesians." },
-    { "date": "02-02", "title": "The Presentation of the Lord", "rank": "feast", "colour": "white", "about": "Mary and Joseph bring the Child Jesus to the Temple, where Simeon greets him as a light for the nations." },
-    { "date": "02-03", "title": "St. Blaise", "rank": "optional", "colour": "red", "about": "A bishop and martyr of Armenia; throats are blessed on his day." },
-    { "date": "02-05", "title": "St. Agatha", "rank": "memorial", "colour": "red", "about": "A virgin martyr of Sicily, honoured since the early centuries." },
-    { "date": "02-06", "title": "St. Paul Miki and Companions", "rank": "memorial", "colour": "red", "about": "Twenty-six Catholics crucified at Nagasaki, Japan, in 1597 for their faith." },
-    { "date": "02-08", "title": "St. Josephine Bakhita", "rank": "optional", "colour": "white", "about": "Born in Sudan and sold into slavery as a child, she found Christ, gained her freedom and became a Canossian sister known for her kindness." },
-    { "date": "02-10", "title": "St. Scholastica", "rank": "memorial", "colour": "white", "about": "Sister of St. Benedict, she led a community of nuns and was known for the power of her prayer." },
-    { "date": "02-11", "title": "Our Lady of Lourdes", "rank": "optional", "colour": "white", "about": "Remembers Mary's appearances to St. Bernadette in 1858. Also the World Day of the Sick." },
-    { "date": "02-14", "title": "Sts. Cyril and Methodius", "rank": "memorial", "colour": "white", "about": "Brothers who brought the Gospel to the Slavic peoples in their own language." },
-    { "date": "02-22", "title": "The Chair of St. Peter", "rank": "feast", "colour": "white", "about": "Celebrates the mission Christ gave to Peter and his successors to strengthen the faith of the Church." },
-    { "date": "02-23", "title": "St. Polycarp", "rank": "memorial", "colour": "red", "about": "Bishop of Smyrna and disciple of St. John the Apostle, martyred in his old age." },
-    { "date": "03-07", "title": "Sts. Perpetua and Felicity", "rank": "memorial", "colour": "red", "about": "A young noblewoman and her servant, martyred together at Carthage in North Africa in 203." },
-    { "date": "03-17", "title": "St. Patrick", "rank": "optional", "colour": "white", "about": "The missionary bishop of Ireland. Irish missionaries later helped to plant the faith in much of Nigeria." },
-    { "date": "03-19", "title": "St. Joseph, Spouse of the Blessed Virgin Mary", "rank": "solemnity", "colour": "white", "about": "The just man who protected Mary and Jesus. Patron of the universal Church and of fathers." },
-    { "date": "03-25", "title": "The Annunciation of the Lord", "rank": "solemnity", "colour": "white", "about": "The angel Gabriel announces to Mary that she will bear the Son of God, and she answers yes." },
-    { "date": "04-25", "title": "St. Mark, Evangelist", "rank": "feast", "colour": "red", "about": "Author of the second Gospel and, by tradition, founder of the Church in Alexandria in Africa." },
-    { "date": "04-29", "title": "St. Catherine of Siena", "rank": "memorial", "colour": "white", "about": "A Dominican laywoman, mystic and Doctor of the Church who called popes and princes to faithfulness." },
-    { "date": "05-01", "title": "St. Joseph the Worker", "rank": "optional", "colour": "white", "about": "Honours St. Joseph the carpenter and the dignity of human work." },
-    { "date": "05-02", "title": "St. Athanasius", "rank": "memorial", "colour": "white", "about": "An African bishop of Alexandria who defended the divinity of Christ through five exiles." },
-    { "date": "05-03", "title": "Sts. Philip and James, Apostles", "rank": "feast", "colour": "red", "about": "Two of the Twelve. Philip asked Jesus to show them the Father; James led the Church in Jerusalem." },
-    { "date": "05-14", "title": "St. Matthias, Apostle", "rank": "feast", "colour": "red", "about": "Chosen by lot to take the place of Judas among the Twelve." },
-    { "date": "05-26", "title": "St. Philip Neri", "rank": "memorial", "colour": "white", "about": "The joyful 'Apostle of Rome' who won young people to Christ with prayer, music and good humour." },
-    { "date": "05-31", "title": "The Visitation of the Blessed Virgin Mary", "rank": "feast", "colour": "white", "about": "Mary visits her cousin Elizabeth and sings the Magnificat." },
-    { "date": "06-01", "title": "St. Justin, Martyr", "rank": "memorial", "colour": "red", "about": "A philosopher who found the truth in Christ and gave his life for it in Rome." },
-    { "date": "06-03", "title": "Sts. Charles Lwanga and Companions", "rank": "memorial", "colour": "red", "about": "The Uganda Martyrs: young African Catholics who chose death in 1886 rather than betray Christ." },
-    { "date": "06-11", "title": "St. Barnabas, Apostle", "rank": "memorial", "colour": "red", "about": "A generous early disciple who brought St. Paul to the apostles and travelled with him." },
-    { "date": "06-13", "title": "St. Anthony of Padua", "rank": "memorial", "colour": "white", "about": "A Franciscan preacher and Doctor of the Church, much loved as a helper in finding what is lost." },
-    { "date": "06-24", "title": "The Nativity of St. John the Baptist", "rank": "solemnity", "colour": "white", "about": "The birth of the forerunner who prepared the way for the Lord." },
-    { "date": "06-29", "title": "Sts. Peter and Paul, Apostles", "rank": "solemnity", "colour": "red", "about": "The two great apostles of Rome, the rock and the missionary, martyred for Christ." },
-    { "date": "07-03", "title": "St. Thomas, Apostle", "rank": "feast", "colour": "red", "about": "The apostle who doubted and then confessed, 'My Lord and my God!'" },
-    { "date": "07-11", "title": "St. Benedict", "rank": "memorial", "colour": "white", "about": "Father of Western monasticism, whose Rule teaches prayer and work. Patron of Europe." },
-    { "date": "07-22", "title": "St. Mary Magdalene", "rank": "feast", "colour": "white", "about": "The first witness of the Resurrection, called the 'apostle to the apostles'." },
-    { "date": "07-25", "title": "St. James, Apostle", "rank": "feast", "colour": "red", "about": "Brother of John and the first of the Twelve to be martyred." },
-    { "date": "07-26", "title": "Sts. Joachim and Anne", "rank": "memorial", "colour": "white", "about": "By tradition the parents of the Virgin Mary and grandparents of Jesus." },
-    { "date": "07-29", "title": "Sts. Martha, Mary and Lazarus", "rank": "memorial", "colour": "white", "about": "Friends of Jesus at Bethany who welcomed him into their home." },
-    { "date": "07-31", "title": "St. Ignatius of Loyola", "rank": "memorial", "colour": "white", "about": "A soldier turned priest who founded the Jesuits and wrote the Spiritual Exercises." },
-    { "date": "08-04", "title": "St. John Vianney", "rank": "memorial", "colour": "white", "about": "The Curé of Ars, a humble parish priest who spent long hours hearing confessions. Patron of parish priests." },
-    { "date": "08-06", "title": "The Transfiguration of the Lord", "rank": "feast", "colour": "white", "about": "On the mountain, Peter, James and John see the glory of Jesus." },
-    { "date": "08-08", "title": "St. Dominic", "rank": "memorial", "colour": "white", "about": "Founder of the Order of Preachers, devoted to preaching the truth of the Gospel." },
-    { "date": "08-10", "title": "St. Lawrence, Deacon and Martyr", "rank": "feast", "colour": "red", "about": "A deacon of Rome who called the poor 'the treasures of the Church' and died for Christ." },
-    { "date": "08-11", "title": "St. Clare", "rank": "memorial", "colour": "white", "about": "Follower of St. Francis and founder of the Poor Clares, a life of poverty and prayer." },
-    { "date": "08-14", "title": "St. Maximilian Kolbe", "rank": "memorial", "colour": "red", "about": "A Franciscan priest who gave his life at Auschwitz in place of a father of a family." },
-    { "date": "08-15", "title": "The Assumption of the Blessed Virgin Mary", "rank": "solemnity", "colour": "white", "about": "Mary, at the end of her earthly life, was taken up body and soul into heavenly glory." },
-    { "date": "08-22", "title": "The Queenship of the Blessed Virgin Mary", "rank": "memorial", "colour": "white", "about": "Honours Mary as Queen of heaven and earth, close to her Son the King." },
-    { "date": "08-24", "title": "St. Bartholomew, Apostle", "rank": "feast", "colour": "red", "about": "One of the Twelve, often identified with Nathanael, 'an Israelite in whom there is no guile'." },
-    { "date": "08-27", "title": "St. Monica", "rank": "memorial", "colour": "white", "about": "An African mother whose years of patient prayer won the conversion of her son Augustine." },
-    { "date": "08-28", "title": "St. Augustine", "rank": "memorial", "colour": "white", "about": "Bishop of Hippo in North Africa and Doctor of the Church: 'Our heart is restless until it rests in you.'" },
-    { "date": "08-29", "title": "The Passion of St. John the Baptist", "rank": "memorial", "colour": "red", "about": "John was beheaded for speaking the truth to King Herod." },
-    { "date": "09-03", "title": "St. Gregory the Great", "rank": "memorial", "colour": "white", "about": "A monk who became pope, reformed the liturgy and sent missionaries to England." },
-    { "date": "09-08", "title": "The Nativity of the Blessed Virgin Mary", "rank": "feast", "colour": "white", "about": "The birthday of the Mother of God." },
-    { "date": "09-13", "title": "St. John Chrysostom", "rank": "memorial", "colour": "white", "about": "Archbishop of Constantinople, called 'golden mouth' for his preaching." },
-    { "date": "09-14", "title": "The Exaltation of the Holy Cross", "rank": "feast", "colour": "red", "about": "The Cross, once a sign of shame, is honoured as the tree of our salvation." },
-    { "date": "09-15", "title": "Our Lady of Sorrows", "rank": "memorial", "colour": "white", "about": "Mary standing faithfully at the foot of the Cross." },
-    { "date": "09-16", "title": "Sts. Cornelius and Cyprian", "rank": "memorial", "colour": "red", "about": "A pope and an African bishop of Carthage who held the Church together in a time of persecution." },
-    { "date": "09-21", "title": "St. Matthew, Apostle and Evangelist", "rank": "feast", "colour": "red", "about": "A tax collector who left everything to follow Jesus and wrote the first Gospel." },
-    { "date": "09-23", "title": "St. Pius of Pietrelcina (Padre Pio)", "rank": "memorial", "colour": "white", "about": "A Capuchin priest known for prayer, the confessional and bearing the wounds of Christ." },
-    { "date": "09-27", "title": "St. Vincent de Paul", "rank": "memorial", "colour": "white", "about": "A French priest who organised care for the poor. Patron of charitable societies." },
-    { "date": "09-29", "title": "Sts. Michael, Gabriel and Raphael, Archangels", "rank": "feast", "colour": "white", "about": "God's messengers who protect, announce and heal." },
-    { "date": "09-30", "title": "St. Jerome", "rank": "memorial", "colour": "white", "about": "Translator of the Bible into Latin: 'Ignorance of Scripture is ignorance of Christ.'" },
-    { "date": "10-01", "title": "St. Thérèse of the Child Jesus", "rank": "memorial", "colour": "white", "about": "A young Carmelite who taught the 'little way' of trust and love. Patron of missions." },
-    { "date": "10-02", "title": "The Holy Guardian Angels", "rank": "memorial", "colour": "white", "about": "God gives each person an angel to guard and guide them." },
-    { "date": "10-04", "title": "St. Francis of Assisi", "rank": "memorial", "colour": "white", "about": "The poor man of Assisi who loved Christ, the poor and all creation." },
-    { "date": "10-07", "title": "Our Lady of the Rosary", "rank": "memorial", "colour": "white", "about": "A day to honour Mary through the prayer of the Rosary." },
-    { "date": "10-15", "title": "St. Teresa of Jesus (of Ávila)", "rank": "memorial", "colour": "white", "about": "A Carmelite reformer and Doctor of the Church who taught prayer as friendship with God." },
-    { "date": "10-17", "title": "St. Ignatius of Antioch", "rank": "memorial", "colour": "red", "about": "An early bishop who wrote to the churches on his way to martyrdom in Rome." },
-    { "date": "10-18", "title": "St. Luke, Evangelist", "rank": "feast", "colour": "red", "about": "Physician and companion of St. Paul, author of the third Gospel and the Acts of the Apostles." },
-    { "date": "10-22", "title": "St. John Paul II", "rank": "optional", "colour": "white", "about": "The pope who told the young, 'Do not be afraid! Open wide the doors to Christ.' He visited Nigeria in 1982 and 1998." },
-    { "date": "10-28", "title": "Sts. Simon and Jude, Apostles", "rank": "feast", "colour": "red", "about": "Two of the Twelve who, by tradition, preached and died together." },
-    { "date": "11-01", "title": "All Saints", "rank": "solemnity", "colour": "white", "about": "The whole family of God in heaven, known and unknown." },
-    { "date": "11-02", "title": "All Souls", "rank": "commemoration", "colour": "violet", "about": "We pray for all the faithful departed." },
-    { "date": "11-04", "title": "St. Charles Borromeo", "rank": "memorial", "colour": "white", "about": "Archbishop of Milan who renewed the Church after the Council of Trent." },
-    { "date": "11-09", "title": "The Dedication of the Lateran Basilica", "rank": "feast", "colour": "white", "about": "The cathedral of the Pope as Bishop of Rome, 'mother of all churches'." },
-    { "date": "11-10", "title": "St. Leo the Great", "rank": "memorial", "colour": "white", "about": "A pope who taught clearly that Christ is true God and true man." },
-    { "date": "11-11", "title": "St. Martin of Tours", "rank": "memorial", "colour": "white", "about": "A soldier who shared his cloak with a beggar and became a bishop." },
-    { "date": "11-21", "title": "The Presentation of the Blessed Virgin Mary", "rank": "memorial", "colour": "white", "about": "Honours Mary's dedication to God from her youth." },
-    { "date": "11-22", "title": "St. Cecilia", "rank": "memorial", "colour": "red", "about": "A Roman virgin martyr. Patron of musicians." },
-    { "date": "11-30", "title": "St. Andrew, Apostle", "rank": "feast", "colour": "red", "about": "Brother of Peter, who brought him to Jesus." },
-    { "date": "12-03", "title": "St. Francis Xavier", "rank": "memorial", "colour": "white", "about": "A Jesuit missionary to India and Japan. Patron of missions." },
-    { "date": "12-07", "title": "St. Ambrose", "rank": "memorial", "colour": "white", "about": "Bishop of Milan who baptised St. Augustine." },
-    { "date": "12-08", "title": "The Immaculate Conception of the Blessed Virgin Mary", "rank": "solemnity", "colour": "white", "about": "Mary was preserved from original sin from the first moment of her life." },
-    { "date": "12-12", "title": "Our Lady of Guadalupe", "rank": "optional", "colour": "white", "about": "Mary's appearance in 1531 to St. Juan Diego in Mexico." },
-    { "date": "12-13", "title": "St. Lucy", "rank": "memorial", "colour": "red", "about": "A virgin martyr of Sicily whose name means 'light'." },
-    { "date": "12-14", "title": "St. John of the Cross", "rank": "memorial", "colour": "white", "about": "A Carmelite mystic and poet of the soul's journey to God." },
-    { "date": "12-25", "title": "The Nativity of the Lord (Christmas)", "rank": "solemnity", "colour": "white", "about": "The Word became flesh and dwelt among us." },
-    { "date": "12-26", "title": "St. Stephen, the First Martyr", "rank": "feast", "colour": "red", "about": "A deacon who forgave those who stoned him." },
-    { "date": "12-27", "title": "St. John, Apostle and Evangelist", "rank": "feast", "colour": "white", "about": "The beloved disciple, author of the fourth Gospel." },
-    { "date": "12-28", "title": "The Holy Innocents", "rank": "feast", "colour": "red", "about": "The children of Bethlehem killed by King Herod." }
+    {
+      "date": "01-01",
+      "title": "Mary, the Holy Mother of God",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "The Church begins the civil year honouring Mary as Mother of God (Theotokos), the title affirmed at the Council of Ephesus."
+    },
+    {
+      "date": "01-02",
+      "title": "Sts. Basil the Great and Gregory Nazianzen",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Two fourth-century bishops and friends whose teaching helped the Church express its faith in the Holy Trinity.",
+      "lived": "4th century (c. 329–390)",
+      "place": "Cappadocia, in present-day Turkey",
+      "life": "Basil and Gregory met as students in Athens and stayed lifelong friends. Basil became Bishop of Caesarea, wrote a rule for monks and built a city of care for the sick and poor. Gregory, a gentle scholar who loved quiet, preached so clearly on the Trinity at Constantinople that he is called 'the Theologian'."
+    },
+    {
+      "date": "01-03",
+      "title": "The Most Holy Name of Jesus",
+      "rank": "optional",
+      "colour": "white",
+      "about": "A day to honour the name given to the Child at his circumcision: Jesus, 'God saves'."
+    },
+    {
+      "date": "01-17",
+      "title": "St. Anthony, Abbot",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "An Egyptian hermit who gave away his wealth to pray in the desert and is remembered as a father of monks.",
+      "lived": "c. 251–356",
+      "place": "Egypt",
+      "life": "As a young man Anthony heard the Gospel 'Go, sell what you have and give to the poor' and did exactly that. He spent decades in the desert in prayer, fasting and spiritual battle, and people came from far away for his counsel. St. Athanasius wrote his life, which inspired monks across the world."
+    },
+    {
+      "date": "01-21",
+      "title": "St. Agnes",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A young Roman martyr who chose death rather than deny Christ.",
+      "lived": "c. 291–304",
+      "place": "Rome",
+      "life": "Agnes was about twelve or thirteen when she refused to marry and to offer sacrifice to the Roman gods, saying she belonged to Christ alone. She was put to death in the persecution of Diocletian. Her name is said in the Roman Canon of the Mass."
+    },
+    {
+      "date": "01-24",
+      "title": "St. Francis de Sales",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A gentle bishop of Geneva who taught that every person, in every walk of life, is called to holiness. Patron of writers.",
+      "lived": "1567–1622",
+      "place": "Savoy and Geneva",
+      "life": "Francis gave up a promising career in law to become a priest and went to win back the Calvinist region of the Chablais, slipping leaflets under doors when people would not hear him. As Bishop of Geneva he wrote the Introduction to the Devout Life, teaching that holiness is for everyone. With St. Jane Frances de Chantal he founded the Visitation sisters."
+    },
+    {
+      "date": "01-25",
+      "title": "The Conversion of St. Paul",
+      "rank": "feast",
+      "colour": "white",
+      "about": "Saul the persecutor met the risen Christ on the road to Damascus and became the Apostle to the Gentiles.",
+      "lived": "1st century (died c. 64–67)",
+      "place": "Tarsus, Damascus and the Roman world",
+      "life": "Saul was a zealous Pharisee who persecuted the first Christians. On the road to Damascus the risen Jesus spoke to him, and he was baptised and became Paul, the Apostle to the Gentiles. His journeys planted churches across the Mediterranean, and his letters fill much of the New Testament."
+    },
+    {
+      "date": "01-26",
+      "title": "Sts. Timothy and Titus",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Companions of St. Paul and shepherds of the early Church, to whom he wrote three of his letters.",
+      "lived": "1st century",
+      "place": "Ephesus and Crete",
+      "life": "Timothy, son of a Jewish mother and a Greek father, travelled with St. Paul and was left to lead the Church at Ephesus. Titus, a Greek convert, was sent to organise the Church on Crete. Paul's letters to them still guide pastors today."
+    },
+    {
+      "date": "01-28",
+      "title": "St. Thomas Aquinas",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A Dominican friar and Doctor of the Church whose writings joined faith and reason. Patron of students.",
+      "lived": "1225–1274",
+      "place": "Italy and Paris",
+      "life": "Thomas joined the new Dominican order against his noble family's wishes; they even locked him up for a year. Quiet and heavy-set, he was nicknamed 'the dumb ox', but his Summa Theologiae became one of the greatest works of Christian thought. He also wrote hymns for Corpus Christi that are still sung at Benediction."
+    },
+    {
+      "date": "01-31",
+      "title": "St. John Bosco",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "An Italian priest who gave his life to educating poor young people and founded the Salesians.",
+      "lived": "1815–1888",
+      "place": "Turin, Italy",
+      "life": "John grew up poor and lost his father at two. As a priest in industrial Turin he gathered street boys, gave them food, schooling, trades and faith, and taught that education should rest on reason, religion and kindness. His Salesians now run schools and youth centres around the world, including in Nigeria."
+    },
+    {
+      "date": "02-02",
+      "title": "The Presentation of the Lord",
+      "rank": "feast",
+      "colour": "white",
+      "about": "Mary and Joseph bring the Child Jesus to the Temple, where Simeon greets him as a light for the nations."
+    },
+    {
+      "date": "02-03",
+      "title": "St. Blaise",
+      "rank": "optional",
+      "colour": "red",
+      "about": "A bishop and martyr of Armenia; throats are blessed on his day.",
+      "lived": "Died c. 316",
+      "place": "Sebaste, Armenia",
+      "life": "Blaise was a physician who became bishop. By tradition he saved a boy choking on a fish bone, and so throats are blessed on his day with two crossed candles. He was martyred under the emperor Licinius."
+    },
+    {
+      "date": "02-05",
+      "title": "St. Agatha",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A virgin martyr of Sicily, honoured since the early centuries.",
+      "lived": "Died c. 251",
+      "place": "Sicily",
+      "life": "Agatha was a young Christian woman who refused a powerful official's advances. She was tortured and died in prison at Catania during the persecution of Decius. She is named in the Roman Canon."
+    },
+    {
+      "date": "02-06",
+      "title": "St. Paul Miki and Companions",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "Twenty-six Catholics crucified at Nagasaki, Japan, in 1597 for their faith.",
+      "lived": "Died 1597",
+      "place": "Nagasaki, Japan",
+      "life": "Paul Miki was a Japanese Jesuit and a gifted preacher. When the ruler Hideyoshi turned against Christianity, he and twenty-five companions, priests, brothers and lay people including boys, were marched to Nagasaki and crucified. From the cross Paul forgave his executioners."
+    },
+    {
+      "date": "02-08",
+      "title": "St. Josephine Bakhita",
+      "rank": "optional",
+      "colour": "white",
+      "about": "Born in Sudan and sold into slavery as a child, she found Christ, gained her freedom and became a Canossian sister known for her kindness.",
+      "lived": "c. 1869–1947",
+      "place": "Darfur, Sudan, and Schio, Italy",
+      "life": "Kidnapped by slave traders at about seven, she was so frightened she forgot her name; her captors called her Bakhita, 'lucky'. Sold several times and cruelly treated, she was brought to Italy, where she met Christ and won her freedom in court. As a Canossian sister she served with gentleness for fifty years. She is patron of Sudan and of victims of human trafficking."
+    },
+    {
+      "date": "02-10",
+      "title": "St. Scholastica",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Sister of St. Benedict, she led a community of nuns and was known for the power of her prayer.",
+      "lived": "c. 480–547",
+      "place": "Nursia and Monte Cassino, Italy",
+      "life": "Scholastica was the twin sister of St. Benedict and led a community of nuns near his monastery. At their last meeting she prayed for a storm so that he could not leave and they could keep talking of God, and the storm came. She died three days later."
+    },
+    {
+      "date": "02-11",
+      "title": "Our Lady of Lourdes",
+      "rank": "optional",
+      "colour": "white",
+      "about": "Remembers Mary's appearances to St. Bernadette in 1858. Also the World Day of the Sick.",
+      "lived": "Apparitions in 1858",
+      "place": "Lourdes, France",
+      "life": "Mary appeared eighteen times to Bernadette Soubirous, a poor fourteen-year-old, calling herself 'the Immaculate Conception' and asking for prayer and penance. A spring that appeared at the grotto has drawn millions of pilgrims and the sick."
+    },
+    {
+      "date": "02-14",
+      "title": "Sts. Cyril and Methodius",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Brothers who brought the Gospel to the Slavic peoples in their own language.",
+      "lived": "Cyril 826–869, Methodius 815–885",
+      "place": "Thessalonica and Moravia",
+      "life": "These Greek brothers were sent to the Slavic peoples. They devised an alphabet so the Gospel and the liturgy could be in the people's own language. St. John Paul II named them patrons of Europe."
+    },
+    {
+      "date": "02-22",
+      "title": "The Chair of St. Peter",
+      "rank": "feast",
+      "colour": "white",
+      "about": "Celebrates the mission Christ gave to Peter and his successors to strengthen the faith of the Church."
+    },
+    {
+      "date": "02-23",
+      "title": "St. Polycarp",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "Bishop of Smyrna and disciple of St. John the Apostle, martyred in his old age.",
+      "lived": "c. 69–155",
+      "place": "Smyrna, in present-day Turkey",
+      "life": "Polycarp learned the faith from St. John the Apostle and led the Church of Smyrna for many years. At eighty-six he was told to curse Christ to save his life and answered, 'Eighty-six years I have served him, and he has done me no wrong. How can I blaspheme my King who saved me?' He was burned at the stake."
+    },
+    {
+      "date": "03-07",
+      "title": "Sts. Perpetua and Felicity",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A young noblewoman and her servant, martyred together at Carthage in North Africa in 203.",
+      "lived": "Died 203",
+      "place": "Carthage, North Africa",
+      "life": "Perpetua, a young mother of noble birth, and Felicity, a slave who gave birth in prison, were catechumens arrested for their faith. Perpetua kept a diary in prison, one of the oldest writings by a Christian woman. They died together in the arena, encouraging each other to the end."
+    },
+    {
+      "date": "03-17",
+      "title": "St. Patrick",
+      "rank": "optional",
+      "colour": "white",
+      "about": "The missionary bishop of Ireland. Irish missionaries later helped to plant the faith in much of Nigeria.",
+      "lived": "5th century (died c. 461)",
+      "place": "Britain and Ireland",
+      "life": "Captured by raiders at sixteen, Patrick spent six years as a slave herding sheep in Ireland, where he learned to pray. He escaped, became a priest and bishop, and returned to the people who had enslaved him to bring them the Gospel. Irish missionaries later helped to spread the faith in Nigeria."
+    },
+    {
+      "date": "03-19",
+      "title": "St. Joseph, Spouse of the Blessed Virgin Mary",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "The just man who protected Mary and Jesus. Patron of the universal Church and of fathers.",
+      "lived": "1st century",
+      "place": "Nazareth",
+      "life": "Joseph, a carpenter of David's line, took Mary as his wife and raised Jesus as his own son. The Gospels record no word he spoke, only what he did: he listened to God in dreams and acted, protecting his family on the flight into Egypt. He is patron of the universal Church, of fathers and of workers."
+    },
+    {
+      "date": "03-25",
+      "title": "The Annunciation of the Lord",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "The angel Gabriel announces to Mary that she will bear the Son of God, and she answers yes."
+    },
+    {
+      "date": "04-25",
+      "title": "St. Mark, Evangelist",
+      "rank": "feast",
+      "colour": "red",
+      "about": "Author of the second Gospel and, by tradition, founder of the Church in Alexandria in Africa.",
+      "lived": "1st century",
+      "place": "Jerusalem, Rome and Alexandria",
+      "life": "Mark, also called John Mark, travelled with St. Paul and St. Barnabas and later was with St. Peter in Rome. His Gospel, the shortest, is thought to preserve Peter's preaching. Tradition says he founded the Church in Alexandria, in Africa."
+    },
+    {
+      "date": "04-29",
+      "title": "St. Catherine of Siena",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A Dominican laywoman, mystic and Doctor of the Church who called popes and princes to faithfulness.",
+      "lived": "1347–1380",
+      "place": "Siena, Italy",
+      "life": "The twenty-fourth child of a wool dyer, Catherine gave herself to God young and lived as a Dominican laywoman, nursing the sick and visiting prisoners. She wrote fearless letters to popes and rulers and helped persuade the Pope to return from Avignon to Rome. She is a Doctor of the Church and patron of Europe."
+    },
+    {
+      "date": "05-01",
+      "title": "St. Joseph the Worker",
+      "rank": "optional",
+      "colour": "white",
+      "about": "Honours St. Joseph the carpenter and the dignity of human work.",
+      "lived": "1st century",
+      "place": "Nazareth",
+      "life": "This feast was set by Pope Pius XII in 1955, on the day many countries keep as Workers' Day. It honours Joseph the carpenter and the dignity of work done for God and family."
+    },
+    {
+      "date": "05-02",
+      "title": "St. Athanasius",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "An African bishop of Alexandria who defended the divinity of Christ through five exiles.",
+      "lived": "c. 296–373",
+      "place": "Alexandria, Egypt",
+      "life": "As a young deacon Athanasius attended the Council of Nicaea, and as Bishop of Alexandria he spent his life defending its faith that Christ is truly God. He was exiled five times and spent years hidden among desert monks. His Life of St. Anthony spread the ideal of monastic life."
+    },
+    {
+      "date": "05-03",
+      "title": "Sts. Philip and James, Apostles",
+      "rank": "feast",
+      "colour": "red",
+      "about": "Two of the Twelve. Philip asked Jesus to show them the Father; James led the Church in Jerusalem.",
+      "lived": "1st century",
+      "place": "Galilee and Jerusalem",
+      "life": "Philip, from Bethsaida, brought Nathanael to Jesus and later asked, 'Lord, show us the Father.' James, called 'the Less', is honoured with him; tradition links him with James who led the Church in Jerusalem. Both died as martyrs."
+    },
+    {
+      "date": "05-14",
+      "title": "St. Matthias, Apostle",
+      "rank": "feast",
+      "colour": "red",
+      "about": "Chosen by lot to take the place of Judas among the Twelve.",
+      "lived": "1st century",
+      "place": "Judea",
+      "life": "Matthias had followed Jesus from his baptism to the Ascension. After Judas's death the apostles prayed and cast lots, and Matthias was chosen to complete the Twelve."
+    },
+    {
+      "date": "05-26",
+      "title": "St. Philip Neri",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "The joyful 'Apostle of Rome' who won young people to Christ with prayer, music and good humour.",
+      "lived": "1515–1595",
+      "place": "Florence and Rome",
+      "life": "Philip gave up a business career and spent his life in Rome, chatting with young men in the streets and drawing them to prayer, the sacraments and service of the sick. Cheerful and full of jokes, he founded the Oratory. He was called the Apostle of Rome."
+    },
+    {
+      "date": "05-31",
+      "title": "The Visitation of the Blessed Virgin Mary",
+      "rank": "feast",
+      "colour": "white",
+      "about": "Mary visits her cousin Elizabeth and sings the Magnificat."
+    },
+    {
+      "date": "06-01",
+      "title": "St. Justin, Martyr",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A philosopher who found the truth in Christ and gave his life for it in Rome.",
+      "lived": "c. 100–165",
+      "place": "Samaria and Rome",
+      "life": "Justin searched for truth through every school of philosophy until an old man by the sea pointed him to the prophets and Christ. He opened a school in Rome and wrote defences of the faith, including the oldest description of the Sunday Mass. He was beheaded for refusing to sacrifice to the gods."
+    },
+    {
+      "date": "06-03",
+      "title": "Sts. Charles Lwanga and Companions",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "The Uganda Martyrs: young African Catholics who chose death in 1886 rather than betray Christ.",
+      "lived": "Died 1885–1887",
+      "place": "Buganda, in present-day Uganda",
+      "life": "Charles Lwanga was a young page at the court of King Mwanga. When the king turned against Christians, Charles secretly baptised boys in his care and protected them from the king's abuse. On 3 June 1886 he and many companions were burned alive at Namugongo. Twenty-two Catholic martyrs were canonised in 1964; Charles is patron of African Catholic youth."
+    },
+    {
+      "date": "06-11",
+      "title": "St. Barnabas, Apostle",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A generous early disciple who brought St. Paul to the apostles and travelled with him.",
+      "lived": "1st century",
+      "place": "Cyprus and Antioch",
+      "life": "Barnabas, a Levite from Cyprus, sold his field for the poor. He vouched for Paul when others feared him and travelled with him on the first missionary journey. His name means 'son of encouragement'."
+    },
+    {
+      "date": "06-13",
+      "title": "St. Anthony of Padua",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A Franciscan preacher and Doctor of the Church, much loved as a helper in finding what is lost.",
+      "lived": "1195–1231",
+      "place": "Lisbon, Portugal, and Padua, Italy",
+      "life": "Born in Lisbon, Anthony became a Franciscan hoping to die as a martyr in Morocco, but illness sent him to Italy. When he was asked to preach without warning, his learning and fire astonished everyone. He preached across Italy and France and died at thirty-six. He is often asked to help find lost things."
+    },
+    {
+      "date": "06-24",
+      "title": "The Nativity of St. John the Baptist",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "The birth of the forerunner who prepared the way for the Lord.",
+      "lived": "1st century",
+      "place": "Judea",
+      "life": "John was born to the elderly Zechariah and Elizabeth and leapt for joy in the womb when Mary visited. He preached repentance by the Jordan and baptised Jesus. He said, 'He must increase, but I must decrease.'"
+    },
+    {
+      "date": "06-29",
+      "title": "Sts. Peter and Paul, Apostles",
+      "rank": "solemnity",
+      "colour": "red",
+      "about": "The two great apostles of Rome, the rock and the missionary, martyred for Christ.",
+      "lived": "1st century (died c. 64–67)",
+      "place": "Galilee, Tarsus and Rome",
+      "life": "Peter was a fisherman whom Jesus made the rock of his Church; he denied Jesus three times and was forgiven three times. Paul persecuted the Church until Christ called him. Both were put to death in Rome under the emperor Nero, Peter crucified and Paul beheaded."
+    },
+    {
+      "date": "07-03",
+      "title": "St. Thomas, Apostle",
+      "rank": "feast",
+      "colour": "red",
+      "about": "The apostle who doubted and then confessed, 'My Lord and my God!'",
+      "lived": "1st century",
+      "place": "Galilee and, by tradition, India",
+      "life": "Thomas offered to die with Jesus, then doubted the Resurrection until he saw the wounds and said, 'My Lord and my God!' Tradition says he took the Gospel to India, where Christians still call themselves St. Thomas Christians."
+    },
+    {
+      "date": "07-11",
+      "title": "St. Benedict",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Father of Western monasticism, whose Rule teaches prayer and work. Patron of Europe.",
+      "lived": "c. 480–547",
+      "place": "Nursia and Monte Cassino, Italy",
+      "life": "Benedict left his studies in Rome to live as a hermit in a cave at Subiaco. Disciples gathered, and at Monte Cassino he wrote his Rule, built on prayer and work ('ora et labora'), listening and hospitality. Benedictine monasteries kept learning and faith alive across Europe."
+    },
+    {
+      "date": "07-22",
+      "title": "St. Mary Magdalene",
+      "rank": "feast",
+      "colour": "white",
+      "about": "The first witness of the Resurrection, called the 'apostle to the apostles'.",
+      "lived": "1st century",
+      "place": "Magdala, Galilee",
+      "life": "Jesus freed Mary of Magdala from seven demons, and she followed him and provided for him. She stood at the Cross, and on Easter morning she was the first to meet the risen Lord, who sent her to tell the apostles. Pope Francis raised her day to a feast in 2016."
+    },
+    {
+      "date": "07-25",
+      "title": "St. James, Apostle",
+      "rank": "feast",
+      "colour": "red",
+      "about": "Brother of John and the first of the Twelve to be martyred.",
+      "lived": "1st century (died 44)",
+      "place": "Galilee and Jerusalem",
+      "life": "James and his brother John left their father's fishing boat to follow Jesus, who called them 'sons of thunder'. James saw the Transfiguration and the agony in the garden. King Herod Agrippa had him beheaded, the first of the Twelve to die for Christ."
+    },
+    {
+      "date": "07-26",
+      "title": "Sts. Joachim and Anne",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "By tradition the parents of the Virgin Mary and grandparents of Jesus.",
+      "lived": "1st century BC",
+      "place": "Jerusalem and Nazareth",
+      "life": "Scripture does not name Mary's parents; an early tradition calls them Joachim and Anne. They are honoured for raising their daughter in faith, and they are patrons of grandparents."
+    },
+    {
+      "date": "07-29",
+      "title": "Sts. Martha, Mary and Lazarus",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Friends of Jesus at Bethany who welcomed him into their home.",
+      "lived": "1st century",
+      "place": "Bethany, near Jerusalem",
+      "life": "Martha, Mary and Lazarus often welcomed Jesus into their home. Martha served and declared her faith, 'You are the Christ, the Son of God'; Mary sat at his feet; and Jesus raised Lazarus from the tomb. Pope Francis joined the three in one memorial in 2021."
+    },
+    {
+      "date": "07-31",
+      "title": "St. Ignatius of Loyola",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A soldier turned priest who founded the Jesuits and wrote the Spiritual Exercises.",
+      "lived": "1491–1556",
+      "place": "Basque Country, Spain, and Rome",
+      "life": "Ignatius was a proud soldier until a cannonball shattered his leg. Reading the lives of Christ and the saints while he recovered, he turned to God. He wrote the Spiritual Exercises and founded the Society of Jesus, the Jesuits, to serve 'for the greater glory of God'."
+    },
+    {
+      "date": "08-04",
+      "title": "St. John Vianney",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "The Curé of Ars, a humble parish priest who spent long hours hearing confessions. Patron of parish priests.",
+      "lived": "1786–1859",
+      "place": "Ars, France",
+      "life": "John struggled with Latin and nearly failed his studies, but became the parish priest of the small village of Ars. His prayer, penance and kindness changed the parish, and he heard confessions for up to sixteen hours a day as people came from all over France. He is patron of parish priests."
+    },
+    {
+      "date": "08-06",
+      "title": "The Transfiguration of the Lord",
+      "rank": "feast",
+      "colour": "white",
+      "about": "On the mountain, Peter, James and John see the glory of Jesus."
+    },
+    {
+      "date": "08-08",
+      "title": "St. Dominic",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Founder of the Order of Preachers, devoted to preaching the truth of the Gospel.",
+      "lived": "1170–1221",
+      "place": "Castile, Spain, and Bologna",
+      "life": "Dominic, a Spanish priest, saw that people needed the faith explained clearly and lived humbly. He founded the Order of Preachers, friars devoted to study, poverty and preaching. Tradition links him with spreading the Rosary."
+    },
+    {
+      "date": "08-10",
+      "title": "St. Lawrence, Deacon and Martyr",
+      "rank": "feast",
+      "colour": "red",
+      "about": "A deacon of Rome who called the poor 'the treasures of the Church' and died for Christ.",
+      "lived": "Died 258",
+      "place": "Rome",
+      "life": "Lawrence was a deacon who cared for the Church's goods and the poor in Rome. When the prefect demanded the Church's treasures, Lawrence brought the poor and sick and said, 'These are the treasures of the Church.' He was martyred a few days after Pope Sixtus II."
+    },
+    {
+      "date": "08-11",
+      "title": "St. Clare",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Follower of St. Francis and founder of the Poor Clares, a life of poverty and prayer.",
+      "lived": "1194–1253",
+      "place": "Assisi, Italy",
+      "life": "At eighteen Clare left her wealthy family on Palm Sunday night to follow St. Francis. She founded the Poor Ladies, now the Poor Clares, and led them for forty years in poverty, prayer and joy. Tradition says she turned away soldiers from her convent by holding up the Blessed Sacrament."
+    },
+    {
+      "date": "08-14",
+      "title": "St. Maximilian Kolbe",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A Franciscan priest who gave his life at Auschwitz in place of a father of a family.",
+      "lived": "1894–1941",
+      "place": "Poland and Auschwitz",
+      "life": "Maximilian was a Franciscan who spread devotion to Mary through printing and radio, in Poland and in Japan. Arrested by the Nazis, he offered at Auschwitz to take the place of Franciszek Gajowniczek, a husband and father condemned to starve. He died on 14 August 1941; Gajowniczek survived the war."
+    },
+    {
+      "date": "08-15",
+      "title": "The Assumption of the Blessed Virgin Mary",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "Mary, at the end of her earthly life, was taken up body and soul into heavenly glory."
+    },
+    {
+      "date": "08-22",
+      "title": "The Queenship of the Blessed Virgin Mary",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Honours Mary as Queen of heaven and earth, close to her Son the King."
+    },
+    {
+      "date": "08-24",
+      "title": "St. Bartholomew, Apostle",
+      "rank": "feast",
+      "colour": "red",
+      "about": "One of the Twelve, often identified with Nathanael, 'an Israelite in whom there is no guile'.",
+      "lived": "1st century",
+      "place": "Galilee",
+      "life": "Bartholomew is one of the Twelve and is often identified with Nathanael, whom Jesus praised as 'an Israelite in whom there is no guile'. Tradition says he preached in the East and was martyred in Armenia."
+    },
+    {
+      "date": "08-27",
+      "title": "St. Monica",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "An African mother whose years of patient prayer won the conversion of her son Augustine.",
+      "lived": "c. 331–387",
+      "place": "Thagaste, in present-day Algeria",
+      "life": "Monica was a Christian wife and mother in North Africa. Her son Augustine lived a wild life and joined a sect, and she prayed and wept for him for years, following him to Italy. She lived to see him baptised and died at Ostia soon after."
+    },
+    {
+      "date": "08-28",
+      "title": "St. Augustine",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Bishop of Hippo in North Africa and Doctor of the Church: 'Our heart is restless until it rests in you.'",
+      "lived": "354–430",
+      "place": "Thagaste and Hippo, North Africa",
+      "life": "Augustine was a brilliant teacher who chased pleasure and success for years. In a garden in Milan he heard a child's voice say 'take and read', opened St. Paul and was converted. As Bishop of Hippo he wrote the Confessions and The City of God. He is a Doctor of the Church and one of Africa's greatest sons."
+    },
+    {
+      "date": "08-29",
+      "title": "The Passion of St. John the Baptist",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "John was beheaded for speaking the truth to King Herod.",
+      "lived": "1st century",
+      "place": "Judea",
+      "life": "John the Baptist told King Herod Antipas that it was wrong for him to take his brother's wife. Herod imprisoned him, and at a banquet, to keep a rash promise, had him beheaded."
+    },
+    {
+      "date": "09-03",
+      "title": "St. Gregory the Great",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A monk who became pope, reformed the liturgy and sent missionaries to England.",
+      "lived": "c. 540–604",
+      "place": "Rome",
+      "life": "Gregory was Prefect of Rome before he became a monk. Elected pope in a time of plague and war, he fed the poor, sent St. Augustine of Canterbury to England, and wrote on the work of pastors. He called himself 'servant of the servants of God'."
+    },
+    {
+      "date": "09-08",
+      "title": "The Nativity of the Blessed Virgin Mary",
+      "rank": "feast",
+      "colour": "white",
+      "about": "The birthday of the Mother of God."
+    },
+    {
+      "date": "09-13",
+      "title": "St. John Chrysostom",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Archbishop of Constantinople, called 'golden mouth' for his preaching.",
+      "lived": "c. 347–407",
+      "place": "Antioch and Constantinople",
+      "life": "John was such a powerful preacher that he was later called Chrysostom, 'golden mouth'. As Archbishop of Constantinople he spoke out against the luxury of the court and for the poor, and he died in exile. He is a Doctor of the Church."
+    },
+    {
+      "date": "09-14",
+      "title": "The Exaltation of the Holy Cross",
+      "rank": "feast",
+      "colour": "red",
+      "about": "The Cross, once a sign of shame, is honoured as the tree of our salvation."
+    },
+    {
+      "date": "09-15",
+      "title": "Our Lady of Sorrows",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Mary standing faithfully at the foot of the Cross."
+    },
+    {
+      "date": "09-16",
+      "title": "Sts. Cornelius and Cyprian",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A pope and an African bishop of Carthage who held the Church together in a time of persecution.",
+      "lived": "Cornelius died 253; Cyprian c. 200–258",
+      "place": "Rome and Carthage, North Africa",
+      "life": "Cornelius was pope in a time of persecution and division and died in exile. Cyprian, Bishop of Carthage, supported him and wrote on the unity of the Church and the Lord's Prayer. Cyprian was beheaded at Carthage, saying 'Thanks be to God.'"
+    },
+    {
+      "date": "09-21",
+      "title": "St. Matthew, Apostle and Evangelist",
+      "rank": "feast",
+      "colour": "red",
+      "about": "A tax collector who left everything to follow Jesus and wrote the first Gospel.",
+      "lived": "1st century",
+      "place": "Capernaum, Galilee",
+      "life": "Matthew was a tax collector, despised as a collaborator with Rome, when Jesus said to him, 'Follow me.' He got up and left everything, and then held a dinner for Jesus with other tax collectors and sinners. The first Gospel bears his name."
+    },
+    {
+      "date": "09-23",
+      "title": "St. Pius of Pietrelcina (Padre Pio)",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A Capuchin priest known for prayer, the confessional and bearing the wounds of Christ.",
+      "lived": "1887–1968",
+      "place": "Pietrelcina and San Giovanni Rotondo, Italy",
+      "life": "Francesco Forgione became a Capuchin friar, Padre Pio. For fifty years he bore wounds like those of Christ, spent long hours hearing confessions and celebrated Mass with deep devotion. He founded a hospital, the House for the Relief of Suffering. He said, 'Pray, hope and don't worry.'"
+    },
+    {
+      "date": "09-27",
+      "title": "St. Vincent de Paul",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A French priest who organised care for the poor. Patron of charitable societies.",
+      "lived": "1581–1660",
+      "place": "France",
+      "life": "Vincent was a country boy who first sought an easy life as a priest. Struck by the needs of poor peasants, he gave himself to them, founding priests for the missions and, with St. Louise de Marillac, the Daughters of Charity. He is patron of all charitable works."
+    },
+    {
+      "date": "09-29",
+      "title": "Sts. Michael, Gabriel and Raphael, Archangels",
+      "rank": "feast",
+      "colour": "white",
+      "about": "God's messengers who protect, announce and heal."
+    },
+    {
+      "date": "09-30",
+      "title": "St. Jerome",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Translator of the Bible into Latin: 'Ignorance of Scripture is ignorance of Christ.'",
+      "lived": "c. 347–420",
+      "place": "Dalmatia, Rome and Bethlehem",
+      "life": "Jerome was a brilliant and short-tempered scholar who lived as a monk in Bethlehem. He translated the Bible into Latin, the Vulgate, which the Western Church used for over a thousand years. He wrote, 'Ignorance of Scripture is ignorance of Christ.'"
+    },
+    {
+      "date": "10-01",
+      "title": "St. Thérèse of the Child Jesus",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A young Carmelite who taught the 'little way' of trust and love. Patron of missions.",
+      "lived": "1873–1897",
+      "place": "Lisieux, France",
+      "life": "Thérèse entered the Carmelite convent at fifteen and died of tuberculosis at twenty-four. She taught the 'little way': doing small things with great love and trusting God like a child. Her autobiography, Story of a Soul, made her loved worldwide, and she is a Doctor of the Church and patron of missions."
+    },
+    {
+      "date": "10-02",
+      "title": "The Holy Guardian Angels",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "God gives each person an angel to guard and guide them."
+    },
+    {
+      "date": "10-04",
+      "title": "St. Francis of Assisi",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "The poor man of Assisi who loved Christ, the poor and all creation.",
+      "lived": "1181/82–1226",
+      "place": "Assisi, Italy",
+      "life": "Francis was the son of a rich cloth merchant and dreamed of glory as a knight. After prison and illness, he heard Christ say, 'Rebuild my church', gave up everything and lived in joyful poverty. He founded the Franciscans, loved the poor and all creation, and received the wounds of Christ."
+    },
+    {
+      "date": "10-07",
+      "title": "Our Lady of the Rosary",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A day to honour Mary through the prayer of the Rosary.",
+      "lived": "Feast since 1571",
+      "place": "Universal",
+      "life": "After the Christian victory at Lepanto in 1571, which Pope Pius V credited to the Rosary prayed across Europe, this day was set to honour Mary. October became the month of the Rosary."
+    },
+    {
+      "date": "10-15",
+      "title": "St. Teresa of Jesus (of Ávila)",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A Carmelite reformer and Doctor of the Church who taught prayer as friendship with God.",
+      "lived": "1515–1582",
+      "place": "Ávila, Spain",
+      "life": "Teresa entered the Carmelites at twenty but lived a half-hearted life for years until a deep conversion before an image of the wounded Christ. She reformed her order, founded seventeen convents and wrote The Interior Castle on prayer. She was the first woman named a Doctor of the Church."
+    },
+    {
+      "date": "10-17",
+      "title": "St. Ignatius of Antioch",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "An early bishop who wrote to the churches on his way to martyrdom in Rome.",
+      "lived": "Died c. 107",
+      "place": "Antioch, Syria, and Rome",
+      "life": "Ignatius was Bishop of Antioch, perhaps a disciple of St. John. Taken to Rome to be thrown to the lions, he wrote seven letters to churches on the way. He called himself 'God's wheat', to be ground by the beasts into the pure bread of Christ."
+    },
+    {
+      "date": "10-18",
+      "title": "St. Luke, Evangelist",
+      "rank": "feast",
+      "colour": "red",
+      "about": "Physician and companion of St. Paul, author of the third Gospel and the Acts of the Apostles.",
+      "lived": "1st century",
+      "place": "Antioch and the Roman world",
+      "life": "Luke was a Gentile physician and a companion of St. Paul. He wrote the Gospel that tells of the Annunciation, the Nativity and the parables of the Prodigal Son and the Good Samaritan, and the Acts of the Apostles."
+    },
+    {
+      "date": "10-22",
+      "title": "St. John Paul II",
+      "rank": "optional",
+      "colour": "white",
+      "about": "The pope who told the young, 'Do not be afraid! Open wide the doors to Christ.' He visited Nigeria in 1982 and 1998.",
+      "lived": "1920–2005",
+      "place": "Poland and Rome",
+      "life": "Karol Wojtyła lost his mother, brother and father by the age of twenty, worked in a quarry under Nazi occupation and studied in secret for the priesthood. Elected pope in 1978, he travelled the world, started World Youth Day and helped bring down communism in Eastern Europe. He visited Nigeria in 1982 and 1998."
+    },
+    {
+      "date": "10-28",
+      "title": "Sts. Simon and Jude, Apostles",
+      "rank": "feast",
+      "colour": "red",
+      "about": "Two of the Twelve who, by tradition, preached and died together.",
+      "lived": "1st century",
+      "place": "Galilee and, by tradition, Persia",
+      "life": "Simon was called 'the Zealot'. Jude, also called Thaddeus, asked Jesus at the Last Supper why he would show himself to the disciples and not to the world. Tradition says they preached together and were martyred. Jude is patron of hopeless causes."
+    },
+    {
+      "date": "11-01",
+      "title": "All Saints",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "The whole family of God in heaven, known and unknown."
+    },
+    {
+      "date": "11-02",
+      "title": "All Souls",
+      "rank": "commemoration",
+      "colour": "violet",
+      "about": "We pray for all the faithful departed."
+    },
+    {
+      "date": "11-04",
+      "title": "St. Charles Borromeo",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Archbishop of Milan who renewed the Church after the Council of Trent.",
+      "lived": "1538–1584",
+      "place": "Milan, Italy",
+      "life": "Charles came from a powerful family and was made a cardinal young by his uncle, the pope. He helped finish the Council of Trent and, as Archbishop of Milan, reformed the clergy, opened seminaries and stayed to nurse the sick during the plague of 1576."
+    },
+    {
+      "date": "11-09",
+      "title": "The Dedication of the Lateran Basilica",
+      "rank": "feast",
+      "colour": "white",
+      "about": "The cathedral of the Pope as Bishop of Rome, 'mother of all churches'."
+    },
+    {
+      "date": "11-10",
+      "title": "St. Leo the Great",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A pope who taught clearly that Christ is true God and true man.",
+      "lived": "Died 461",
+      "place": "Rome",
+      "life": "Leo was pope for twenty-one years. His letter on the two natures of Christ was acclaimed at the Council of Chalcedon: 'Peter has spoken through Leo.' He met Attila the Hun and persuaded him to turn back from Rome."
+    },
+    {
+      "date": "11-11",
+      "title": "St. Martin of Tours",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A soldier who shared his cloak with a beggar and became a bishop.",
+      "lived": "c. 316–397",
+      "place": "Pannonia (present-day Hungary) and Tours, France",
+      "life": "Martin was a Roman soldier. At Amiens he cut his cloak in half to give to a freezing beggar, and that night dreamed of Christ wearing it. He was baptised, became a monk, and as Bishop of Tours travelled the countryside preaching."
+    },
+    {
+      "date": "11-21",
+      "title": "The Presentation of the Blessed Virgin Mary",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Honours Mary's dedication to God from her youth."
+    },
+    {
+      "date": "11-22",
+      "title": "St. Cecilia",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A Roman virgin martyr. Patron of musicians.",
+      "lived": "3rd century (by tradition)",
+      "place": "Rome",
+      "life": "Cecilia was a young Roman Christian who, by tradition, kept her vow of virginity in marriage and converted her husband Valerian. She was martyred for the faith. She is said to have sung to God in her heart, and she is patron of musicians."
+    },
+    {
+      "date": "11-30",
+      "title": "St. Andrew, Apostle",
+      "rank": "feast",
+      "colour": "red",
+      "about": "Brother of Peter, who brought him to Jesus.",
+      "lived": "1st century",
+      "place": "Bethsaida, Galilee, and Patras, Greece",
+      "life": "Andrew was a fisherman and a disciple of John the Baptist. He was among the first to follow Jesus and brought his brother Simon Peter to him. Tradition says he was crucified on an X-shaped cross in Greece."
+    },
+    {
+      "date": "12-03",
+      "title": "St. Francis Xavier",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A Jesuit missionary to India and Japan. Patron of missions.",
+      "lived": "1506–1552",
+      "place": "Navarre, Spain, India and Japan",
+      "life": "Francis was a proud young teacher in Paris until his roommate, St. Ignatius of Loyola, won him for Christ. As one of the first Jesuits, he sailed to India, then to Japan, baptising thousands. He died on an island off China, waiting to enter the country."
+    },
+    {
+      "date": "12-07",
+      "title": "St. Ambrose",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "Bishop of Milan who baptised St. Augustine.",
+      "lived": "c. 340–397",
+      "place": "Trier and Milan",
+      "life": "Ambrose was the Roman governor of Milan when the people demanded that he be their bishop, though he was not yet baptised. He gave his wealth to the poor, wrote hymns, stood up to emperors, and his preaching helped bring St. Augustine to baptism."
+    },
+    {
+      "date": "12-08",
+      "title": "The Immaculate Conception of the Blessed Virgin Mary",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "Mary was preserved from original sin from the first moment of her life."
+    },
+    {
+      "date": "12-12",
+      "title": "Our Lady of Guadalupe",
+      "rank": "optional",
+      "colour": "white",
+      "about": "Mary's appearance in 1531 to St. Juan Diego in Mexico.",
+      "lived": "Apparitions in 1531",
+      "place": "Tepeyac, Mexico",
+      "life": "Mary appeared to Juan Diego, an Aztec farmer, as a young Indigenous woman, asking for a church to be built. Her image appeared on his cloak, the tilma, which is still venerated in Mexico City. Millions came to faith in the years that followed."
+    },
+    {
+      "date": "12-13",
+      "title": "St. Lucy",
+      "rank": "memorial",
+      "colour": "red",
+      "about": "A virgin martyr of Sicily whose name means 'light'.",
+      "lived": "Died 304",
+      "place": "Syracuse, Sicily",
+      "life": "Lucy was a young Christian who gave her dowry to the poor and refused marriage to a pagan. She was martyred in the persecution of Diocletian. Her name means 'light', and she is named in the Roman Canon."
+    },
+    {
+      "date": "12-14",
+      "title": "St. John of the Cross",
+      "rank": "memorial",
+      "colour": "white",
+      "about": "A Carmelite mystic and poet of the soul's journey to God.",
+      "lived": "1542–1591",
+      "place": "Spain",
+      "life": "John grew up poor and worked in a hospital before becoming a Carmelite friar. He helped St. Teresa of Ávila reform the order and was imprisoned by his own brothers, where he wrote some of the most beautiful poems in Spanish. The Dark Night and The Living Flame of Love describe the soul's journey to union with God."
+    },
+    {
+      "date": "12-25",
+      "title": "The Nativity of the Lord (Christmas)",
+      "rank": "solemnity",
+      "colour": "white",
+      "about": "The Word became flesh and dwelt among us."
+    },
+    {
+      "date": "12-26",
+      "title": "St. Stephen, the First Martyr",
+      "rank": "feast",
+      "colour": "red",
+      "about": "A deacon who forgave those who stoned him.",
+      "lived": "Died c. 34",
+      "place": "Jerusalem",
+      "life": "Stephen was one of the seven men chosen to serve the poor, full of grace and power. He was stoned for his preaching and died praying, 'Lord, do not hold this sin against them.' Saul, the future St. Paul, watched and approved."
+    },
+    {
+      "date": "12-27",
+      "title": "St. John, Apostle and Evangelist",
+      "rank": "feast",
+      "colour": "white",
+      "about": "The beloved disciple, author of the fourth Gospel.",
+      "lived": "1st century",
+      "place": "Galilee and Ephesus",
+      "life": "John, brother of James, was the disciple Jesus loved, who leaned on his breast at the Last Supper and stood at the Cross, where Jesus gave him Mary as his mother. He wrote the fourth Gospel, three letters and, by tradition, Revelation, and died in old age at Ephesus."
+    },
+    {
+      "date": "12-28",
+      "title": "The Holy Innocents",
+      "rank": "feast",
+      "colour": "red",
+      "about": "The children of Bethlehem killed by King Herod.",
+      "lived": "1st century",
+      "place": "Bethlehem",
+      "life": "King Herod, afraid of a newborn king, ordered all the boys of Bethlehem aged two and under to be killed. These children are honoured as martyrs who died in place of Christ."
+    }
   ],
   "national": {
     "NG": {
@@ -110,7 +914,17 @@
         "note": "Defaults follow the universal calendar. Confirm with the CBCN whether Epiphany, Ascension and Corpus Christi are moved to Sunday in Nigeria, and which days are holy days of obligation."
       },
       "celebrations": [
-        { "date": "01-20", "title": "Bl. Cyprian Michael Iwene Tansi", "rank": "memorial", "colour": "white", "verify": true, "about": "A Nigerian priest of Onitsha and later a Cistercian monk, beatified by St. John Paul II at Oba in 1998." }
+        {
+          "date": "01-20",
+          "title": "Bl. Cyprian Michael Iwene Tansi",
+          "rank": "memorial",
+          "colour": "white",
+          "verify": true,
+          "about": "A Nigerian priest of Onitsha and later a Cistercian monk, beatified by St. John Paul II at Oba in 1998.",
+          "lived": "1903–1964",
+          "place": "Aguleri, Nigeria, and Leicestershire, England",
+          "life": "Born Iwene Tansi near Onitsha, he became a teacher, then one of the first priests ordained for the Archdiocese of Onitsha. As a parish priest he was known for prayer, hard work and care for young people and marriages. Later he became a Cistercian monk at Mount St Bernard Abbey in England, taking the name Cyprian. St. John Paul II beatified him at Oba, Nigeria, in 1998."
+        }
       ]
     }
   }

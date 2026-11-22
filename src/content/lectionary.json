@@ -1,0 +1,1500 @@
+{
+ "version": 1,
+ "reviewNote": "References follow the Lectionary for Mass (Sunday cycle A/B/C, weekday cycle I/II) in its usual English numbering. Texts are adapted from the World English Bible (public domain; the divine name is rendered \"the LORD\", deuterocanonical books from its Catholic Edition); webRef is given where that Bible numbers the verses differently, and psalm numbering is adjusted in scripts/build-readings.mjs. Every entry is reviewStatus pending until the theological adviser checks it against the Lectionary used in Nigeria.",
+ "reviewStatus": "pending",
+ "coverage": "Rest of liturgical Year A (week 34); Advent 2026 to the Baptism of the Lord 2027; Year B Sundays and solemnities of Lent, Holy Week and Easter; fixed-date solemnities and major feasts. Other days fall back to the verse of the day.",
+ "entries": {
+  "christ-the-king-A": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Ezekiel 34:11-12, 15-17"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 23:1-3, 5-6"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Corinthians 15:20-26, 28"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 25:31-46"
+    }
+   ]
+  },
+  "ot-34-mon-II": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 14:1-3, 4b-5"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 24:1-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 21:1-4"
+    }
+   ]
+  },
+  "ot-34-tue-II": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 14:14-19"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 96:10-13"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 21:5-11"
+    }
+   ]
+  },
+  "ot-34-wed-II": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 15:1-4"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 98:1-3, 7-9"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 21:12-19"
+    }
+   ]
+  },
+  "ot-34-thu-II": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 18:1-2, 21-23; 19:1-3, 9a"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 100:1-5"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 21:20-28"
+    }
+   ]
+  },
+  "ot-34-fri-II": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 20:1-4, 11–21:2"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 84:3-6, 8"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 21:29-33"
+    }
+   ]
+  },
+  "ot-34-sat-II": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 22:1-7"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 95:1-7"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 21:34-36"
+    }
+   ]
+  },
+  "advent-1-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 63:16b-17, 19b; 64:2-7",
+     "webRef": "Isaiah 63:16-17; 64:1, 3-8"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 80:2-3, 15-16, 18-19"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Corinthians 1:3-9"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 13:33-37"
+    }
+   ]
+  },
+  "advent-1-mon": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 2:1-5"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 122:1-9"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 8:5-11"
+    }
+   ]
+  },
+  "advent-1-tue": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 11:1-10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 72:1-2, 7-8, 12-13, 17"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 10:21-24"
+    }
+   ]
+  },
+  "advent-1-wed": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 25:6-10a"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 23:1-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 15:29-37"
+    }
+   ]
+  },
+  "advent-1-thu": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 26:1-6"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 118:1, 8-9, 19-21, 25-27a"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 7:21, 24-27"
+    }
+   ]
+  },
+  "advent-1-fri": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 29:17-24"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 27:1, 4, 13-14"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 9:27-31"
+    }
+   ]
+  },
+  "advent-1-sat": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 30:19-21, 23-26"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 147:1-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 9:35–10:1, 5a, 6-8"
+    }
+   ]
+  },
+  "advent-2-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 40:1-5, 9-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 85:9-14"
+    },
+    {
+     "kind": "second",
+     "ref": "2 Peter 3:8-14"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 1:1-8"
+    }
+   ]
+  },
+  "advent-2-mon": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 35:1-10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 85:9-14"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 5:17-26"
+    }
+   ]
+  },
+  "advent-2-tue": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 40:1-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 96:1-3, 10-13"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 18:12-14"
+    }
+   ]
+  },
+  "advent-2-wed": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 40:25-31"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 103:1-4, 8, 10"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 11:28-30"
+    }
+   ]
+  },
+  "advent-2-thu": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 41:13-20"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 145:1, 9-13"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 11:11-15"
+    }
+   ]
+  },
+  "advent-2-fri": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 48:17-19"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 1:1-4, 6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 11:16-19"
+    }
+   ]
+  },
+  "advent-2-sat": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Sirach 48:1-4, 9-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 80:2-3, 15-16, 18-19"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 17:9a, 10-13"
+    }
+   ]
+  },
+  "advent-3-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 61:1-2a, 10-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Luke 1:46-50, 53-54"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Thessalonians 5:16-24"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:6-8, 19-28"
+    }
+   ]
+  },
+  "advent-3-mon": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Numbers 24:2-7, 15-17a"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 25:4-9"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 21:23-27"
+    }
+   ]
+  },
+  "advent-3-tue": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Zephaniah 3:1-2, 9-13"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 34:2-3, 6-7, 17-19, 23"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 21:28-32"
+    }
+   ]
+  },
+  "advent-3-wed": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 45:6c-8, 18, 21c-25"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 85:9-14"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 7:18b-23"
+    }
+   ]
+  },
+  "advent-3-thu": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 54:1-10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 30:2, 4-6, 11-13"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 7:24-30"
+    }
+   ]
+  },
+  "advent-3-fri": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 56:1-3a, 6-8"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 67:2-3, 5, 7-8"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 5:33-36"
+    }
+   ]
+  },
+  "advent-4-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "2 Samuel 7:1-5, 8b-12, 14a, 16"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 89:2-5, 27, 29"
+    },
+    {
+     "kind": "second",
+     "ref": "Romans 16:25-27",
+     "webRef": "Romans 14:24-26"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:26-38"
+    }
+   ]
+  },
+  "advent-dec-17": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Genesis 49:2, 8-10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 72:1-4, 7-8, 17"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 1:1-17"
+    }
+   ]
+  },
+  "advent-dec-18": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Jeremiah 23:5-8"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 72:1, 12-13, 18-19"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 1:18-25"
+    }
+   ]
+  },
+  "advent-dec-19": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Judges 13:2-7, 24-25a"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 71:3-6, 16-17"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:5-25"
+    }
+   ]
+  },
+  "advent-dec-20": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 7:10-14"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 24:1-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:26-38"
+    }
+   ]
+  },
+  "advent-dec-21": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Song of Songs 2:8-14"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 33:2-3, 11-12, 20-21"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:39-45"
+    }
+   ],
+   "note": "Zephaniah 3:14-18a may be read instead of the first reading."
+  },
+  "advent-dec-22": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 Samuel 1:24-28"
+    },
+    {
+     "kind": "psalm",
+     "ref": "1 Samuel 2:1, 4-8"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:46-56"
+    }
+   ]
+  },
+  "advent-dec-23": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Malachi 3:1-4, 23-24",
+     "webRef": "Malachi 3:1-4; 4:5-6"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 25:4-5, 8-10, 14"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:57-66"
+    }
+   ]
+  },
+  "advent-dec-24": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "2 Samuel 7:1-5, 8b-12, 14a, 16"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 89:2-5, 27, 29"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:67-79"
+    }
+   ]
+  },
+  "fixed-12-25": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 52:7-10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 98:1-6"
+    },
+    {
+     "kind": "second",
+     "ref": "Hebrews 1:1-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:1-18"
+    }
+   ],
+   "note": "Mass during the Day."
+  },
+  "fixed-12-26": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Acts 6:8-10; 7:54-59"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 31:3-4, 6, 8, 16-17"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 10:17-22"
+    }
+   ]
+  },
+  "fixed-12-27": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 1:1-4"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 97:1-2, 5-6, 11-12"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 20:1a, 2-8"
+    }
+   ]
+  },
+  "fixed-12-28": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 1:5–2:2"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 124:2-5, 7b-8"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 2:13-18"
+    }
+   ]
+  },
+  "holy-family-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Sirach 3:2-6, 12-14"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 128:1-5"
+    },
+    {
+     "kind": "second",
+     "ref": "Colossians 3:12-21"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 2:22-40"
+    }
+   ],
+   "note": "Genesis 15:1-6; 21:1-3, Psalm 105 and Hebrews 11:8, 11-12, 17-19 may be read instead."
+  },
+  "christmas-dec-29": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 2:3-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 96:1-3, 5-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 2:22-35"
+    }
+   ]
+  },
+  "christmas-dec-30": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 2:12-17"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 96:7-10"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 2:36-40"
+    }
+   ]
+  },
+  "christmas-dec-31": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 2:18-21"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 96:1-2, 11-13"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:1-18"
+    }
+   ]
+  },
+  "fixed-01-01": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Numbers 6:22-27"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 67:2-3, 5, 6, 8"
+    },
+    {
+     "kind": "second",
+     "ref": "Galatians 4:4-7"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 2:16-21"
+    }
+   ]
+  },
+  "christmas-jan-02": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 2:22-28"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 98:1-4"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:19-28"
+    }
+   ]
+  },
+  "christmas-jan-03": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 2:29–3:6"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 98:1, 3-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:29-34"
+    }
+   ]
+  },
+  "christmas-jan-04": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 3:7-10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 98:1, 7-9"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:35-42"
+    }
+   ]
+  },
+  "christmas-jan-05": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 3:11-21"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 100:1-5"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:43-51"
+    }
+   ]
+  },
+  "christmas-2-sun": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Sirach 24:1-2, 8-12"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 147:12-15, 19-20"
+    },
+    {
+     "kind": "second",
+     "ref": "Ephesians 1:3-6, 15-18"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 1:1-18"
+    }
+   ]
+  },
+  "epiphany": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 60:1-6"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 72:1-2, 7-8, 10-13"
+    },
+    {
+     "kind": "second",
+     "ref": "Ephesians 3:2-3a, 5-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 2:1-12"
+    }
+   ]
+  },
+  "christmas-jan-07": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 3:22–4:6"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 2:7-8, 10-12"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 4:12-17, 23-25"
+    }
+   ]
+  },
+  "christmas-jan-08": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 4:7-10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 72:1-4, 7-8"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 6:34-44"
+    }
+   ]
+  },
+  "christmas-jan-09": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "1 John 4:11-18"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 72:1-2, 10, 12-13"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 6:45-52"
+    }
+   ]
+  },
+  "baptism-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 42:1-4, 6-7"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 29:1-4, 9-10"
+    },
+    {
+     "kind": "second",
+     "ref": "Acts 10:34-38"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 1:7-11"
+    }
+   ]
+  },
+  "ash-wednesday": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Joel 2:12-18"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 51:3-6, 12-14, 17"
+    },
+    {
+     "kind": "second",
+     "ref": "2 Corinthians 5:20–6:2"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 6:1-6, 16-18"
+    }
+   ]
+  },
+  "lent-1-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Genesis 9:8-15"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 25:4-9"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Peter 3:18-22"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 1:12-15"
+    }
+   ]
+  },
+  "lent-2-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Genesis 22:1-2, 9a, 10-13, 15-18"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 116:10, 15-19"
+    },
+    {
+     "kind": "second",
+     "ref": "Romans 8:31b-34"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 9:2-10"
+    }
+   ]
+  },
+  "lent-3-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Exodus 20:1-17"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 19:8-11"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Corinthians 1:22-25"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 2:13-25"
+    }
+   ]
+  },
+  "lent-4-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "2 Chronicles 36:14-16, 19-23"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 137:1-6"
+    },
+    {
+     "kind": "second",
+     "ref": "Ephesians 2:4-10"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 3:14-21"
+    }
+   ]
+  },
+  "lent-5-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Jeremiah 31:31-34"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 51:3-4, 12-15"
+    },
+    {
+     "kind": "second",
+     "ref": "Hebrews 5:7-9"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 12:20-33"
+    }
+   ]
+  },
+  "palm-sunday-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 50:4-7"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 22:8-9, 17-20, 23-24"
+    },
+    {
+     "kind": "second",
+     "ref": "Philippians 2:6-11"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 15:1-39"
+    }
+   ],
+   "note": "The shorter form of the Passion is given here; the full reading is Mark 14:1–15:47."
+  },
+  "holy-thursday": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Exodus 12:1-8, 11-14"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 116:12-13, 15-18"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Corinthians 11:23-26"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 13:1-15"
+    }
+   ],
+   "note": "Mass of the Lord's Supper."
+  },
+  "good-friday": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 52:13–53:12"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 31:2, 6, 12-13, 15-17, 25"
+    },
+    {
+     "kind": "second",
+     "ref": "Hebrews 4:14-16; 5:7-9"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 18:1–19:42"
+    }
+   ]
+  },
+  "easter-sunday": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Acts 10:34a, 37-43"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 118:1-2, 16-17, 22-23"
+    },
+    {
+     "kind": "second",
+     "ref": "Colossians 3:1-4"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 20:1-9"
+    }
+   ]
+  },
+  "easter-2-sun-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Acts 4:32-35"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 118:2-4, 13-15, 22-24"
+    },
+    {
+     "kind": "second",
+     "ref": "1 John 5:1-6"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 20:19-31"
+    }
+   ]
+  },
+  "ascension-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Acts 1:1-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 47:2-3, 6-9"
+    },
+    {
+     "kind": "second",
+     "ref": "Ephesians 1:17-23"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 16:15-20"
+    }
+   ]
+  },
+  "pentecost": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Acts 2:1-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 104:1, 24, 29-31, 34"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Corinthians 12:3b-7, 12-13"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 20:19-23"
+    }
+   ],
+   "note": "Mass during the Day."
+  },
+  "trinity-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Deuteronomy 4:32-34, 39-40"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 33:4-6, 9, 18-20, 22"
+    },
+    {
+     "kind": "second",
+     "ref": "Romans 8:14-17"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 28:16-20"
+    }
+   ]
+  },
+  "corpus-christi-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Exodus 24:3-8"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 116:12-13, 15-18"
+    },
+    {
+     "kind": "second",
+     "ref": "Hebrews 9:11-15"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 14:12-16, 22-26"
+    }
+   ]
+  },
+  "sacred-heart-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Hosea 11:1, 3-4, 8c-9"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Isaiah 12:2-6"
+    },
+    {
+     "kind": "second",
+     "ref": "Ephesians 3:8-12, 14-19"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 19:31-37"
+    }
+   ]
+  },
+  "christ-the-king-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Daniel 7:13-14"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 93:1-2, 5"
+    },
+    {
+     "kind": "second",
+     "ref": "Revelation 1:5-8"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 18:33b-37"
+    }
+   ]
+  },
+  "fixed-12-08": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Genesis 3:9-15, 20"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 98:1-4"
+    },
+    {
+     "kind": "second",
+     "ref": "Ephesians 1:3-6, 11-12"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:26-38"
+    }
+   ]
+  },
+  "fixed-11-30": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Romans 10:9-18"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 19:8-11"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 4:18-22"
+    }
+   ]
+  },
+  "fixed-02-02": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Malachi 3:1-4"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 24:7-10"
+    },
+    {
+     "kind": "second",
+     "ref": "Hebrews 2:14-18"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 2:22-40"
+    }
+   ]
+  },
+  "fixed-03-19": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "2 Samuel 7:4-5a, 12-14a, 16"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 89:2-5, 27, 29"
+    },
+    {
+     "kind": "second",
+     "ref": "Romans 4:13, 16-18, 22"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 1:16, 18-21, 24a"
+    }
+   ]
+  },
+  "fixed-03-25": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 7:10-14; 8:10"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 40:7-11"
+    },
+    {
+     "kind": "second",
+     "ref": "Hebrews 10:4-10"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:26-38"
+    }
+   ]
+  },
+  "fixed-06-24": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Isaiah 49:1-6"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 139:1-3, 13-15"
+    },
+    {
+     "kind": "second",
+     "ref": "Acts 13:22-26"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:57-66, 80"
+    }
+   ],
+   "note": "Mass during the Day."
+  },
+  "fixed-06-29": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Acts 12:1-11"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 34:2-9"
+    },
+    {
+     "kind": "second",
+     "ref": "2 Timothy 4:6-8, 17-18"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 16:13-19"
+    }
+   ],
+   "note": "Mass during the Day."
+  },
+  "fixed-08-06-B": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Daniel 7:9-10, 13-14"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 97:1-2, 5-6, 9"
+    },
+    {
+     "kind": "second",
+     "ref": "2 Peter 1:16-19"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Mark 9:2-10"
+    }
+   ]
+  },
+  "fixed-08-15": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 11:19a; 12:1-6a, 10ab"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 45:10-12, 16"
+    },
+    {
+     "kind": "second",
+     "ref": "1 Corinthians 15:20-27"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Luke 1:39-56"
+    }
+   ],
+   "note": "Mass during the Day."
+  },
+  "fixed-09-14": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Numbers 21:4b-9"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 78:1-2, 34-38"
+    },
+    {
+     "kind": "second",
+     "ref": "Philippians 2:6-11"
+    },
+    {
+     "kind": "gospel",
+     "ref": "John 3:13-17"
+    }
+   ]
+  },
+  "fixed-11-01": {
+   "readings": [
+    {
+     "kind": "first",
+     "ref": "Revelation 7:2-4, 9-14"
+    },
+    {
+     "kind": "psalm",
+     "ref": "Psalm 24:1-6"
+    },
+    {
+     "kind": "second",
+     "ref": "1 John 3:1-3"
+    },
+    {
+     "kind": "gospel",
+     "ref": "Matthew 5:1-12a"
+    }
+   ]
+  }
+ }
+}

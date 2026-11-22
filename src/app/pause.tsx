@@ -14,6 +14,7 @@ import { pausePrayer, prayerById } from '../core/prayers';
 import { resolvePrayerId } from '../core/schedule';
 import { PauseOutcome } from '../core/stats';
 import { getState, nextPauseCounter, recordPause, useAppState } from '../state/store';
+import { gospelVerse } from '../core/readings';
 
 /** "I've prayed" becomes active after a short moment, so the tap follows the prayer. */
 const PRAY_DELAY_MS = 5000;
@@ -43,6 +44,10 @@ export default function PrayerPause() {
     const t = setTimeout(() => setReady(true), PRAY_DELAY_MS);
     return () => clearTimeout(t);
   }, [prayer.id]);
+
+  const counter = useMemo(() => getState().pauseCounter, [app, time]);
+  const gospel = useMemo(() => gospelVerse(new Date(), counter, { country: state.country }), [counter, state.country]);
+  const intention = state.intentions.length ? state.intentions[counter % state.intentions.length] : undefined;
 
   const appLabel = app ? state.appLabels[app] ?? 'your app' : undefined;
   const minutes = state.gate.unlockMinutes;
@@ -90,6 +95,18 @@ export default function PrayerPause() {
     <SafeAreaView style={s.root}>
       <ScrollView contentContainerStyle={s.scroll}>
         <Text style={s.kicker}>Pause and pray before you scroll</Text>
+        {intention ? (
+          <View style={s.intention}>
+            <Text style={s.intentionLabel}>Praying today for</Text>
+            <Text style={s.intentionText}>{intention}</Text>
+          </View>
+        ) : null}
+        {gospel ? (
+          <View style={s.gospel}>
+            <Text style={s.gospelText}>{gospel.verse.text}</Text>
+            <Text style={s.gospelRef}>Today's Gospel · {gospel.ref.split(' ')[0]} {gospel.verse.label}</Text>
+          </View>
+        ) : null}
         <Text style={s.title}>{prayer.title}</Text>
         <Text style={s.prayer}>{prayer.text}</Text>
         {prayer.note ? <Text style={s.note}>{prayer.note}</Text> : null}
@@ -114,6 +131,12 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.primary },
   scroll: { padding: space.lg, paddingTop: space.xl * 1.5, gap: space.md },
   centre: { flex: 1, justifyContent: 'center', padding: space.lg, gap: space.lg },
+  intention: { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 14, padding: space.md, gap: 2 },
+  intentionLabel: { color: '#CFE0D5', fontSize: 12, fontWeight: '700', letterSpacing: 0.8, textTransform: 'uppercase' },
+  intentionText: { color: '#FFFFFF', fontSize: 18, fontWeight: '600' },
+  gospel: { borderLeftWidth: 3, borderLeftColor: '#E7D9A8', paddingLeft: space.md, gap: 6 },
+  gospelText: { color: '#FFFFFF', fontSize: 19, lineHeight: 28, fontStyle: 'italic' },
+  gospelRef: { color: '#E7D9A8', fontSize: 13, fontWeight: '600' },
   kicker: { color: '#E7D9A8', fontSize: 13, fontWeight: '700', letterSpacing: 1, textTransform: 'uppercase' },
   title: { color: '#FFFFFF', fontSize: 30, fontWeight: '700' },
   lead: { color: '#FFFFFF', fontSize: 18, lineHeight: 26 },

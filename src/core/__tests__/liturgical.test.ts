@@ -130,3 +130,25 @@ describe('liturgical day', () => {
     expect(liturgicalDay(local(2027, 1, 20)).title).toBe('Bl. Cyprian Michael Iwene Tansi');
   });
 });
+
+describe('saint of the day', () => {
+  const { saintOfDay } = require('../liturgical');
+  test('today, even when outranked', () => {
+    const s = saintOfDay(local(2026, 11, 22));
+    expect(s.when).toBe('today');
+    expect(s.saint.title).toBe('St. Cecilia');
+    expect(s.saint.observed).toBe(false);
+    expect(s.saint.lived).toBeDefined();
+  });
+  test('next saint when today has none', () => {
+    const s = saintOfDay(local(2026, 11, 24));
+    expect(s.saint.title).toBe('St. Andrew, Apostle');
+    expect(s.when).toBe('2026-11-30');
+  });
+  test('every saint entry has its life and times', () => {
+    const data = require('../../content/calendar.json');
+    for (const e of data.universal) {
+      if (e.life) expect(e.lived && e.place).toBeTruthy();
+    }
+  });
+});
