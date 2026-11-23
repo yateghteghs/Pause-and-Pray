@@ -1,0 +1,25 @@
+{
+  "name": "pause-and-pray-admin",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Admin console for Pause & Pray: plans, organisations, groups, reports, accounts, content and the audit log.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "preview-artifact": "node scripts/build-artifact.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "react": "19.1.10",
+    "react-dom": "19.1.10"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.10",
+    "@vitejs/plugin-react": "6.2.1",
+    "typescript": "5.9.3",
+    "vite": "8.3.6"
+  }
+}

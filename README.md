@@ -114,6 +114,30 @@ Before relying on this, confirm with both stores' current rules that selling a g
 
 Never charge for prayers or Mass intentions, and keep ads out: the data is religious and sensitive.
 
+## Admin console
+
+A separate website for the Pause & Pray team, in `admin/` (React + Vite, same Supabase project). Sections: overview, plan requests (invoice, activate), organisations (renew, change plan, usage against limits), groups and reports (resolve, dismiss, remove a group), accounts (support lookup, password reset, deletion on request), content (campaign sponsors, recorded prayers), and admins with the audit log.
+
+**What admins cannot see, by design:** anyone's prayers, intentions or history (they never leave the phone), or which members prayed on which day. The overview shows totals only, and the person who reported a group is never shown.
+
+Every admin action is a database function in `supabase/migrations/0007_admin.sql` that checks the caller is on the admin list and writes to the audit log, so the console itself holds no special keys.
+
+To set it up:
+1. Run all migrations, including `0007_admin.sql`.
+2. Sign up in the app with the account you will use, then make it the first admin in the SQL editor: `insert into public.platform_admins (user_id) select id from auth.users where email = 'you@example.org';`
+3. In `admin/`, copy `.env.example` to `.env` with the project URL and anon key, then `npm install` and `npm run build`.
+4. Host `admin/dist/` on any static host (for example Netlify, Vercel or Cloudflare Pages) on a private address, and add more admins from the console.
+
+Without the Supabase variables the console runs as a demo on sample data (`npm run dev`, or `npm run preview-artifact` for the shareable preview).
+
+## Database tests
+
+`supabase/tests/run.sh` applies every migration to a fresh PostgreSQL database (with a small stand-in for Supabase's auth) and runs security tests: group privacy, the 15-member limit, plan tiers, leader-only actions, public tables, account deletion, and every admin function including the audit log.
+
+```bash
+PGHOST=localhost PGUSER=postgres supabase/tests/run.sh
+```
+
 ## For Catholics everywhere
 
 The General Roman Calendar is the default. National calendars layer on top (Nigeria for now, chosen automatically for phones set to Nigeria, or in Me → Settings → Church calendar). To add a country, add its layer to `src/content/calendar.json` and a line to `src/core/country.ts`. Intention prayers no longer name a single country.

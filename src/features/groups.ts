@@ -527,3 +527,12 @@ export async function orgDashboard(orgId: string): Promise<Result<OrgDashboardRo
     })),
   };
 }
+
+/** A member reports a group (spam, abuse) to the Pause & Pray team. The reporter is not shown to admins. */
+export async function reportGroup(groupId: string, reason: string): Promise<Result<null>> {
+  const text = reason.trim();
+  if (text.length < 3) return { ok: false, error: 'Tell us briefly what is wrong.' };
+  if (!accountsConfigured) return { ok: true, value: null }; // preview: nothing is sent
+  const { error } = await supabase().from('group_reports').insert({ group_id: groupId, reason: text });
+  return error ? { ok: false, error: friendly(error.message) } : { ok: true, value: null };
+}

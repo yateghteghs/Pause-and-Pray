@@ -7,7 +7,7 @@ import { TimeField } from '../../components/TimeField';
 import { colors, space } from '../../components/theme';
 import { DEVOTION_LABELS, GroupDetail, GroupDevotion } from '../../core/groups';
 import { formatTime } from '../../core/schedule';
-import { deleteAnnouncement, getGroup, leaveGroup, postAnnouncement, updateGroup } from '../../features/groups';
+import { deleteAnnouncement, getGroup, leaveGroup, postAnnouncement, reportGroup, updateGroup } from '../../features/groups';
 import { useAppState } from '../../state/store';
 
 export default function Group() {
@@ -122,8 +122,37 @@ export default function Group() {
       ) : (
         <Button kind="ghost" title="Leave group" onPress={() => setLeaving(true)} />
       )}
+      <ReportGroup groupId={group.id} />
       <ErrorText>{error}</ErrorText>
     </Screen>
+  );
+}
+
+function ReportGroup({ groupId }: { groupId: string }) {
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState('');
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  if (sent) return <Body muted>Thank you. The Pause & Pray team will look at your report. Your name is not shared with them.</Body>;
+  if (!open) return <Button kind="ghost" title="Report this group" onPress={() => setOpen(true)} />;
+  return (
+    <Card>
+      <Label>Report this group</Label>
+      <Body muted>For spam, abuse or anything against the faith. The team sees the group and your reason, not your name.</Body>
+      <Field id="report-reason" label="What is wrong?" value={reason} onChangeText={setReason} multiline maxLength={500} />
+      <ErrorText>{error}</ErrorText>
+      <Button
+        kind="secondary"
+        title="Send report"
+        disabled={reason.trim().length < 3}
+        onPress={async () => {
+          const r = await reportGroup(groupId, reason);
+          if (!r.ok) return setError(r.error);
+          setSent(true);
+        }}
+      />
+      <Button kind="ghost" title="Cancel" onPress={() => setOpen(false)} />
+    </Card>
   );
 }
 
